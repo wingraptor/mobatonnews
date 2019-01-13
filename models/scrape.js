@@ -61,7 +61,7 @@ const request = require("request"),
 //       loopNews[index] = {
 //         //add root URL to relative link scraped from page
 //         link: "http://www.loopnewsbarbados.com" + $(this).find("a").attr("href"),
-//         headline: $(this).find("a").text(),
+//         headline: $(this).find(".title-5 a").text(),
 //         summary: $(this).find("p").text(),
 //         date: $(this).find(".date span").text(),
 //       }
