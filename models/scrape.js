@@ -47,6 +47,7 @@ const request = require("request"),
 //       }
 //     });
 //   }
+//   console.log(nationNews[1]);
 // });
 
 //Scrape LoopNews
@@ -61,8 +62,8 @@ const request = require("request"),
 //       loopNews[index] = {
 //         //add root URL to relative link scraped from page
 //         link: "http://www.loopnewsbarbados.com" + $(this).find("a").attr("href"),
-//         headline: $(this).find(".title-5 a").text(),
-//         summary: $(this).find("p").text(),
+//         headline: $(this).find(".title-5 a").text().replace(/^\s+|\s+$/g, ''),
+//         summary: $(this).find("p").text().replace(/^\s+|\s+$/g, ''),
 //         date: $(this).find(".date span").text(),
 //       }
 //     });
