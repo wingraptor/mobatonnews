@@ -165,7 +165,7 @@ const request = require("request"),
 //     $(".news-item").each(function(index, element){
 //       businessbb[index] = {
 //         link: $(this).find("a").attr("href"),
-//         title: $(this).find("a").text()
+//         headline: $(this).find("a").text()
 //       }
 //     });
 //   }
@@ -184,7 +184,7 @@ const request = require("request"),
 //       }
 //       GIS[index] = {
 //         link: $(this).find(".esg-bottom a").attr("href"),
-//         title: $(this).find(".eg-hmpg_alt-element-0").text(),
+//         headline: $(this).find(".eg-hmpg_alt-element-0").text(),
 //         date: $(this).find(".eg-hmpg_alt-element-3").text()
 //       }
 //     });
