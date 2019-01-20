@@ -1,0 +1,28 @@
+<% include partials/header %>
+
+<% for(var i = 0; i < articles.length; i++){ %>
+  <table>
+    <thead>
+      <tr>
+        <th><%= siteNameConvertor(articles[i]._id) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for(var j = 0; j < articles[i].data.length; j++){ %>
+      <tr>
+        <td>
+          <a href="<%=articles[i].data[j].link%>">
+            <%= articles[i].data[j].headline %>
+          </a>
+          <span>
+            <%= articles[i].data[j].date %>
+          </span>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>
+
+
+<% include partials/footer %>
