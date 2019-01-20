@@ -21,31 +21,31 @@ mongoose.connect("mongodb://localhost:27017/scrapedData",
 
 // Convert siteName to a siteID
 function siteID(siteName) {
-  let siteID = 0;
+  let siteID = "";
   switch (siteName) {
     case "Barbados Today":
-      siteID = 1;
+      siteID = 0;
       break;
     case "Nation News":
-      siteID = 2;
+      siteID = 1;
       break;
     case "Loop News":
-      siteID = 3;
+      siteID = 2;
       break;
     case "Barbados Advocate":
-      siteID = 4;
+      siteID = 3;
       break;
     case "Barbados International Business Association":
-      siteID = 5;
+      siteID = 4;
       break;
     case "Barbados ICT":
-      siteID = 6;
+      siteID = 5;
       break;
     case "Business Barbados":
-      siteID = 7;
+      siteID = 6;
       break;
     case "Government Info.Service":
-      siteID = 8;
+      siteID = 7;
       break;
   }
   return siteID;
@@ -234,12 +234,12 @@ new CronJob("0 8 5-20 * * *", function () {
       console.log(`Error scraping ${siteName}: ${error}`);
     } else {
       let $ = cheerio.load(body);
-      //Clear Article collection
-      Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
-        if (error) {
-          console.log(`Error deleting ${siteName} data`);
-        }
-      });
+      //Do not Clear Advocate2 Article collection because all advocate information is cleared
+      // Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+      //   if (error) {
+      //     console.log(`Error deleting ${siteName} data`);
+      //   }
+      // });
       //Generate siteData object from scraped data
       $(".node-article").each(function (index, element) {
         let siteData = {
