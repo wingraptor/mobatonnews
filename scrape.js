@@ -58,12 +58,13 @@ function addSiteData(siteData, siteName) {
     if (error) {
       console.log(`Error adding ${siteName} data to articles database: ${error}`);
     }
+    // Add site data to the archive DB
+    archiver(siteData, siteName);
   });
 }
 
 //Adds data to archive collection
 function archiver(siteData, siteName) {
-  console.log(siteData.headline);
   Archive.findOne({ headline: siteData.headline }, function (error, document) {
     if (error) {
       console.log(`Error finding ${siteName} in Articles collection: ${error}`)
@@ -102,6 +103,7 @@ new CronJob("0 0 5-20 * * *", function () {
         if (error) {
           console.log(`Error deleting ${siteName} data`);
         }
+        console.log("Deleted articles collection");
       });
       //Generate siteData object from scraped data
       //Iterate through each local news element on page
@@ -114,8 +116,7 @@ new CronJob("0 0 5-20 * * *", function () {
           summary: $(this).find("p").text(),
           siteID: siteID(siteName)
         }
-        addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        addSiteData(siteData, siteName); 
       });
     }
   });
@@ -150,7 +151,7 @@ new CronJob("0 2 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   })
@@ -186,7 +187,7 @@ new CronJob("0 4 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
@@ -217,7 +218,7 @@ new CronJob("0 6 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
@@ -249,7 +250,7 @@ new CronJob("0 8 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
@@ -280,7 +281,7 @@ new CronJob("0 10 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
@@ -311,7 +312,7 @@ new CronJob("0 12 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
@@ -341,7 +342,7 @@ new CronJob("0 14 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
@@ -376,7 +377,7 @@ new CronJob("0 16 5-20 * * *", function () {
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
-        archiver(siteData, siteName);
+        
       });
     }
   });
