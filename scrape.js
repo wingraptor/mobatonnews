@@ -103,7 +103,6 @@ new CronJob("0 0 5-20 * * *", function () {
         if (error) {
           console.log(`Error deleting ${siteName} data`);
         }
-        console.log("Deleted articles collection");
       });
       //Generate siteData object from scraped data
       //Iterate through each local news element on page
@@ -217,8 +216,7 @@ new CronJob("0 6 5-20 * * *", function () {
           summary: $(this).find(".field-item p").text() + "...",
           siteID: siteID(siteName)
         }
-        addSiteData(siteData, siteName);
-        
+        addSiteData(siteData, siteName);      
       });
     }
   });
@@ -249,8 +247,7 @@ new CronJob("0 8 5-20 * * *", function () {
           summary: $(this).find(".field-item p").text() + "...",
           siteID: siteID(siteName)
         }
-        addSiteData(siteData, siteName);
-        
+        addSiteData(siteData, siteName); 
       });
     }
   });
@@ -382,4 +379,3 @@ new CronJob("0 16 5-20 * * *", function () {
     }
   });
 }, null, "start", "America/Barbados");
-

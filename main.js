@@ -18,50 +18,51 @@ app.use(express.static(__dirname + "/public"));
 
 
 
-// Convert siteID to siteName
-function siteName(siteID) {
-  let siteName = "";
+// Use siteID to get siteName and URL
+function siteInfo(siteID) {
+  let siteInfo = {
+    name:"",
+    URL: ""
+};
   switch (siteID) {
     case 0:
-      siteName = "Barbados Today";
+      siteInfo.name = "Barbados Today";
+      siteInfo.URL = "http://barbadostoday.bb/";
       break;
     case 1:
-      siteName = "Nation News";
+      siteInfo.name = "Nation News";
+      siteInfo.URL = "http://www.nationnews.com/";
       break;
     case 2:
-      siteName = "Loop News";
+      siteInfo.name = "Loop News";
+      siteInfo.URL = "http://www.loopnewsbarbados.com/";
       break;
     case 3:
-      siteName = "Barbados Advocate";
+      siteInfo.name = "Barbados Advocate";
+      siteInfo.URL = "https://www.barbadosadvocate.com/";
       break;
     case 4:
-      siteName = "Barbados International Business Association";
+      siteInfo.name = "Barbados International Business Association";
+      siteInfo.URL = "http://biba.bb/";
       break;
     case 5:
-      siteName = "Barbados ICT";
+      siteInfo.name = "Barbados ICT";
+      siteInfo.URL = "http://barbadosict.org/";
       break;
     case 6:
-      siteName = "Business Barbados";
+      siteInfo.name = "Business Barbados";
+      siteInfo.URL = "http://businessbarbados.com/";
       break;
     case 7:
-      siteName = "Government Info.Service";
+      siteInfo.name = "Government Info.Service";
+      siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
       break;
   }
-  return siteName;
+  return siteInfo;
 }
 
 
 app.get("/", function(req,res){
-  // Return data from articles DB sorted according to siteID and ID(newest article to oldest article)
-  // Article.find({}, null, { sort: { siteID: "ascending", _id: "ascending" } }, function(error, articles){
-  //   if(error){
-  //     console.log("Error quering articles DB on home page");
-  //   }
-  //   else {
-  //     res.render("home", { articles: articles, siteNameConvertor: siteName});
-  //   }
-  // });
-
   // Query Articles DB
   Article.aggregate([
     //group articles according to siteIDs
@@ -73,7 +74,24 @@ app.get("/", function(req,res){
       console.log("Error quering articles DB on home page");
     }
     else {
-      res.render("home", { articles: articles, siteNameConvertor: siteName});
+      res.render("home", { articles: articles, siteInfo: siteInfo});
+    }
+  });
+});
+
+app.get("/test", function (req, res) {
+  // Query Articles DB
+  Article.aggregate([
+    //group articles according to siteIDs
+    { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
+    //sort according to siteID and ID(newest article to oldest article)
+    { $sort: { _id: 1, "data._id": -1 } },
+  ], function (error, articles) {
+    if (error) {
+      console.log("Error quering articles DB on home page");
+    }
+    else {
+      res.render("test", { articles: articles, siteInfo: siteInfo });
     }
   });
 });
