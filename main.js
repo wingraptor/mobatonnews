@@ -18,7 +18,7 @@ app.use(express.static(__dirname + "/public"));
 
 
 
-// Use siteID to get siteName and URL
+// Use siteID to get siteName and URL - reverse function is found in scrape.js
 function siteInfo(siteID) {
   let siteInfo = {
     name:"",

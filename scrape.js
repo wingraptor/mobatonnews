@@ -19,7 +19,7 @@ const mongoose = require("mongoose"),
 mongoose.connect("mongodb://localhost:27017/scrapedData",
   { useNewUrlParser: true });
 
-// Convert siteName to a siteID
+// Convert siteName to a siteID - reverse function is found in main.js
 function siteID(siteName) {
   let siteID = "";
   switch (siteName) {
