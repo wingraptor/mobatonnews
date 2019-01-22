@@ -1,13 +1,70 @@
+/* CSS Variables */
+
+:root {
+  --main-bg-color: #1a1c20;
+  --main-highlight-color: rgba(80, 200, 120, 0.5);
+  --alt-highlight-color: rgba(18,10,143, 0.5);
+  --headline-font: 'Libre Franklin', sans-serif;
+  --body-font: 'Libre Baskerville', serif;
+}
+
+body {
+  background-color: var(--main-bg-color);
+  color: #b2b6b9;
+  font-family: var(--body-font);
+}
+
+h1,h2 {
+  font-family: var(--headline-font); 
+}
+
+a, a:visited {
+  text-decoration: none;
+  color:inherit;
+}
+
+/* Arrange lists of articles in a flexible grid */
 .main-content {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-  grid-column-gap: 2%;
-  grid-row-gap: 2%;
-  justify-content: center;
-  margin-top: 2.5%;
+  grid-column-gap: 1%;
+  grid-row-gap: 1%;
+  /* justify-content: center; */
+  /* margin-top: 2.5%; */
+  padding-left: 1%;
+  padding-right: 1%;
 }
 
-li, ul, h2, section {
+
+.links-header, ul {
+  /* Remove bullet point */
+  list-style-type: none;
+  padding-left: 1rem;
+}
+
+/* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
+.headline {
+    /* padding: .5rem 1rem; */
+    padding: 1.8% 2%;
+    display: inline-block;
+}
+
+/* Style Icons */
+.fas {
+  color: var(--main-highlight-color);
+  font-size: 1.3em;
+}
+
+/* Style headline list items */
+.links-list li {
+  border-bottom: dotted var(--main-highlight-color) 1px;
+}
+
+
+
+
+
+/* li, ul, h2, section {
   border: solid red 1px;
   list-style-type: none;
-}
+} */

@@ -3,21 +3,21 @@
 <main class="main-content">
   <% for(var i = 0; i < articles.length; i++){ %>
     <section class="links-section <%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>-section">
-      <h2 class="links-header">
+      <h2 class="links-header"">
         <a href="<%= siteInfo(articles[i]._id).URL %>">
           <i class="fas fa-<%= siteInfo(articles[i]._id).icon %>"></i>
           <%= siteInfo(articles[i]._id).name %>
         </a>
       </h2>
-      <% for(var j = 0; j < articles[i].data.length; j++){ %>
       <ul class="links-list">
+      <% for(var j = 0; j < articles[i].data.length; j++){ %>
         <li>
-          <a href="<%= articles[i].data[j].link %>" class="headline" data-tippy-content="<%= articles[i].data[j].date %> <%= articles[i].data[j].summary %>">
+          <a href="<%= articles[i].data[j].link %>" class="headline" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">
             <%= articles[i].data[j].headline %>
           </a>
-        </li>
-      </ul>
+        </li> 
       <% } %>
+      </ul>
     </section>
   <% } %>
   </main>
