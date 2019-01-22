@@ -44,13 +44,15 @@ function siteID(siteName) {
     case "Business Barbados":
       siteID = 6;
       break;
-    case "Government Info.Service":
+    case "Government Info. Service":
       siteID = 7;
       break;
   }
   return siteID;
 }
 
+
+Archive.update({})
 
 // Adds Scraped Data to Database
 function addSiteData(siteData, siteName) {
@@ -350,7 +352,7 @@ new CronJob("0 14 5-20 * * *", function () {
 new CronJob("0 16 5-20 * * *", function () {
   // Scrape GIS
   request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
-    let siteName = "Government Info.Service";
+    let siteName = "Government Info. Service";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
     } else {
