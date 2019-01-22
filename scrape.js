@@ -35,7 +35,7 @@ function siteID(siteName) {
     case "Barbados Advocate":
       siteID = 3;
       break;
-    case "Barbados International Business Association":
+    case "Barbados Intl. Business Assoc.":
       siteID = 4;
       break;
     case "Barbados ICT":
@@ -260,7 +260,7 @@ new CronJob("0 8 5-20 * * *", function () {
 new CronJob("0 10 5-20 * * *", function () {
   // Scrape BIBA
   request.get("http://biba.bb/category/news/local-news/", function (error, response, body) {
-    let siteName = "Barbados International Business Association";
+    let siteName = "Barbados Intl. Business Assoc.";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
     } else {

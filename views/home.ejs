@@ -2,9 +2,10 @@
 
 <main class="main-content">
   <% for(var i = 0; i < articles.length; i++){ %>
-    <section class="links-section <%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>">
+    <section class="links-section <%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>-section">
       <h2 class="links-header">
         <a href="<%= siteInfo(articles[i]._id).URL %>">
+          <i class="fas fa-<%= siteInfo(articles[i]._id).icon %>"></i>
           <%= siteInfo(articles[i]._id).name %>
         </a>
       </h2>

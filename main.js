@@ -22,40 +22,49 @@ app.use(express.static(__dirname + "/public"));
 function siteInfo(siteID) {
   let siteInfo = {
     name:"",
-    URL: ""
+    URL: "",
+    icon: ""
 };
   switch (siteID) {
     case 0:
       siteInfo.name = "Barbados Today";
       siteInfo.URL = "http://barbadostoday.bb/";
+      siteInfo.icon = "newspaper";
       break;
     case 1:
       siteInfo.name = "Nation News";
       siteInfo.URL = "http://www.nationnews.com/";
+      siteInfo.icon = "newspaper";
       break;
     case 2:
       siteInfo.name = "Loop News";
       siteInfo.URL = "http://www.loopnewsbarbados.com/";
+      siteInfo.icon = "newspaper";
       break;
     case 3:
       siteInfo.name = "Barbados Advocate";
       siteInfo.URL = "https://www.barbadosadvocate.com/";
+      siteInfo.icon = "newspaper";
       break;
     case 4:
-      siteInfo.name = "Barbados International Business Association";
+      siteInfo.name = "Barbados Intl. Business Assoc.";
       siteInfo.URL = "http://biba.bb/";
+      siteInfo.icon = "briefcase";
       break;
     case 5:
       siteInfo.name = "Barbados ICT";
       siteInfo.URL = "http://barbadosict.org/";
+      siteInfo.icon = "laptop";
       break;
     case 6:
       siteInfo.name = "Business Barbados";
       siteInfo.URL = "http://businessbarbados.com/";
+      siteInfo.icon = "briefcase";
       break;
     case 7:
-      siteInfo.name = "Government Info.Service";
+      siteInfo.name = "Government Info. Service";
       siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
+      siteInfo.icon = "bell";
       break;
   }
   return siteInfo;
