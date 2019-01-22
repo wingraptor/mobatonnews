@@ -1,4 +1,4 @@
-.pageContent {
+.main-content {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   grid-column-gap: 2%;
@@ -7,7 +7,7 @@
   margin-top: 2.5%;
 }
 
-table, th, td, li, ul, h2, .pageContent div {
+li, ul, h2, section {
   border: solid red 1px;
   list-style-type: none;
 }

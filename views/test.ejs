@@ -2,20 +2,27 @@
 
 <div class="pageContent">
   <% for(var i = 0; i < articles.length; i++){ %>
-    <div>
-      <h2>
-        <%= siteInfo(articles[i]._id).name %>
-      </h2>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <i class="far fa-newspaper"></i>
+          <a href="<%=siteInfo(articles[i]._id).URL%>"><%= siteInfo(articles[i]._id).name %></a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
       <% for(var j = 0; j < articles[i].data.length; j++){ %>
-      <ul>
-        <li>
+      <tr>
+        <td>
           <a href="<%=articles[i].data[j].link%>" data-tippy-content="<%= articles[i].data[j].date %> <%= articles[i].data[j].summary %>">
             <%= articles[i].data[j].headline %>
           </a>
-        </li>
-      </ul>
+        </td>
+      </tr>
       <% } %>
-    </div>
+    </tbody>
+  </table>
   <% } %>
 </div>
 
