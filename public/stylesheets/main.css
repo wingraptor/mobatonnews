@@ -27,6 +27,14 @@ a, a:visited {
   color:inherit;
 }
 
+.headline:visited {
+  color: var(--alt-bg-color);
+}
+
+.headline:hover {
+  color:white;
+}
+
 /* Styles Page Header */
 .main-header {
   /* border: solid red 1px; */
@@ -36,12 +44,11 @@ a, a:visited {
   padding: 0.7rem;
   margin-bottom: 1rem;
   position: fixed;
-  z-index: 2;
 }
 
 /* Styles Page Footer */
 .main-footer {
-  padding: 1rem 1rem;
+  padding: 0.8rem 1rem;
   background-color:var(--alt-bg-color);
   text-transform: uppercase;
   font-size: 0.7em;
@@ -87,6 +94,25 @@ a, a:visited {
   border-bottom: dotted var(--main-highlight-color) 1px;
 }
 
+
+
+/* CSS Hover Effect */
+/* Grow */
+.hvr-grow {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+.hvr-grow:hover,
+.hvr-grow:focus,
+.hvr-grow:active {
+    transform: scale(1.1);
+}
 
 /* li, ul, h2, section {
   border: solid red 1px;

@@ -12,7 +12,7 @@
       <ul class="links-list">
       <% for(var j = 0; j < articles[i].data.length; j++){ %>
         <li>
-          <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">
+          <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">
             <%= articles[i].data[j].headline %>
           </a>
         </li> 
