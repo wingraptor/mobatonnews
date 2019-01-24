@@ -4,7 +4,7 @@
   <% for(var i = 0; i < articles.length; i++){ %>
     <section class="links-section <%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>-section">
       <h2 class="links-header"">
-        <a href="<%= siteInfo(articles[i]._id).URL %>">
+        <a href="<%= siteInfo(articles[i]._id).URL %>" target="_blank">
           <i class="fas fa-<%= siteInfo(articles[i]._id).icon %>"></i>
           <%= siteInfo(articles[i]._id).name %>
         </a>
@@ -12,7 +12,7 @@
       <ul class="links-list">
       <% for(var j = 0; j < articles[i].data.length; j++){ %>
         <li>
-          <a href="<%= articles[i].data[j].link %>" class="headline" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">
+          <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">
             <%= articles[i].data[j].headline %>
           </a>
         </li> 

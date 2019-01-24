@@ -2,16 +2,20 @@
 
 :root {
   --main-bg-color: #1a1c20;
+  --alt-bg-color: #111214;
   --main-highlight-color: rgba(80, 200, 120, 0.5);
   --alt-highlight-color: rgba(18,10,143, 0.5);
   --headline-font: 'Libre Franklin', sans-serif;
   --body-font: 'Libre Baskerville', serif;
 }
 
+
 body {
   background-color: var(--main-bg-color);
   color: #b2b6b9;
   font-family: var(--body-font);
+  line-height: 1.5;
+  margin:0;
 }
 
 h1,h2 {
@@ -23,19 +27,42 @@ a, a:visited {
   color:inherit;
 }
 
+/* Styles Page Header */
+.main-header {
+  /* border: solid red 1px; */
+  background-color: var(--main-highlight-color);
+  text-transform: uppercase;
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  position: fixed;
+  z-index: 2;
+}
+
+/* Styles Page Footer */
+.main-footer {
+  padding: 1rem 1rem;
+  background-color:var(--alt-bg-color);
+  text-transform: uppercase;
+  font-size: 0.7em;
+}
+
+#footer-link{
+  color: var(--main-highlight-color);
+}
+
 /* Arrange lists of articles in a flexible grid */
 .main-content {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-  grid-column-gap: 1%;
-  grid-row-gap: 1%;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
   /* justify-content: center; */
   /* margin-top: 2.5%; */
-  padding-left: 1%;
-  padding-right: 1%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 4rem;
 }
 
-
+/* Styles header for each list of links --> Nation News */
 .links-header, ul {
   /* Remove bullet point */
   list-style-type: none;
@@ -55,13 +82,10 @@ a, a:visited {
   font-size: 1.3em;
 }
 
-/* Style headline list items */
+/* Styles article headlines */
 .links-list li {
   border-bottom: dotted var(--main-highlight-color) 1px;
 }
-
-
-
 
 
 /* li, ul, h2, section {
