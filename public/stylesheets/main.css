@@ -5,8 +5,10 @@
   --alt-bg-color: #111214;
   --main-highlight-color: rgba(80, 200, 120, 0.5);
   --alt-highlight-color: rgba(18,10,143, 0.5);
-  --headline-font: 'Libre Franklin', sans-serif;
-  --body-font: 'Libre Baskerville', serif;
+  /* --headline-font: 'Libre Franklin', sans-serif;
+  --body-font: 'Libre Baskerville', serif; */
+  --headline-font: 'Cormorant Garamond', serif;
+  --body-font: 'Proza Libre', sans-serif;
 }
 
 
@@ -19,7 +21,8 @@ body {
 }
 
 h1,h2 {
-  font-family: var(--headline-font); 
+  font-family: var(--headline-font);
+  color:white;
 }
 
 a, a:visited {
@@ -38,7 +41,7 @@ a, a:visited {
 /* Styles Page Header */
 .main-header {
   /* border: solid red 1px; */
-  background-color: var(--main-highlight-color);
+  background-color: var(--alt-bg-color);
   text-transform: uppercase;
   width: 100%;
   padding: 0.7rem;
@@ -86,12 +89,11 @@ a, a:visited {
 /* Style Icons */
 .fas {
   color: var(--main-highlight-color);
-  font-size: 1.3em;
 }
 
 /* Styles article headlines */
 .links-list li {
-  border-bottom: dotted var(--main-highlight-color) 1px;
+  border-bottom: dotted rgba(46,46,55,.5) 1px;
 }
 
 
