@@ -15,8 +15,13 @@ const mongoose = require("mongoose"),
 //       businessbb = [],
 //       GIS = [];
 
+
+//Environment variable setup
+require("dotenv").config();
+const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+
 //mongoose config
-mongoose.connect("mongodb://localhost:27017/scrapedData",
+mongoose.connect(databaseUrl,
   { useNewUrlParser: true });
 
 // Convert siteName to a siteID - reverse function is found in main.js

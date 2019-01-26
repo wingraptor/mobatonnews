@@ -5,9 +5,16 @@ const mongoose = require("mongoose"),
       ejs = require("ejs");
 
 
+
+//Environment variable setup
+require("dotenv").config();
+const port = process.env.PORT || 3000;
+const IP = process.env.IP || "";
+const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+
 //mongoose config
 mongoose.connect(
-  "mongodb://localhost:27017/scrapedData",
+  databaseUrl,
   { useNewUrlParser: true }
 );
 
@@ -71,6 +78,7 @@ function siteInfo(siteID) {
 }
 
 
+// Home Page Route
 app.get("/", function(req,res){
   // Query Articles DB
   Article.aggregate([
@@ -87,24 +95,6 @@ app.get("/", function(req,res){
     }
   });
 });
-
-app.get("/test", function (req, res) {
-  // Query Articles DB
-  Article.aggregate([
-    //group articles according to siteIDs
-    { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    //sort according to siteID and ID(newest article to oldest article)
-    { $sort: { _id: 1, "data._id": -1 } },
-  ], function (error, articles) {
-    if (error) {
-      console.log("Error quering articles DB on home page");
-    }
-    else {
-      res.render("test", { articles: articles, siteInfo: siteInfo });
-    }
-  });
-});
-
 
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
