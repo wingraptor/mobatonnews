@@ -56,9 +56,6 @@ function siteID(siteName) {
   return siteID;
 }
 
-
-Archive.update({})
-
 // Adds Scraped Data to Database
 function addSiteData(siteData, siteName) {
   Article.create(siteData, function (error) {
