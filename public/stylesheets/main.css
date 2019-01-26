@@ -31,7 +31,8 @@ a, a:visited {
 }
 
 .headline:visited {
-  color: var(--alt-bg-color);
+  /* color: var(--alt-bg-color); */
+  text-decoration: line-through solid red;
 }
 
 .headline:hover {

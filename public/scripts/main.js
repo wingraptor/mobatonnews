@@ -44,3 +44,14 @@ togglers.forEach(function(toggler){
     });
   });
 });
+
+
+/***********************************
+Strike through clicked article links
+************************************/
+var links = document.querySelectorAll(".headline");
+links.forEach(function(link){
+  link.addEventListener("click", function(){
+    this.style.textDecoration = "line-through";
+  });
+});
