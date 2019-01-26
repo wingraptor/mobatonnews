@@ -98,6 +98,6 @@ app.get("/", function(req,res){
 
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
-app.listen(3000, function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("Server started");
 });
