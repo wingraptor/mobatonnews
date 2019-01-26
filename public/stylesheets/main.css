@@ -11,6 +11,9 @@
   --body-font: 'Proza Libre', sans-serif;
 }
 
+html {
+  box-sizing: border-box;
+}
 
 body {
   background-color: var(--main-bg-color);
