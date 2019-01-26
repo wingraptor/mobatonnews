@@ -96,7 +96,12 @@ a, a:visited {
   border-bottom: dotted rgba(46,46,55,.5) 1px;
 }
 
-
+.articles-toggler {
+  text-align: center;
+  font-size: 0.9em;
+  color:white;
+  cursor: pointer;
+}
 
 /* CSS Hover Effect */
 /* Grow */

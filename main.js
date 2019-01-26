@@ -62,7 +62,7 @@ function siteInfo(siteID) {
       siteInfo.icon = "briefcase";
       break;
     case 7:
-      siteInfo.name = "Government Info. Service";
+      siteInfo.name = "Government Info Service";
       siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
       siteInfo.icon = "bell";
       break;
