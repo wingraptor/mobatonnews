@@ -11,9 +11,6 @@
   --body-font: 'Proza Libre', sans-serif;
 }
 
-html{
-  width:100%;
-}
 
 body {
   background-color: var(--main-bg-color);
@@ -21,7 +18,6 @@ body {
   font-family: var(--body-font);
   line-height: 1.5;
   margin:0;
-  width:100%;
 }
 
 h1,h2 {
@@ -124,6 +120,13 @@ a, a:visited {
 .hvr-grow:focus,
 .hvr-grow:active {
     transform: scale(1.1);
+}
+
+/* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
+@media all and (max-width: 500px){
+  .main-content {
+    grid-template-columns: repeat(auto-fill, 100%);
+  } 
 }
 
 /* li, ul, h2, section {
