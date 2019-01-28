@@ -1,6 +1,7 @@
 const mongoose = require("mongoose"),
       Article = require("./models/scrapedData.js"),
       Archive = require("./models/archive.js"),
+      weather = require('weather-js');
       express = require("express"),
       ejs = require("ejs");
 
@@ -78,6 +79,10 @@ function siteInfo(siteID) {
 }
 
 
+
+
+
+
 // Home Page Route
 app.get("/", function(req,res){
   // Query Articles DB
@@ -91,7 +96,21 @@ app.get("/", function(req,res){
       console.log("Error quering articles DB on home page");
     }
     else {
-      res.render("home", { articles: articles, siteInfo: siteInfo});
+      weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
+        if (err){
+          res.render("home", {
+            articles: articles,
+            siteInfo: siteInfo,
+            weather: "ERROR"
+          });          
+        } else {
+          res.render("home", {
+            articles: articles,
+            siteInfo: siteInfo,
+            weather: result[0]
+          });
+        }
+      });
     }
   });
 });

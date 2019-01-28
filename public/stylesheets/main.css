@@ -48,6 +48,17 @@ a, a:visited {
   padding: 0.7rem;
   margin-bottom: 1rem;
   position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.weather-widget{
+  padding-right: 15px;
+}
+
+.weather-temp{
+  padding-right: 5px;
 }
 
 /* Styles Page Footer */
@@ -127,6 +138,12 @@ a, a:visited {
   .main-content {
     grid-template-columns: repeat(auto-fill, 100%);
   } 
+}
+
+@media all and (max-width: 413px){
+  .main-header {
+    flex-direction: column;
+  }
 }
 
 /* li, ul, h2, section {

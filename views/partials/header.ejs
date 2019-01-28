@@ -19,4 +19,17 @@
         <img src="/images/logo.svg" alt="" height="30px">
         Mobaton News
       </a>
+      <div class="weather-widget">
+        <% if(weather === "ERROR"){ %>
+          <span></span>
+        <% } else { %>
+          <span class="weather-temp">
+            <%= weather.current.temperature %><span>&#176;C</span>
+          </span>
+          <span>
+            <%= weather.current.skytext %>
+            <img src="<%=weather.current.imageUrl%>" alt="">
+          </span>
+        <% } %>
+      </div>
     </header>
