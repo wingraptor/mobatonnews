@@ -43,7 +43,6 @@ a, a:visited {
 .main-header {
   /* border: solid red 1px; */
   background-color: var(--alt-bg-color);
-  text-transform: uppercase;
   width: 100%;
   padding: 0.7rem;
   margin-bottom: 1rem;
@@ -59,6 +58,10 @@ a, a:visited {
 
 .weather-temp{
   padding-right: 5px;
+}
+
+.weather-info img{
+  height: 22px;
 }
 
 /* Styles Page Footer */

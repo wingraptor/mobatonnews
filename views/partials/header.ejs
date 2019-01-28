@@ -17,7 +17,7 @@
     <header class="main-header">
       <a href="/">
         <img src="/images/logo.svg" alt="" height="30px">
-        Mobaton News
+        MOBATON NEWS
       </a>
       <div class="weather-widget">
         <% if(weather === "ERROR"){ %>
@@ -26,7 +26,7 @@
           <span class="weather-temp">
             <%= weather.current.temperature %><span>&#176;C</span>
           </span>
-          <span>
+          <span class="weather-info">
             <%= weather.current.skytext %>
             <img src="<%=weather.current.imageUrl%>" alt="">
           </span>
