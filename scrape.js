@@ -415,8 +415,7 @@ new CronJob("0 18 5-21 * * *", function () {
           summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
           siteID: siteID(siteName)
         }
-        // addSiteData(siteData, siteName);
-        console.log(siteData);
+        addSiteData(siteData, siteName);
       });
     }
   });
