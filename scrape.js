@@ -473,6 +473,10 @@ new CronJob("0 22 5-21 * * *", function () {
       //Generate siteData object from scraped data
       $(".post").each(function (index, element) {
         //Limit news articles to first 16 only
+        if (index > 15) {
+          return;
+        }
+        //Limit news articles to first 16 only
         let siteData = {
           link: $(this).find("h2 a").attr("href"),
           headline: $(this).find("h2 a").text(),
