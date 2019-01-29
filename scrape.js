@@ -432,12 +432,12 @@ new CronJob("0 20 5-21 * * *", function () {
     console.log(`Error scraping ${siteName}: ${error}`);
   } else {
     let $ = cheerio.load(body);
-    // Clear Article collection
-    Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
-      if (error) {
-        console.log(`Error deleting ${siteName} data`);
-      }
-    });
+    // Do not clear Article collection because it contains info about for page 1 of CBC news
+    // Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+    //   if (error) {
+    //     console.log(`Error deleting ${siteName} data`);
+    //   }
+    // });
     //Generate siteData object from scraped data
     $(".catItemView").each(function (index, element) {
       //Limit news articles to first 16 only

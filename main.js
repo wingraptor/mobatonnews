@@ -105,7 +105,9 @@ app.get("/", function(req,res){
       console.log("Error quering articles DB on home page");
     }
     else {
+      // Get Local Weather
       weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
+        // On error same template loaded but with weather properter as "ERROR"
         if (err){
           res.render("home", {
             articles: articles,
