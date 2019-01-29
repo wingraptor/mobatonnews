@@ -52,6 +52,12 @@ function siteID(siteName) {
     case "Government Info. Service":
       siteID = 7;
       break;
+    case "CBC News":
+      siteID = 8;
+      break;
+    case "Barbados Reporter":
+      siteID = 9;
+      break;
   }
   return siteID;
 }
@@ -93,8 +99,8 @@ function archiver(siteData, siteName) {
 }
 
 
-// Schedule Barbados Today to be scrapped every hour on minute 0, second 0 between 5am and 8pm inclusive
-new CronJob("0 0 5-20 * * *", function () {
+// Schedule Barbados Today to be scrapped every hour on minute 0, second 0 between 5am and 9pm inclusive
+new CronJob("0 0 5-21 * * *", function () {
   // Scrape Barbados Today
   request.get("https://barbadostoday.bb/", function (error, response, body) {
     let siteName = "Barbados Today";
@@ -125,8 +131,8 @@ new CronJob("0 0 5-20 * * *", function () {
   });
 }, null, "start", "America/Barbados");
 
-// Schedule NationNews to be scrapped every hour on minute 2, second 0 between 5am and 8pm inclusive
-new CronJob("0 2 5-20 * * *", function () {
+// Schedule NationNews to be scrapped every hour on minute 2, second 0 between 5am and 9pm inclusive
+new CronJob("0 2 5-21 * * *", function () {
   //Scrape NationNews
   request.get("http://www.nationnews.com/type/news", function (error, response, body) {
     let siteName = "Nation News"
@@ -160,8 +166,8 @@ new CronJob("0 2 5-20 * * *", function () {
   })
 }, null, "start", "America/Barbados");
 
-// Schedule LoopNews to be scrapped every hour on minute 4, second 0 between 5am and 8pm inclusive
-new CronJob("0 4 5-20 * * *", function () {
+// Schedule LoopNews to be scrapped every hour on minute 4, second 0 between 5am and 9pm inclusive
+new CronJob("0 4 5-21 * * *", function () {
   //Scrape LoopNews
   request.get("http://www.loopnewsbarbados.com/category/loopnewsbarbados-barbados-news", function (error, response, body) {
     let siteName = "Loop News";
@@ -196,8 +202,8 @@ new CronJob("0 4 5-20 * * *", function () {
   });
 }, null, "start", "America/Barbados");
 
-// Schedule Advocate1 to be scrapped every hour on minute 6, second 0 between 5am and 8pm inclusive
-new CronJob("0 6 5-20 * * *", function () {
+// Schedule Advocate1 to be scrapped every hour on minute 6, second 0 between 5am and 9pm inclusive
+new CronJob("0 6 5-21 * * *", function () {
   // Scrape Advocate Page 1
   request.get("https://www.barbadosadvocate.com/news", function (error, response, body) {
     let siteName = "Barbados Advocate";
@@ -227,8 +233,8 @@ new CronJob("0 6 5-20 * * *", function () {
 }, null, "start", "America/Barbados");
 
 
-// Schedule Advocate2 to be scrapped every hour on minute 8, second 0 between 5am and 8pm inclusive
-new CronJob("0 8 5-20 * * *", function () {
+// Schedule Advocate2 to be scrapped every hour on minute 8, second 0 between 5am and 9pm inclusive
+new CronJob("0 8 5-21 * * *", function () {
   // Scrape Advocate Page 2
   request.get("https://www.barbadosadvocate.com/news?page=1", function (error, response, body) {
     let siteName = "Barbados Advocate"
@@ -258,8 +264,8 @@ new CronJob("0 8 5-20 * * *", function () {
 }, null, "start", "America/Barbados");
 
 
-// Schedule BIBA to be scrapped every hour on minute 10, second 0 between 5am and 8pm inclusive
-new CronJob("0 10 5-20 * * *", function () {
+// Schedule BIBA to be scrapped every hour on minute 10, second 0 between 5am and 9pm inclusive
+new CronJob("0 10 5-21 * * *", function () {
   // Scrape BIBA
   request.get("http://biba.bb/category/news/local-news/", function (error, response, body) {
     let siteName = "Barbados Intl. Business Assoc.";
@@ -289,8 +295,8 @@ new CronJob("0 10 5-20 * * *", function () {
 }, null, "start", "America/Barbados");
 
 
-// Schedule BBICT to be scrapped every hour on minute 12, second 0 between 5am and 8pm inclusive
-new CronJob("0 12 5-20 * * *", function () {
+// Schedule BBICT to be scrapped every hour on minute 12, second 0 between 5am and 9pm inclusive
+new CronJob("0 12 5-21 * * *", function () {
   // Scrape Barbados ICT
   request.get("http://barbadosict.org/news/", function (error, response, body) {
     let siteName = "Barbados ICT";
@@ -320,8 +326,8 @@ new CronJob("0 12 5-20 * * *", function () {
 }, null, "start", "America/Barbados");
 
 
-// Schedule bbBusiness to be scrapped every hour on minute 14, second 0 between 5am and 8pm inclusive
-new CronJob("0 14 5-20 * * *", function () {
+// Schedule bbBusiness to be scrapped every hour on minute 14, second 0 between 5am and 9pm inclusive
+new CronJob("0 14 5-21 * * *", function () {
   // Scrape BusinessBarbados
   request.get("http://businessbarbados.com/", function (error, response, body) {
     let siteName = "Business Barbados";
@@ -350,8 +356,8 @@ new CronJob("0 14 5-20 * * *", function () {
 }, null, "start", "America/Barbados");
 
 
-// Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 8pm inclusive
-new CronJob("0 16 5-20 * * *", function () {
+// Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
+new CronJob("0 16 5-21 * * *", function () {
   // Scrape GIS
   request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
     let siteName = "Government Info. Service";
@@ -379,6 +385,103 @@ new CronJob("0 16 5-20 * * *", function () {
         }
         addSiteData(siteData, siteName);
         
+      });
+    }
+  });
+}, null, "start", "America/Barbados");
+
+// Schedule CBC News to be scrapped every hour on minute 18, second 0 between 5am and 8pm inclusive
+new CronJob("0 18 5-21 * * *", function () {
+  // Scrape CBC
+  request.get("https://www.cbc.bb/index.php/news/barbados-news", function (error, response, body) {
+    let siteName = "CBC News";
+    if (error) {
+      console.log(`Error scraping ${siteName}: ${error}`);
+    } else {
+      let $ = cheerio.load(body);
+      // Clear Article collection
+      Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+        if (error) {
+          console.log(`Error deleting ${siteName} data`);
+        }
+      });
+      //Generate siteData object from scraped data
+      $(".catItemView").each(function (index, element) {
+        //Limit news articles to first 16 only
+        let siteData = {
+          link:"https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
+          headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
+          date: $(this).find(".itemDate  span").text(),
+          summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
+          siteID: siteID(siteName)
+        }
+        // addSiteData(siteData, siteName);
+        console.log(siteData);
+      });
+    }
+  });
+}, null, "start", "America/Barbados");
+
+
+// Schedule CBC News to be scrapped every hour on minute 20, second 0 between 5am and 8pm inclusive
+new CronJob("0 20 5-21 * * *", function () {
+// Scrape CBC
+  request.get("https://www.cbc.bb/index.php/news/barbados-news?start=6", function (error, response, body) {
+  let siteName = "CBC News";
+  if (error) {
+    console.log(`Error scraping ${siteName}: ${error}`);
+  } else {
+    let $ = cheerio.load(body);
+    // Clear Article collection
+    Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+      if (error) {
+        console.log(`Error deleting ${siteName} data`);
+      }
+    });
+    //Generate siteData object from scraped data
+    $(".catItemView").each(function (index, element) {
+      //Limit news articles to first 16 only
+      let siteData = {
+        link: "https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
+        headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
+        date: $(this).find(".itemDate  span").text(),
+        summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
+        siteID: siteID(siteName)
+      }
+      addSiteData(siteData, siteName);
+    });
+  }
+});
+}, null, "start", "America/Barbados");
+
+
+// Schedule Barbados Reporter to be scrapped every hour on minute 18, second 0 between 5am and 9pm inclusive
+new CronJob("0 22 5-21 * * *", function () {
+  // Scrape Barbados Reporter
+  request.get("https://www.bajanreporter.com/category/new/", function (error, response, body) {
+    let siteName = "Barbados Reporter";
+    if (error) {
+      console.log(`Error scraping ${siteName}: ${error}`);
+    } else {
+      let $ = cheerio.load(body);
+      // Clear Article collection
+      Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+        if (error) {
+          console.log(`Error deleting ${siteName} data`);
+        }
+      });
+      //Generate siteData object from scraped data
+      $(".post").each(function (index, element) {
+        //Limit news articles to first 16 only
+        let siteData = {
+          link: $(this).find("h2 a").attr("href"),
+          headline: $(this).find("h2 a").text(),
+          date: $(this).find(".byline .post-date").text(),
+          // to only select text of summary and not text in <noscript> element - https://stackoverflow.com/questions/3442394/using-text-to-retrieve-only-text-not-nested-in-child-tags
+          summary: $(this).find(".article-summary").clone().children().remove().end(".article-summary").text().replace(/^\s+|\s+$/g, ''),
+          siteID: siteID(siteName)
+        }
+        addSiteData(siteData, siteName);
       });
     }
   });

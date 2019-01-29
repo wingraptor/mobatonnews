@@ -74,6 +74,15 @@ function siteInfo(siteID) {
       siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
       siteInfo.icon = "bell";
       break;
+    case 8:
+      siteInfo.name = "CBC News";
+      siteInfo.URL = "https://www.cbc.bb/index.php/news/barbados-news"
+      siteInfo.icon = "newspaper";
+      break;
+    case 9: 
+      siteInfo.name = "Barbados Reporter";
+      siteInfo.URL = "https://www.bajanreporter.com/category/new/";
+      siteInfo.icon = "newspaper"
   }
   return siteInfo;
 }
