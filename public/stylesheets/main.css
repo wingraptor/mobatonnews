@@ -183,7 +183,7 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
 
 /* CSS Hover Effect */
 /* Grow */
-.hvr-grow {
+/* .hvr-grow {
     display: inline-block;
     vertical-align: middle;
     transform: translateZ(0);
@@ -197,7 +197,7 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
 .hvr-grow:focus,
 .hvr-grow:active {
     transform: scale(1.1);
-}
+} */
 
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
 @media all and (max-width: 500px){
