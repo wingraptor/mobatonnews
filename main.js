@@ -55,7 +55,7 @@ function siteInfo(siteID) {
       siteInfo.icon = "newspaper";
       break;
     case 4:
-      siteInfo.name = "Barbados Intl. Business Assoc.";
+      siteInfo.name = "Barbados Intl Business Assoc";
       siteInfo.URL = "http://biba.bb/";
       siteInfo.icon = "briefcase";
       break;

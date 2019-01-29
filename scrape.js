@@ -40,7 +40,7 @@ function siteID(siteName) {
     case "Barbados Advocate":
       siteID = 3;
       break;
-    case "Barbados Intl. Business Assoc.":
+    case "Barbados Intl Business Assoc":
       siteID = 4;
       break;
     case "Barbados ICT":
@@ -49,7 +49,7 @@ function siteID(siteName) {
     case "Business Barbados":
       siteID = 6;
       break;
-    case "Government Info. Service":
+    case "Government Info Service":
       siteID = 7;
       break;
     case "CBC News":
@@ -268,7 +268,7 @@ new CronJob("0 8 5-21 * * *", function () {
 new CronJob("0 10 5-21 * * *", function () {
   // Scrape BIBA
   request.get("http://biba.bb/category/news/local-news/", function (error, response, body) {
-    let siteName = "Barbados Intl. Business Assoc.";
+    let siteName = "Barbados Intl Business Assoc";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
     } else {
@@ -360,7 +360,7 @@ new CronJob("0 14 5-21 * * *", function () {
 new CronJob("0 16 5-21 * * *", function () {
   // Scrape GIS
   request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
-    let siteName = "Government Info. Service";
+    let siteName = "Government Info Service";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
     } else {
