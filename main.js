@@ -105,9 +105,9 @@ app.get("/", function(req,res){
       console.log("Error quering articles DB on home page");
     }
     else {
-      // Get Local Weather
+      // Get Local Weather To Be Used in Widget
       weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
-        // On error same template loaded but with weather properter as "ERROR"
+        // Load same view template if error is returned but with weather property set as "ERROR" :- in this case home.ejs will show no weather widget
         if (err){
           res.render("home", {
             articles: articles,

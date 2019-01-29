@@ -1,10 +1,13 @@
 /* CSS Variables */
-
 :root {
   --main-bg-color: #1a1c20;
   --alt-bg-color: #111214;
   --main-highlight-color: rgba(80, 200, 120, 0.5);
-  --alt-highlight-color: rgba(18,10,143, 0.5);
+  --alt-highlight-color: #578039;
+  --scroll-color-one: #803957;
+  --scroll-color-two: #397580;
+  --scroll-color-three: #804d39;
+  --transition-values: all 500ms ease-out;
   /* --headline-font: 'Libre Franklin', sans-serif;
   --body-font: 'Libre Baskerville', serif; */
   --headline-font: 'Cormorant Garamond', serif;
@@ -12,12 +15,26 @@
 }
 
 
+/* Setting Related to Body Element */
 body {
-  background-color: var(--main-bg-color);
-  color: #b2b6b9;
-  font-family: var(--body-font);
-  line-height: 1.5;
-  margin:0;
+color: #b2b6b9;
+background-color: var(--main-bg-color);
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23803957' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+font-family: var(--body-font);
+line-height: 1.5;
+margin:0;
+transition: var(--transition-values);
+}
+
+/* Change colors of background svg when page scrolled to certain position */
+html[data-scroll='1'] body{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23578039' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+}
+html[data-scroll='2'] body{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23804d39' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+}
+html[data-scroll='3'] body{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23397580' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 h1,h2 {
@@ -30,16 +47,7 @@ a, a:visited {
   color:inherit;
 }
 
-.headline:visited {
-  /* color: var(--alt-bg-color); */
-  text-decoration: line-through solid red;
-}
-
-.headline:hover {
-  color:white;
-}
-
-/* Styles Page Header */
+/* CSS Rulesets for Main Header */
 .main-header {
   /* border: solid red 1px; */
   background-color: var(--alt-bg-color);
@@ -52,19 +60,35 @@ a, a:visited {
   align-items: baseline;
 }
 
+
+.logo{
+  fill: var(--alt-highlight-color);
+  transition: var(--transition-values);
+}
+/* Change color of logo svg depending position of scroll */
+html[data-scroll='1'] .logo{
+  fill: var(--scroll-color-one);
+}
+html[data-scroll='2'] .logo{
+  fill: var(--scroll-color-two);
+}
+html[data-scroll='3'] .logo{
+  fill: var(--scroll-color-three);
+}
+
+
+/* Weather Widget Styling */
 .weather-widget{
   padding-right: 15px;
 }
-
 .weather-temp{
   padding-right: 5px;
 }
-
 .weather-info img{
   height: 22px;
 }
 
-/* Styles Page Footer */
+/* Styles For Main Footer */
 .main-footer {
   padding: 0.8rem 1rem;
   background-color:var(--alt-bg-color);
@@ -73,11 +97,23 @@ a, a:visited {
 }
 
 #footer-link{
-  color: var(--main-highlight-color);
+  color: var(--alt-highlight-color);
 }
 
-/* Arrange lists of articles in a flexible grid */
+/* Changes color of footer link depending on scroll position  */
+html[data-scroll='1'] #footer-link{
+  color: var(--scroll-color-one);
+}
+html[data-scroll='2'] #footer-link{
+  color: var(--scroll-color-two);
+}
+html[data-scroll='3'] #footer-link{
+  color: var(--scroll-color-three);
+}
+
+/* Styles for Main Content on Page */
 .main-content {
+  /* Arrange lists of articles in a flexible grid */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
   /* justify-content: center; */
@@ -94,6 +130,11 @@ a, a:visited {
   padding-left: 1rem;
 }
 
+/* Styles article headlines */
+.links-list li {
+  border-bottom: dashed rgba(70, 70, 83, 0.5) 1px;
+}
+
 /* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
 .headline {
     /* padding: .5rem 1rem; */
@@ -101,16 +142,33 @@ a, a:visited {
     display: inline-block;
 }
 
+.headline:visited {
+  /* color: var(--alt-bg-color); */
+  text-decoration: line-through solid red;
+}
+
+.headline:hover {
+  color:white;
+}
+
 /* Style Icons */
 .fas {
-  color: var(--main-highlight-color);
+  color: #578039;
+  transition: var(--transition-values);
 }
 
-/* Styles article headlines */
-.links-list li {
-  border-bottom: dotted rgba(46,46,55,.5) 1px;
+/* Changes Color of Icons (fas) on page depending on scroll position */
+html[data-scroll='1'] .fas{
+  color: var(--scroll-color-one);
+}
+html[data-scroll='2'] .fas, html[data-scroll='2'] .logo{
+  color: var(--scroll-color-two);
+}
+html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
+  color: var(--scroll-color-three);
 }
 
+/* Styles of More/Less Button */
 .articles-toggler {
   text-align: center;
   font-size: 0.9em;
@@ -143,6 +201,7 @@ a, a:visited {
   } 
 }
 
+/* Change flex items to be verticle in header on smaller screensizes */
 @media all and (max-width: 413px){
   .main-header {
     flex-direction: column;
