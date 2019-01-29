@@ -120,7 +120,12 @@ html[data-scroll='3'] #footer-link{
   /* margin-top: 2.5%; */
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 4rem;
+  padding-top: 5rem;
+}
+
+
+.links-header{
+  font-weight: normal;
 }
 
 /* Styles header for each list of links --> Nation News */
