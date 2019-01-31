@@ -162,7 +162,8 @@ new CronJob("0 2 5-21 * * *", function () {
           date: $(this).find(".latest_content span").text(),
           //Remove spaces and new line character before, after and within summary text
           summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
-          siteID: siteID(siteName)
+          siteID: siteID(siteName),
+          articleCount: articleCount
         }
         addSiteData(siteData, siteName);
         articleCount++;       
