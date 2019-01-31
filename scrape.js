@@ -199,6 +199,7 @@ new CronJob("0 4 5-21 * * *", function () {
           //Replace newlines and spaces with a '' from beginning, within and ending of string
           summary: $(this).find("p").text().replace(/^\s+|\s+$|\n/g, ' '),
           date: $(this).find(".date span").text(),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -230,6 +231,7 @@ new CronJob("0 6 5-21 * * *", function () {
           headline: $(this).find(".title a").text(),
           date: $(this).find(".date span").text(),
           summary: $(this).find(".field-item p").text() + "...",
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -262,6 +264,7 @@ new CronJob("0 8 5-21 * * *", function () {
           headline: $(this).find(".title a").text(),
           date: $(this).find(".date span").text(),
           summary: $(this).find(".field-item p").text() + "...",
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -293,6 +296,7 @@ new CronJob("0 10 5-21 * * *", function () {
           link: $(this).find(".jeg_thumb a").attr("href"),
           headline: $(this).find(".jeg_post_title a").text(),
           date: $(this).find(".jeg_meta_date a").text(),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -325,6 +329,7 @@ new CronJob("0 12 5-21 * * *", function () {
           link: $(this).find(".image a").attr("href"),
           headline: $(this).find(".title a").text(),
           date: $(this).find(".date").text(),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -356,6 +361,7 @@ new CronJob("0 14 5-21 * * *", function () {
         let siteData = {
           link: $(this).find("a").attr("href"),
           headline: $(this).find("a").text(),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -392,6 +398,7 @@ new CronJob("0 16 5-21 * * *", function () {
           link: $(this).find(".esg-bottom a").attr("href"),
           headline: $(this).find(".eg-hmpg_alt-element-0").text(),
           date: $(this).find(".eg-hmpg_alt-element-3").text(),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -425,6 +432,7 @@ new CronJob("0 18 5-21 * * *", function () {
           headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
           date: $(this).find(".itemDate  span").text(),
           summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -495,6 +503,7 @@ new CronJob("0 22 5-21 * * *", function () {
           date: $(this).find(".byline .post-date").text(),
           // to only select text of summary and not text in <noscript> element - https://stackoverflow.com/questions/3442394/using-text-to-retrieve-only-text-not-nested-in-child-tags
           summary: $(this).find(".article-summary").clone().children().remove().end(".article-summary").text().replace(/^\s+|\s+$/g, ''),
+          siteID: siteID(siteName),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
