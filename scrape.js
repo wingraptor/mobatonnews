@@ -512,3 +512,9 @@ new CronJob("0 22 5-21 * * *", function () {
     }
   });
 }, null, "start", "America/Barbados");
+
+
+// Reset article count to 0 after all sites have been scraped
+new CronJob("0 24 5-21 * * *", function(){
+  articleCount = 0;
+}, null, "start", "America/Barbados")
