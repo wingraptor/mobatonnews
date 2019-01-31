@@ -96,6 +96,8 @@ function siteInfo(siteID) {
 app.get("/", function(req,res){
   // Query Articles DB
   Article.aggregate([
+    //Sort ObjectID (Sorts from )
+    {$sort: { articleCount: 1} },
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
     //sort according to siteID and ID(newest article to oldest article)
