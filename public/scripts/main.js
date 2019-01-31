@@ -1,15 +1,3 @@
-/**************************************
-Load Tippy tool tips with custom option
-****************************************/ 
-tippy(".headline", {
-  delay: [400, 200],
-  duration: [400, 100],
-  theme:"google",
-  arrow: true,
-  arrowType: "round"
-});
-
-
 /**************************************** 
 Handle Toggler To Show/Hide More Articles  
 ****************************************/
@@ -117,3 +105,16 @@ document.addEventListener('scroll', debounce(storeScroll));
 
 // Update scroll position for first time
 storeScroll();
+
+
+
+/**************************************
+Load Tippy tool tips with custom option
+****************************************/
+tippy(".headline", {
+  delay: [400, 200],
+  duration: [400, 100],
+  theme: "google",
+  arrow: true,
+  arrowType: "round"
+});
