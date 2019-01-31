@@ -101,7 +101,7 @@ app.get("/", function(req,res){
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
     //sort according to siteID and ID(newest article to oldest article)
-    { $sort: { _id: 1, "data._id": -1 } },
+    { $sort: { _id: 1 } },
   ], function (error, articles) {
     if(error){
       console.log("Error quering articles DB on home page");
