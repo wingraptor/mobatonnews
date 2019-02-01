@@ -113,7 +113,7 @@ app.get("/", function(req,res){
         res.render("home", {
           articles: articles,
           siteInfo: siteInfo,
-          weather: data
+          weather: data[0]
         });
       })
     }
