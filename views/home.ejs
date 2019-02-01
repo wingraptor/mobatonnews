@@ -14,7 +14,7 @@
         <%# controls number of article headlines %>
         <% if (j >= 10){ %>
           <li style="display: none" class="list-hidden--<%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>">
-            <a href="https://wa.me/?text=<%= articles[i].data[j].link %>">
+            <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
               <i class="fab fa-whatsapp"></i>
             </a>
             <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow" data-tippy-content="<em><%= articles[i].data[j].date%></em>  <%= articles[i].data[j].summary %>">
@@ -23,7 +23,7 @@
           </li>
         <% } else { %>
           <li>
-            <a href="https://wa.me/?text=<%= articles[i].data[j].link %>">
+            <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
               <i class="fab fa-whatsapp"></i>
             </a>
             <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">

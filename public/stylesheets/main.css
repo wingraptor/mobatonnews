@@ -139,6 +139,7 @@ html[data-scroll='3'] #footer-link{
 .links-list li {
   border-bottom: dashed rgba(70, 70, 83, 0.5) 1px;
   display: flex;
+  padding-left: 2%;
   align-items: baseline;
 }
 
@@ -161,6 +162,14 @@ html[data-scroll='3'] #footer-link{
 /* Style Icons */
 .fas {
   color: #578039;
+  transition: var(--transition-values);
+}
+
+.whatsApp-icon{
+  padding-right: 2%;
+  color: #4FCE5D;
+  font-size: 1.25em;
+  padding-right: 2%;
   transition: var(--transition-values);
 }
 
