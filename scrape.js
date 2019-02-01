@@ -3,7 +3,8 @@ const mongoose = require("mongoose"),
   request = require("request"),
   cheerio = require("cheerio"),
   CronJob = require("cron").CronJob,
-  Archive = require("./models/archive.js");
+  Archive = require("./models/archive.js"),
+  Weather = require("./models/weatherData");
 
 // const bbToday = [],
 //       nationNews = [],
@@ -24,7 +25,7 @@ const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrap
 mongoose.connect(databaseUrl,
   { useNewUrlParser: true });
 
-
+// Count articles as data is scraped from website
 let articleCount = 0;
 
 // Convert siteName to a siteID - reverse function is found in main.js
@@ -300,8 +301,7 @@ new CronJob("0 10 5-21 * * *", function () {
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
-        articleCount++;
-        
+        articleCount++;    
       });
     }
   });
@@ -333,8 +333,7 @@ new CronJob("0 12 5-21 * * *", function () {
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
-        articleCount++;
-        
+        articleCount++;   
       });
     }
   });
@@ -366,7 +365,6 @@ new CronJob("0 14 5-21 * * *", function () {
         }
         addSiteData(siteData, siteName);
         articleCount++;
-        
       });
     }
   });
@@ -403,7 +401,6 @@ new CronJob("0 16 5-21 * * *", function () {
         }
         addSiteData(siteData, siteName);
         articleCount++;
-        
       });
     }
   });
@@ -514,7 +511,17 @@ new CronJob("0 22 5-21 * * *", function () {
 }, null, "start", "America/Barbados");
 
 
-// Reset article count to 0 after all sites have been scraped
+// Get Weather Data and reset article count
 new CronJob("0 24 5-21 * * *", function(){
+  // Reset article count to 0 after all sites have been scraped
   articleCount = 0;
+  weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
+    if (err) console.log(`Error getting weather data: ${err}`);
+    Weather.replaceOne({}, {
+      temperature: result[0].current.temperature,
+      skytext: result[0].current.skytext,
+      imageUrl: result[0].current.imageUrl
+    },
+    { upsert: true });
+  });
 }, null, "start", "America/Barbados")

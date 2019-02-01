@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"),
       Article = require("./models/scrapedData.js"),
       Archive = require("./models/archive.js"),
-      weather = require('weather-js');
+      Weather = require("./models/weatherData");
       express = require("express"),
       ejs = require("ejs");
 
@@ -96,11 +96,11 @@ function siteInfo(siteID) {
 app.get("/", function(req,res){
   // Query Articles DB
   Article.aggregate([
-    //Sort ObjectID (Sorts from )
+    //Sort articles in each document (Sorts in ascending order )
     {$sort: { articleCount: 1} },
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    //sort according to siteID and ID(newest article to oldest article)
+    //sort according siteID
     { $sort: { _id: 1 } },
   ], function (error, articles) {
     if(error){
@@ -108,22 +108,14 @@ app.get("/", function(req,res){
     }
     else {
       // Get Local Weather To Be Used in Widget
-      weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
-        // Load same view template if error is returned but with weather property set as "ERROR" :- in this case home.ejs will show no weather widget
-        if (err){
-          res.render("home", {
-            articles: articles,
-            siteInfo: siteInfo,
-            weather: "ERROR"
-          });          
-        } else {
-          res.render("home", {
-            articles: articles,
-            siteInfo: siteInfo,
-            weather: result[0]
-          });
-        }
-      });
+      Weather.find({}, function (error, data) {
+        // Render homepage template
+        res.render("home", {
+          articles: articles,
+          siteInfo: siteInfo,
+          weather: data
+        });
+      })
     }
   });
 });

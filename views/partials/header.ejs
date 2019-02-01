@@ -30,9 +30,6 @@
         MOBATON NEWS
       </a>
       <div class="weather-widget">
-        <% if(weather === "ERROR"){ %>
-          <span></span>
-        <% } else { %>
           <span class="weather-temp">
             <%= weather.current.temperature %><span>&#176;C</span>
           </span>
@@ -40,6 +37,5 @@
             <%= weather.current.skytext %>
             <img src="<%=weather.current.imageUrl%>" alt="">
           </span>
-        <% } %>
       </div>
     </header>
