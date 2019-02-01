@@ -138,6 +138,8 @@ html[data-scroll='3'] #footer-link{
 /* Styles article headlines */
 .links-list li {
   border-bottom: dashed rgba(70, 70, 83, 0.5) 1px;
+  display: flex;
+  align-items: baseline;
 }
 
 /* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
