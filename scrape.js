@@ -25,8 +25,15 @@ const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrap
 mongoose.connect(databaseUrl,
   { useNewUrlParser: true });
 
+/************************
+Declare Global Variables
+*************************/
 // Count articles as data is scraped from website
-let articleCount = 0;
+let articleCount = 0,
+    location = "America/Barbados",
+    scrapeHours = "5-21",
+    scrapeMins = 0;
+
 
 // Convert siteName to a siteID - reverse function is found in main.js
 function siteID(siteName) {
@@ -104,7 +111,7 @@ function archiver(siteData, siteName) {
 
 
 // Schedule Barbados Today to be scrapped every hour on minute 0, second 0 between 5am and 9pm inclusive
-new CronJob("0 0 5-21 * * *", function () {
+new CronJob(`0 0 ${scrapeHours} * * *`, function () {
   // Scrape Barbados Today
   request.get("https://barbadostoday.bb/", function (error, response, body) {
     let siteName = "Barbados Today";
@@ -135,10 +142,10 @@ new CronJob("0 0 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 // Schedule NationNews to be scrapped every hour on minute 2, second 0 between 5am and 9pm inclusive
-new CronJob("0 2 5-21 * * *", function () {
+new CronJob(`0 2 ${scrapeHours} * * *`, function () {
   //Scrape NationNews
   request.get("http://www.nationnews.com/type/news", function (error, response, body) {
     let siteName = "Nation News"
@@ -171,10 +178,10 @@ new CronJob("0 2 5-21 * * *", function () {
       });
     }
   })
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 // Schedule LoopNews to be scrapped every hour on minute 4, second 0 between 5am and 9pm inclusive
-new CronJob("0 4 5-21 * * *", function () {
+new CronJob(`0 4 ${scrapeHours} * * *`, function () {
   //Scrape LoopNews
   request.get("http://www.loopnewsbarbados.com/category/loopnewsbarbados-barbados-news", function (error, response, body) {
     let siteName = "Loop News";
@@ -208,10 +215,10 @@ new CronJob("0 4 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 // Schedule Advocate1 to be scrapped every hour on minute 6, second 0 between 5am and 9pm inclusive
-new CronJob("0 6 5-21 * * *", function () {
+new CronJob(`0 6 ${scrapeHours} * * *`, function () {
   // Scrape Advocate Page 1
   request.get("https://www.barbadosadvocate.com/news", function (error, response, body) {
     let siteName = "Barbados Advocate";
@@ -240,11 +247,11 @@ new CronJob("0 6 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule Advocate2 to be scrapped every hour on minute 8, second 0 between 5am and 9pm inclusive
-new CronJob("0 8 5-21 * * *", function () {
+new CronJob(`0 8 ${scrapeHours} * * *`, function () {
   // Scrape Advocate Page 2
   request.get("https://www.barbadosadvocate.com/news?page=1", function (error, response, body) {
     let siteName = "Barbados Advocate"
@@ -273,11 +280,11 @@ new CronJob("0 8 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule BIBA to be scrapped every hour on minute 10, second 0 between 5am and 9pm inclusive
-new CronJob("0 10 5-21 * * *", function () {
+new CronJob(`0 10 ${scrapeHours} * * *`, function () {
   // Scrape BIBA
   request.get("http://biba.bb/category/news/local-news/", function (error, response, body) {
     let siteName = "Barbados Intl Business Assoc";
@@ -305,11 +312,11 @@ new CronJob("0 10 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule BBICT to be scrapped every hour on minute 12, second 0 between 5am and 9pm inclusive
-new CronJob("0 12 5-21 * * *", function () {
+new CronJob(`0 12 ${scrapeHours} * * *`, function () {
   // Scrape Barbados ICT
   request.get("http://barbadosict.org/news/", function (error, response, body) {
     let siteName = "Barbados ICT";
@@ -337,11 +344,11 @@ new CronJob("0 12 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule bbBusiness to be scrapped every hour on minute 14, second 0 between 5am and 9pm inclusive
-new CronJob("0 14 5-21 * * *", function () {
+new CronJob(`0 14 ${scrapeHours} * * *`, function () {
   // Scrape BusinessBarbados
   request.get("http://businessbarbados.com/", function (error, response, body) {
     let siteName = "Business Barbados";
@@ -368,11 +375,11 @@ new CronJob("0 14 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
-new CronJob("0 16 5-21 * * *", function () {
+new CronJob(`0 16 ${scrapeHours} * * *`, function () {
   // Scrape GIS
   request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
     let siteName = "Government Info Service";
@@ -404,10 +411,10 @@ new CronJob("0 16 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 // Schedule CBC News to be scrapped every hour on minute 18, second 0 between 5am and 8pm inclusive
-new CronJob("0 18 5-21 * * *", function () {
+new CronJob(`0 18 ${scrapeHours} * * *`, function () {
   // Scrape CBC
   request.get("https://www.cbc.bb/index.php/news/barbados-news", function (error, response, body) {
     let siteName = "CBC News";
@@ -437,11 +444,11 @@ new CronJob("0 18 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule CBC News to be scrapped every hour on minute 20, second 0 between 5am and 8pm inclusive
-new CronJob("0 20 5-21 * * *", function () {
+new CronJob(`0 20 ${scrapeHours} * * *`, function () {
 // Scrape CBC
   request.get("https://www.cbc.bb/index.php/news/barbados-news?start=6", function (error, response, body) {
   let siteName = "CBC News";
@@ -469,11 +476,11 @@ new CronJob("0 20 5-21 * * *", function () {
     });
   }
 });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Schedule Barbados Reporter to be scrapped every hour on minute 18, second 0 between 5am and 9pm inclusive
-new CronJob("0 22 5-21 * * *", function () {
+new CronJob(`0 22 ${scrapeHours} * * *`, function () {
   // Scrape Barbados Reporter
   request.get("https://www.bajanreporter.com/category/new/", function (error, response, body) {
     let siteName = "Barbados Reporter";
@@ -508,11 +515,11 @@ new CronJob("0 22 5-21 * * *", function () {
       });
     }
   });
-}, null, "start", "America/Barbados");
+}, null, "start", location);
 
 
 // Get Weather Data and reset article count
-new CronJob("0 24 5-21 * * *", function(){
+new CronJob(`0 24 ${scrapeHours} * * *`, function(){
   // Reset article count to 0 after all sites have been scraped
   articleCount = 0;
   weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
@@ -524,4 +531,5 @@ new CronJob("0 24 5-21 * * *", function(){
     },
     { upsert: true });
   });
-}, null, "start", "America/Barbados")
+}, null, "start", location)
+
