@@ -530,8 +530,11 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function(){
       skytext: result[0].current.skytext,
       imageUrl: result[0].current.imageUrl
     },
-    { upsert: true });
-    console.log(result[0].current.temperature);
+    { upsert: true }, function(err, data){
+      if (error) {
+        console.log(`Error adding weather to DB: ${err}`);
+      }
+    });
   });
 }, null, "start", location);
 
