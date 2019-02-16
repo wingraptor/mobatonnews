@@ -5,18 +5,17 @@ Handle Toggler To Show/Hide More Articles
 //Select all togglers on page
 var togglers = document.querySelectorAll(".articles-toggler");
 
-togglers.forEach(function(toggler){
+togglers.forEach(function (toggler) {
   //Add click event listener to all togglers
-  toggler.addEventListener("click", function(){
-    console.log("Success");
+  toggler.addEventListener("click", function () {
     //Select all hidden article items for the specifically clicked toggler
     var hiddenItems = document.querySelectorAll(`.list-hidden--${this.getAttribute("data-website")}`);
     console.log(`.list-hidden--${this.getAttribute("data-website")}`);
     //Make changes for all selected hidden article items
-    hiddenItems.forEach(function(hiddenItem){
-      if(hiddenItem.style.display === "none"){
+    hiddenItems.forEach(function (hiddenItem) {
+      if (hiddenItem.style.display === "none") {
         // Make hidden article item visible
-        hiddenItem.style.display = "block";
+        hiddenItem.style.display = "flex";
         // Change text of p element (first child of toggler element) to 'less'
         toggler.firstChild.textContent = "Less";
         //Change down arrow of arrow in toggler element to up
@@ -34,12 +33,42 @@ togglers.forEach(function(toggler){
 });
 
 
+/****************************************
+Handle Toggler To Share Articles
+****************************************/
+
+// Select all share link togglers on page
+var linkTogglers = document.querySelectorAll(".share-toggler");
+
+// Add event listener to all article togglers
+linkTogglers.forEach(function (toggler) {
+  toggler.addEventListener("click", function () {
+    // Get articleID of corresponding article
+    var articleID = this.getAttribute("data-articleID");
+    // Select corresponding div containing links to share article
+    var shareDiv = document.getElementById(articleID);
+    //Check to see if div with sharing links is not displayed
+    if (shareDiv.style.display === "none") {
+      //Display div with sharing links
+      shareDiv.style.display = "block";
+      //Change arrow to up arrow
+      toggler.classList = "fas fa-angle-up share-toggler";
+    } else {
+      //Remove div from page
+      shareDiv.style.display = "none";
+      //Change arrow to down arrow
+      toggler.classList = "fas fa-angle-down share-toggler";
+    }
+  });
+})
+
+
 /***********************************
 Strike through clicked article links
 ************************************/
 var links = document.querySelectorAll(".headline");
-links.forEach(function(link){
-  link.addEventListener("click", function(){
+links.forEach(function (link) {
+  link.addEventListener("click", function () {
     this.style.textDecoration = "line-through";
   });
 });
@@ -88,7 +117,7 @@ const storeScroll = () => {
   let maxScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
   // Fraction of page scrolled - from 0 to 1
   let fractionScrolled = heightScrolled / maxScrollHeight;
-  
+
   if (fractionScrolled >= 1) {
     document.documentElement.dataset.scroll = 3;
   } else if (fractionScrolled >= 0.66) {

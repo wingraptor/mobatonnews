@@ -11,25 +11,38 @@
       </h2>
       <ul class="links-list">
       <% for(var j = 0; j < articles[i].data.length; j++){ %>
-        <%# controls number of article headlines %>
+        <%# Controls number of headlines displayed per website list, (max of 10), other articles are hidden %>
         <% if (j >= 10){ %>
           <li style="display: none" class="list-hidden--<%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>">
-            <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
-              <i class="fab fa-whatsapp"></i>
-            </a>
             <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow" data-tippy-content="<em><%= articles[i].data[j].date%></em>  <%= articles[i].data[j].summary %>">
               <%= articles[i].data[j].headline %>
             </a>
+            <i class="fas fa-angle-down share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
           </li>
-        <% } else { %>
-          <li>
+          <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
+            <span>Share:</span>
+            <!-- WhatsApp Share Link -->
             <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
               <i class="fab fa-whatsapp"></i>
             </a>
+          </div>
+        <% } else { %>
+          <li>
             <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow" data-tippy-content="<em><%= articles[i].data[j].date %></em> <%= articles[i].data[j].summary %>">
               <%= articles[i].data[j].headline %>
             </a>
+            <i class="fas fa-angle-down share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
           </li>
+          <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
+            <span>Share:</span>
+            <!-- WhatsApp Share Link -->
+            <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
+              <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= articles[i].data[j].link %>" class="whatsApp-icon">
+              <i class="fab fa-facebook" style="color:#3B5998"></i>
+            </a>
+          </div>
         <% } %>
       <% } %>
       </ul>

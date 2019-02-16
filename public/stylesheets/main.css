@@ -141,6 +141,23 @@ html[data-scroll='3'] #footer-link{
   display: flex;
   padding-left: 2%;
   align-items: baseline;
+  /* Spaces flex items equally in parent, in this case pushes items to opposite ends of parent element */
+  justify-content: space-between;
+}
+
+.links-share {
+  padding: 1% 0 1% 0;
+  text-align: center;
+}
+
+.links-share .fab {
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size: 1.3em;
+}
+
+.share-toggler {
+  cursor: pointer;
 }
 
 /* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
@@ -165,12 +182,8 @@ html[data-scroll='3'] #footer-link{
   transition: var(--transition-values);
 }
 
-.whatsApp-icon{
-  padding-right: 2%;
-  color: #4FCE5D;
-  font-size: 1.25em;
-  padding-right: 2%;
-  transition: var(--transition-values);
+.fab {
+  font-size: 1em;
 }
 
 /* Changes Color of Icons (fas) on page depending on scroll position */
