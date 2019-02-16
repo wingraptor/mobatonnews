@@ -1,4 +1,5 @@
 const mongoose = require("mongoose"),
+  weatherAPI = require("weather-js"),
   Article = require("./models/scrapedData.js"),
   request = require("request"),
   cheerio = require("cheerio"),
@@ -522,7 +523,7 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
 new CronJob(`0 24 ${scrapeHours} * * *`, function(){
   // Reset article count to 0 after all sites have been scraped
   articleCount = 0;
-  weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
+  weatherAPI.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
     if (err) console.log(`Error getting weather data: ${err}`);
     Weather.replaceOne({}, {
       temperature: result[0].current.temperature,
@@ -530,6 +531,7 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function(){
       imageUrl: result[0].current.imageUrl
     },
     { upsert: true });
+    console.log(result[0].current.temperature);
   });
-}, null, "start", location)
+}, null, "start", location);
 
