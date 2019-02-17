@@ -235,6 +235,9 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
   .main-header {
     flex-direction: column;
   }
+  .weather-widget{
+    margin-left: 2%;
+  }
 }
 
 /* li, ul, h2, section {
