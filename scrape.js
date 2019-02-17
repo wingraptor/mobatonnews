@@ -531,10 +531,11 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function(){
       imageUrl: result[0].current.imageUrl
     },
     { upsert: true }, function(err, data){
-      if (error) {
+      if (err) {
         console.log(`Error adding weather to DB: ${err}`);
       }
     });
+    console.log(result);
   });
 }, null, "start", location);
 
