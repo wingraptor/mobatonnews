@@ -64,7 +64,7 @@ linkTogglers.forEach(function (toggler) {
 
 
 /***********************************
-Strike through clicked article links
+Strike through clicked article links; cannot use a:visited pseudo-class :- http://bit.ly/2D3B6K9 
 ************************************/
 var links = document.querySelectorAll(".headline");
 links.forEach(function (link) {
