@@ -1,4 +1,5 @@
-const mongoose = require("mongoose"),
+const bodyParser = require('body-parser'),
+  mongoose = require("mongoose"),
   Article = require("./models/scrapedData.js"),
   Archive = require("./models/archive.js"),
   Weather = require("./models/weatherData"),
@@ -29,15 +30,10 @@ mongoose.connect(
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// Send Message
-// client.messages
-//   .create({
-//     from: 'whatsapp:+14155238886',
-//     body: 'I see youuuu!',
-//     to: 'whatsapp:+12462455701'
-//   })
-//   .then(message => console.log(message.sid));
+// Error Messages
+const invalidMessage = "🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n Please use one of the commands below:\n\n- *News*: Send this command see the latest news from selected local sites"
 
 // Use siteID to get siteName and URL - reverse function is found in scrape.js
 function siteInfo(siteID) {
@@ -104,38 +100,46 @@ function siteInfo(siteID) {
 app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
   const date = moment().format("MMMM Do h a");
-  const title = "*🇧🇧Local News From Mobaton News🇧🇧 https://www.mobatonnews.info/*";
+  const title = "*🇧🇧Local News From Mobaton News🇧🇧 \n https://www.mobatonnews.info/*";
   const articlesPerSite = 3;
   let newArticlesMessage = "";
-  // Group top 3 newest articles from BBToday, NationNews and LoopNews
-  Article.aggregate([
-    //Find and Return articles from BBToday, NationNews and Loop News only
-    { $match: { $or: [{ siteID: 0 }, { siteID: 1 }, { siteID: 2 }] } },
-    //Sort articles from each website in ascending order according to articleCount
-    { $sort: { articleCount: 1 } },
-    //group articles according to siteIDs
-    { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    //sort according siteID
-    { $sort: { _id: 1 } }
-  ], function (error, articles) {
-    let newArticles = "";
-    // Iterate through each news site
-    for (var i = 0; i <= articles.length - 1; i++) {
-      let siteName = `*${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
-      newArticles += siteName;
-      // Iterate through articles from specific news site
-      for (var j = 1; j <= articlesPerSite; j++) {
-        newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}\n\n`;
+// Handle Latest News Message
+  if (req.body.Body.toLowerCase() === "news") {
+    // Group top 3 newest articles from BBToday, NationNews and LoopNews
+    Article.aggregate([
+      //Find and Return articles from BBToday, NationNews and Loop News only
+      { $match: { $or: [{ siteID: 0 }, { siteID: 1 }, { siteID: 2 }] } },
+      //Sort articles from each website in ascending order according to articleCount
+      { $sort: { articleCount: 1 } },
+      //group articles according to siteIDs
+      { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
+      //sort according siteID
+      { $sort: { _id: 1 } }
+    ], function (error, articles) {
+      let newArticles = "";
+      // Iterate through each news site
+      for (var i = 0; i <= articles.length - 1; i++) {
+        // Get Website name based on siteID
+        let siteName = `*${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
+        // Append siteName to initial newArticles message
+        newArticles += siteName;
+        // Iterate through articles from specific news site
+        for (var j = 1; j <= articlesPerSite; j++) {
+          newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}\n\n`;
+        }
       }
-    }
-    // Construct message for Users
+      // Construct message for Users
       newArticlesMessage = `${title}\n-----------------------\n*${date}*\n\n${newArticles}`;
 
-    twiml.message(newArticlesMessage);
-
+      twiml.message(newArticlesMessage);
+      res.writeHead(200, { 'Content-Type': 'text/xml' });
+      res.end(twiml.toString());
+    });
+  } else {
+    twiml.message(invalidMessage);
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
-  });
+  }
 });
 
 
