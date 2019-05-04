@@ -120,6 +120,17 @@ app.get("/", function(req,res){
   });
 });
 
+// Archive Page Route
+app.get("/history", function(req, res){
+  // Get Local Weather To Be Used in Widget
+  Weather.find({}, function (error, data) {
+    // Render archive template
+    res.render("archive", {
+      weather: data[0]
+    });
+  })
+});
+
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
 app.listen(port, IP, function(){
