@@ -39,11 +39,72 @@ app.use(express.static(__dirname + "/public"));
 //   })
 //   .then(message => console.log(message.sid));
 
+// Use siteID to get siteName and URL - reverse function is found in scrape.js
+function siteInfo(siteID) {
+  let siteInfo = {
+    name: "",
+    URL: "",
+    icon: ""
+  };
+  switch (siteID) {
+    case 0:
+      siteInfo.name = "Barbados Today";
+      siteInfo.URL = "http://barbadostoday.bb/";
+      siteInfo.icon = "newspaper";
+      break;
+    case 1:
+      siteInfo.name = "Nation News";
+      siteInfo.URL = "http://www.nationnews.com/";
+      siteInfo.icon = "newspaper";
+      break;
+    case 2:
+      siteInfo.name = "Loop News";
+      siteInfo.URL = "http://www.loopnewsbarbados.com/";
+      siteInfo.icon = "newspaper";
+      break;
+    case 3:
+      siteInfo.name = "Barbados Advocate";
+      siteInfo.URL = "https://www.barbadosadvocate.com/";
+      siteInfo.icon = "newspaper";
+      break;
+    case 4:
+      siteInfo.name = "Barbados Intl Business Assoc";
+      siteInfo.URL = "http://biba.bb/";
+      siteInfo.icon = "briefcase";
+      break;
+    case 5:
+      siteInfo.name = "Barbados ICT";
+      siteInfo.URL = "http://barbadosict.org/";
+      siteInfo.icon = "laptop";
+      break;
+    case 6:
+      siteInfo.name = "Business Barbados";
+      siteInfo.URL = "http://businessbarbados.com/";
+      siteInfo.icon = "briefcase";
+      break;
+    case 7:
+      siteInfo.name = "Government Info Service";
+      siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
+      siteInfo.icon = "bell";
+      break;
+    case 8:
+      siteInfo.name = "CBC News";
+      siteInfo.URL = "https://www.cbc.bb/index.php/news/barbados-news"
+      siteInfo.icon = "newspaper";
+      break;
+    case 9:
+      siteInfo.name = "Barbados Reporter";
+      siteInfo.URL = "https://www.bajanreporter.com/category/new/";
+      siteInfo.icon = "newspaper"
+  }
+  return siteInfo;
+}
+
 
 app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
   const date = moment().format("MMMM Do h a");
-  const title = "*News From Mobaton News - https://www.mobatonnews.info/*";
+  const title = "*🇧🇧Local News From Mobaton News🇧🇧 https://www.mobatonnews.info/*";
   const articlesPerSite = 3;
   let newArticlesMessage = "";
   // Group top 3 newest articles from BBToday, NationNews and LoopNews
@@ -57,9 +118,11 @@ app.post('/sms', (req, res) => {
     //sort according siteID
     { $sort: { _id: 1 } }
   ], function (error, articles) {
-    let newArticles = ""
+    let newArticles = "";
     // Iterate through each news site
     for (var i = 0; i <= articles.length - 1; i++) {
+      let siteName = `*${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
+      newArticles += siteName;
       // Iterate through articles from specific news site
       for (var j = 1; j <= articlesPerSite; j++) {
         newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}
