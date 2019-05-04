@@ -125,19 +125,11 @@ app.post('/sms', (req, res) => {
       newArticles += siteName;
       // Iterate through articles from specific news site
       for (var j = 1; j <= articlesPerSite; j++) {
-        newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}
-
-`;
+        newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}\n\n`;
       }
     }
     // Construct message for Users
-    newArticlesMessage = `${title}
-
----------
-
-*${date}*
-
-${newArticles}`;
+      newArticlesMessage = `${title}\n-----------------------\n*${date}*\n\n${newArticles}`;
 
     twiml.message(newArticlesMessage);
 
