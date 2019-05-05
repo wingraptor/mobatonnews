@@ -32,10 +32,11 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Error Messages
+// Error and Command Messages
+const siteCount = 10;
 const generalInvalidCommandMsg = `🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n`;
 const generalCommands = "*/news*: Send this command see the latest news from selected local sites\n";
-const botCommands = `See Valid Commands below:\n\n ${generalCommands}*/nationnews*: Nation News\n*/barbadostoday*: Barbados Today\n*/loopnews*: Loop News \n*/barbadosadvocate: Barbados Advocate*\n*/businessbarbados*: Business Barbados\n*/barbadosICT*: Barbados ICT\n*/gis*: Government Info. Service\n*/cbc*: CBC News\n*/barbadosreporter*: Barbados Reporter\n*/biba*: Barbados International Business Association\n`;
+const botCommands = `See Valid Commands below:\n\n ${generalCommands} ${commandGenerator()}`;
 const invalidCommandMsg = `${generalInvalidCommandMsg}${botCommands}`;
 
 // Returns array of unique siteIDs from articles DB - used to generate unique news sites from which articles are scraped  
@@ -49,12 +50,30 @@ const invalidCommandMsg = `${generalInvalidCommandMsg}${botCommands}`;
 //   }
 // });
 
+/********************************************
+HELPER FUNCTIONS
+*********************************************/
+
+// Generates valid commands and description in the form: /siteName: News from SiteName
+function commandGenerator(){
+  let siteCommandList = "";
+  for (var i = 0; i <= siteCount - 1; i++){
+    let siteInformation = siteInfo(i);
+    siteCommandList += `*${siteInformation.command()}*: News from ${siteInformation.name}\n`;
+  }
+  return siteCommandList;
+}
+
 // Use siteID to get siteName and URL - reverse function is found in scrape.js
 function siteInfo(siteID) {
   let siteInfo = {
     name: "",
     URL: "",
-    icon: ""
+    icon: "",
+    // Generates command strings from the given site
+    command: function(){ 
+      return `/${siteInfo.name.toLowerCase().split(" ").join("")}`;
+    }
   };
   switch (siteID) {
     case 0:
@@ -78,7 +97,7 @@ function siteInfo(siteID) {
       siteInfo.icon = "newspaper";
       break;
     case 4:
-      siteInfo.name = "Barbados Intl Business Assoc";
+      siteInfo.name = "BIBA";
       siteInfo.URL = "http://biba.bb/";
       siteInfo.icon = "briefcase";
       break;
@@ -93,7 +112,7 @@ function siteInfo(siteID) {
       siteInfo.icon = "briefcase";
       break;
     case 7:
-      siteInfo.name = "Government Info Service";
+      siteInfo.name = "GIS";
       siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
       siteInfo.icon = "bell";
       break;
@@ -103,7 +122,7 @@ function siteInfo(siteID) {
       siteInfo.icon = "newspaper";
       break;
     case 9:
-      siteInfo.name = "Barbados Reporter";
+      siteInfo.name = "Bajan Reporter";
       siteInfo.URL = "https://www.bajanreporter.com/category/new/";
       siteInfo.icon = "newspaper"
   }
