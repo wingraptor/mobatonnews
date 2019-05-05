@@ -33,7 +33,21 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Error Messages
-const invalidMessage = "🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n Please use one of the commands below:\n\n- *News*: Send this command see the latest news from selected local sites"
+const generalInvalidCommandMsg = `🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n`;
+const generalCommands = "*/news*: Send this command see the latest news from selected local sites\n";
+const botCommands = `See Valid Commands below:\n\n ${generalCommands}*/nationnews*: Nation News\n*/barbadostoday*: Barbados Today\n*/loopnews*: Loop News \n*/barbadosadvocate: Barbados Advocate*\n*/businessbarbados*: Business Barbados\n*/barbadosICT*: Barbados ICT\n*/gis*: Government Info. Service\n*/cbc*: CBC News\n*/barbadosreporter*: Barbados Reporter\n*/biba*: Barbados International Business Association\n`;
+const invalidCommandMsg = `${generalInvalidCommandMsg}${botCommands}`;
+
+// Returns array of unique siteIDs from articles DB - used to generate unique news sites from which articles are scraped  
+// Article.distinct("siteID", function (error, uniqueIDs) {
+//   if (error) {
+//     console.log(`Error finding distinct siteIDs from DB:   ${error}`);
+//   } else{
+//     for (var i = 0; i <= uniqueIDs.length; i++) {
+//       return siteInfo(uniqueIDs[i]).name;
+//     }
+//   }
+// });
 
 // Use siteID to get siteName and URL - reverse function is found in scrape.js
 function siteInfo(siteID) {
@@ -100,11 +114,11 @@ function siteInfo(siteID) {
 app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
   const date = moment().format("MMMM Do h a");
-  const title = "*🇧🇧Local News From Mobaton News🇧🇧 \n https://www.mobatonnews.info/*";
+  const title = "🇧🇧*Local News From Mobaton News*🇧🇧 \n https://www.mobatonnews.info/";
   const articlesPerSite = 3;
   let newArticlesMessage = "";
 // Handle Latest News Message
-  if (req.body.Body.toLowerCase() === "news") {
+  if (req.body.Body.toLowerCase() === "/news") {
     // Group top 3 newest articles from BBToday, NationNews and LoopNews
     Article.aggregate([
       //Find and Return articles from BBToday, NationNews and Loop News only
@@ -129,14 +143,14 @@ app.post('/sms', (req, res) => {
         }
       }
       // Construct message for Users
-      newArticlesMessage = `${title}\n-----------------------\n*${date}*\n\n${newArticles}`;
+      newArticlesMessage = `${title}\n-----------------------\n*Last Updated: ${date}*\n\n${newArticles}`;
 
       twiml.message(newArticlesMessage);
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
     });
   } else {
-    twiml.message(invalidMessage);
+    twiml.message(invalidCommandMsg);
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
   }
