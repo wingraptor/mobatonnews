@@ -32,36 +32,50 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Error and Command Messages
+// Number of new websites that are crawled
 const siteCount = 10;
+
+// Error and Command Messages
 const generalInvalidCommandMsg = `🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n`;
 const generalCommands = "*/news*: Send this command see the latest news from selected local sites\n";
-const botCommands = `See Valid Commands below:\n\n ${generalCommands} ${commandGenerator()}`;
+const botCommands = `See Valid Commands below:\n\n ${generalCommands} ${addDescriptionToCommands(commandsGenerator())}`;
 const invalidCommandMsg = `${generalInvalidCommandMsg}${botCommands}`;
 
-// Returns array of unique siteIDs from articles DB - used to generate unique news sites from which articles are scraped  
-// Article.distinct("siteID", function (error, uniqueIDs) {
-//   if (error) {
-//     console.log(`Error finding distinct siteIDs from DB:   ${error}`);
-//   } else{
-//     for (var i = 0; i <= uniqueIDs.length; i++) {
-//       return siteInfo(uniqueIDs[i]).name;
-//     }
-//   }
-// });
 
 /********************************************
 HELPER FUNCTIONS
 *********************************************/
 
-// Generates valid commands and description in the form: /siteName: News from SiteName
-function commandGenerator(){
-  let siteCommandList = "";
-  for (var i = 0; i <= siteCount - 1; i++){
+// Generate an array of commands in the format "["/website1", "/webiste2"]" via calling the site.info.command method in the siteInfo function
+function commandsGenerator() {
+  // let siteCommandList = "";
+  let siteCommandList = [];
+  for (var i = 0; i <= siteCount - 1; i++) {
     let siteInformation = siteInfo(i);
-    siteCommandList += `*${siteInformation.command()}*: News from ${siteInformation.name}\n`;
+    // siteCommandList += `*${siteInformation.command()}*: News from ${siteInformation.name}\n`;
+    siteCommandList.push(siteInformation.command());
   }
   return siteCommandList;
+}
+
+// Adds specific descriptions to generated commands in the format "/newsSite1: News from {siteName]"
+function addDescriptionToCommands(commands) {
+  let commandsAndDescript = "";
+  commands.forEach(function (command, i) {
+    let siteInformation = siteInfo(i);
+    commandsAndDescript += `*${command}*: News from ${siteInformation.name}\n`;
+  });
+  return commandsAndDescript;
+}
+
+function siteCommandValidator(userCommand,validSiteCommands){
+  let validCommand = false;
+  validSiteCommands.forEach(function(siteCommand){
+    if (siteCommand === userCommand){
+      validCommand = true;
+    }
+  });
+  return validCommand;
 }
 
 // Use siteID to get siteName and URL - reverse function is found in scrape.js
@@ -70,8 +84,8 @@ function siteInfo(siteID) {
     name: "",
     URL: "",
     icon: "",
-    // Generates command strings from the given site
-    command: function(){ 
+    // Generates command strings from the given site in the form "/siteName"
+    command: function () {
       return `/${siteInfo.name.toLowerCase().split(" ").join("")}`;
     }
   };
@@ -130,14 +144,53 @@ function siteInfo(siteID) {
 }
 
 
+// Convert userCommand to a siteID - reverse function is found in main.js
+function siteIDGenerator(userCommand) {
+  let siteID = "";
+  switch (userCommand) {
+    case "/barbadostoday":
+      siteID = 0;
+      break;
+    case "/nationnews":
+      siteID = 1;
+      break;
+    case "/loopnews":
+      siteID = 2;
+      break;
+    case "/barbadosadvocate":
+      siteID = 3;
+      break;
+    case "/biba":
+      siteID = 4;
+      break;
+    case "/barbadosict":
+      siteID = 5;
+      break;
+    case "/businessbarbados":
+      siteID = 6;
+      break;
+    case "/gis":
+      siteID = 7;
+      break;
+    case "/cbcnews":
+      siteID = 8;
+      break;
+    case "/bajanreporter":
+      siteID = 9;
+      break;
+  }
+  return siteID;
+}
+
 app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
   const date = moment().format("MMMM Do h a");
-  const title = "🇧🇧*Local News From Mobaton News*🇧🇧 \n https://www.mobatonnews.info/";
+  const title = "🇧🇧 *Local News From Mobaton News* 🇧🇧\n https://www.mobatonnews.info/";
   const articlesPerSite = 3;
   let newArticlesMessage = "";
-// Handle Latest News Message
-  if (req.body.Body.toLowerCase() === "/news") {
+  let userCommand = req.body.Body.toLowerCase();
+  // Handle Latest News Message
+  if (userCommand === "/news") {
     // Group top 3 newest articles from BBToday, NationNews and LoopNews
     Article.aggregate([
       //Find and Return articles from BBToday, NationNews and Loop News only
@@ -168,7 +221,28 @@ app.post('/sms', (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
     });
+  } else if (siteCommandValidator(userCommand, commandsGenerator())) {
+    let siteID = siteIDGenerator(userCommand);
+    let articlesList = "";
+    Article.find({ siteID: siteID }, null, function (error, articles) {
+      if (error) {
+        console.log(`Error finding news site: ${Error}`);
+      } else {
+        let siteName = `*${siteInfo(siteID).name.toUpperCase()}* \n -----------------------\n`;
+        for (var i = 0; i <= 3; i++) {
+          articlesList += `*${articles[i].headline}* - ${articles[i].link}\n\n`;
+        }
+
+        // Construct message for Users
+        articlesMessage = `${title}\n-----------------------\n${siteName}*Last Updated: ${date}*\n\n${articlesList}`;
+        twiml.message(articlesMessage);
+        res.writeHead(200, { 'Content-Type': 'text/xml' });
+        res.end(twiml.toString());
+      }
+    });
+    // console.log(siteID(userCommand));
   } else {
+
     twiml.message(invalidCommandMsg);
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());

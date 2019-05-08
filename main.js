@@ -88,10 +88,6 @@ function siteInfo(siteID) {
 }
 
 
-
-
-
-
 // Home Page Route
 app.get("/", function(req,res){
   // Query Articles DB
