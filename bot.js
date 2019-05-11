@@ -33,7 +33,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Number of new websites that are crawled
-const siteCount = 10;
+let siteCount = 10;
 
 // Error and Command Messages
 const generalInvalidCommandMsg = `🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n`;
@@ -68,10 +68,10 @@ function addDescriptionToCommands(commands) {
   return commandsAndDescript;
 }
 
-function siteCommandValidator(userCommand,validSiteCommands){
+function siteCommandValidator(userCommand, validSiteCommands) {
   let validCommand = false;
-  validSiteCommands.forEach(function(siteCommand){
-    if (siteCommand === userCommand){
+  validSiteCommands.forEach(function (siteCommand) {
+    if (siteCommand === userCommand) {
       validCommand = true;
     }
   });
@@ -181,6 +181,17 @@ function siteIDGenerator(userCommand) {
   }
   return siteID;
 }
+
+
+// (function getSiteCount() {
+//   Article.distinct("siteID", function (error, uniqueIDs) {
+//     if (error) {
+//       console.log(`Error finding distinct siteIDs from DB:   ${error}`);
+//     } else {
+//       siteCount = uniqueIDs.length;
+//     }
+//   });
+// })();
 
 app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
