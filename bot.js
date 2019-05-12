@@ -221,7 +221,7 @@ app.post('/sms', (req, res) => {
         // Append siteName to initial newArticles message
         newArticles += siteName;
         // Iterate through articles from specific news site
-        for (var j = 0; j <= articlesPerSite; j++) {
+        for (var j = 0; j <= articlesPerSite - 1; j++) {
           newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}\n\n`;
         }
       }
