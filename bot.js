@@ -235,7 +235,7 @@ app.post('/sms', (req, res) => {
   } else if (siteCommandValidator(userCommand, commandsGenerator())) {
     let siteID = siteIDGenerator(userCommand);
     let articlesList = "";
-    Article.find({ siteID: siteID }, null, { $sort: { articleCount: 1 } }, function (error, articles) {
+    Article.find({ siteID: siteID }, null, { sort: { articleCount: 1 } }, function (error, articles) {
       if (error) {
         console.log(`Error finding news site: ${Error}`);
       } else {
