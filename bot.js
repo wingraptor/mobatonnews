@@ -217,7 +217,7 @@ app.post('/sms', (req, res) => {
       // Iterate through each news site
       for (var i = 0; i <= articles.length - 1; i++) {
         // Get Website name based on siteID
-        let siteName = `*📰 ${siteInfo(articles[i]._id).name.toUpperCase()} 📰* \n -----------------------\n`;
+        let siteName = `*📰 ${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
         // Append siteName to initial newArticles message
         newArticles += siteName;
         // Iterate through articles from specific news site
