@@ -239,13 +239,13 @@ app.post('/sms', (req, res) => {
       if (error) {
         console.log(`Error finding news site: ${Error}`);
       } else {
-        let siteName = `*${siteInfo(siteID).name.toUpperCase()}* \n -----------------------\n`;
+        let siteName = `*📰 ${siteInfo(siteID).name.toUpperCase()} 📰* \n -----------------------\n`;
         for (var i = 0; i <= 3; i++) {
           articlesList += `*${articles[i].headline}* - ${articles[i].link}\n\n`;
         }
 
         // Construct message for Users
-        articlesMessage = `${title}\n-----------------------\n${siteName}*Last Updated: ${date}*\n\n${articlesList}`;
+        articlesMessage = `${title}\n-----------------------\n${siteName}*Last Updated: ${date} Local Time*\n\n${articlesList}`;
         twiml.message(articlesMessage);
         res.writeHead(200, { 'Content-Type': 'text/xml' });
         res.end(twiml.toString());
