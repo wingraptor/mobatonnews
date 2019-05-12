@@ -217,7 +217,7 @@ app.post('/sms', (req, res) => {
       // Iterate through each news site
       for (var i = 0; i <= articles.length - 1; i++) {
         // Get Website name based on siteID
-        let siteName = `*${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
+        let siteName = `*📰 ${siteInfo(articles[i]._id).name.toUpperCase()} 📰* \n -----------------------\n`;
         // Append siteName to initial newArticles message
         newArticles += siteName;
         // Iterate through articles from specific news site
@@ -226,7 +226,7 @@ app.post('/sms', (req, res) => {
         }
       }
       // Construct message for Users
-      newArticlesMessage = `${title}\n-----------------------\n*Last Updated: ${date}*\n\n${newArticles}`;
+      newArticlesMessage = `${title}\n-----------------------\n*Last Updated: ${date} Local Time*\n\n${newArticles}`;
 
       twiml.message(newArticlesMessage);
       res.writeHead(200, { 'Content-Type': 'text/xml' });
