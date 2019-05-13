@@ -38,7 +38,7 @@ let siteCount = 10;
 // Error and Command Messages
 const generalInvalidCommandMsg = `🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n`;
 const generalCommands = "*/news*: Send this command see the latest news from selected local sites\n";
-const botCommands = `See Valid Commands below:\n\n ${generalCommands} ${addDescriptionToCommands(commandsGenerator())}`;
+const botCommands = `See Valid Commands below:\n\n${generalCommands}${addDescriptionToCommands(commandsGenerator())}`;
 const invalidCommandMsg = `${generalInvalidCommandMsg}${botCommands}`;
 
 
