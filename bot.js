@@ -197,9 +197,11 @@ app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
   const date = moment().format("MMMM Do h a");
   const title = "🇧🇧 *Local News From Mobaton News* 🇧🇧\n https://www.mobatonnews.info/";
+  const userCommand = req.body.Body.toLowerCase();
   const articlesPerSite = 3;
+  const maxMessageLength = 1600;
+  const messageHeader = `${title}\n-----------------------\n*Last Updated: ${date} Local Time*\n\n`;
   let newArticlesMessage = "";
-  let userCommand = req.body.Body.toLowerCase();
   // Handle Latest News Message
   if (userCommand === "/news") {
     // Group top 3 newest articles from BBToday, NationNews and LoopNews
@@ -214,19 +216,20 @@ app.post('/sms', (req, res) => {
       { $sort: { _id: 1 } }
     ], function (error, articles) {
       let newArticles = "";
+      let siteName = "";
       // Iterate through each news site
-      for (var i = 0; i <= articles.length - 1; i++) {
+      for (var i = 0; i <= articles.length - 1 && (siteName + messageHeader + newArticles).length <= maxMessageLength; i++) {
         // Get Website name based on siteID
-        let siteName = `*📰 ${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
+        siteName = `*📰 ${siteInfo(articles[i]._id).name.toUpperCase()}* \n -----------------------\n`;
         // Append siteName to initial newArticles message
         newArticles += siteName;
-        // Iterate through articles from specific news site
-        for (var j = 0; j <= articlesPerSite - 1; j++) {
+        // Iterate through articles from specific news site, if the generated message is > the maximum message length of 1600 characters then do no append anymore text
+        for (var j = 0; j <= articlesPerSite && (messageHeader + newArticles + `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}\n\n`).length <= maxMessageLength; j++) {
           newArticles += `*${articles[i].data[j].headline}* - ${articles[i].data[j].link}\n\n`;
         }
       }
       // Construct message for Users
-      newArticlesMessage = `${title}\n-----------------------\n*Last Updated: ${date} Local Time*\n\n${newArticles}`;
+      newArticlesMessage = `${messageHeader}${newArticles}`;
 
       twiml.message(newArticlesMessage);
       res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -240,18 +243,18 @@ app.post('/sms', (req, res) => {
         console.log(`Error finding news site: ${Error}`);
       } else {
         let siteName = `*📰 ${siteInfo(siteID).name.toUpperCase()} 📰* \n -----------------------\n`;
-        for (var i = 0; i <= 3; i++) {
+        // Iterate through articles and only append additional articles to message if message has less chars than maximum char length of 1600
+        for (var i = 0; i <= articles.length - 1 && (messageHeader + siteName + articlesList + `*${articles[i].headline}* - ${articles[i].link}\n\n`).length <= maxMessageLength; i++) {
           articlesList += `*${articles[i].headline}* - ${articles[i].link}\n\n`;
         }
 
         // Construct message for Users
-        articlesMessage = `${title}\n-----------------------\n${siteName}*Last Updated: ${date} Local Time*\n\n${articlesList}`;
+        articlesMessage = `${messageHeader}${siteName}${articlesList}`;
         twiml.message(articlesMessage);
         res.writeHead(200, { 'Content-Type': 'text/xml' });
         res.end(twiml.toString());
       }
     });
-    // console.log(siteID(userCommand));
   } else {
 
     twiml.message(invalidCommandMsg);
