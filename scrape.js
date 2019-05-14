@@ -382,28 +382,31 @@ new CronJob(`0 14 ${scrapeHours} * * *`, function () {
 // Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
 new CronJob(`0 16 ${scrapeHours} * * *`, function () {
   // Scrape GIS
-  request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
+request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
     let siteName = "Government Info Service";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
     } else {
       let $ = cheerio.load(body);
-      //Clear Article collection
+      // Clear Article collection
       Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
         if (error) {
           console.log(`Error deleting ${siteName} data`);
         }
       });
+
       //Generate siteData object from scraped data
-      $(".filter-topstories").each(function (index, element) {
-        //Limit news articles to first 16 only
-        if (index > 15) {
+      $(".et_pb_ajax_pagination_container article").each(function (index, element) {
+        console.log(index);
+        //Limit news articles to first 12 only
+        if (index > 11) {
           return;
         }
         let siteData = {
-          link: $(this).find(".esg-bottom a").attr("href"),
-          headline: $(this).find(".eg-hmpg_alt-element-0").text(),
-          date: $(this).find(".eg-hmpg_alt-element-3").text(),
+          link: $(this).find(".entry-title a").attr("href"),
+          headline: $(this).find(".entry-title").text(),
+          date: $(this).find(".published").text(),
+          summary: $(this).find(".post-content p").text(),
           siteID: siteID(siteName),
           articleCount: articleCount
         }
