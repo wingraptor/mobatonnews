@@ -70,6 +70,9 @@ function siteID(siteName) {
     case "Barbados Reporter":
       siteID = 9;
       break;
+    case "The Broad Street Journal":
+      siteID = 10;
+      break;
   }
   return siteID;
 }
@@ -522,8 +525,40 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
+// Schedule The Broad Street Journal to be scrapped every hour on minute 26, second 0 between 5am and 9pm inclusive
+new CronJob(`0 24 ${scrapeHours} * * *`, function () {
+  // Scrape The Broad Street Journal
+  request.get("https://www.broadstjournal.com/", function (error, response, body) {
+    let siteName = "The Broad Street Journal";
+    if (error) {
+      console.log(`Error scraping ${siteName}: ${error}`);
+    } else {
+      let $ = cheerio.load(body);
+      // Clear Article collection
+      Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+        if (error) {
+          console.log(`Error deleting ${siteName} data`);
+        }
+      });
+      //Generate siteData object from scraped data
+      $(".recent-post-item").each(function (index, element) {
+        let siteData = {
+          link: "https://www.broadstjournal.com" + $(this).find(".heading-link-box").attr("href"),
+          headline: $(this).find(".heading-hover").text(),
+          date: $(this).find(".date .details-text").text(),
+          summary: $(this).find(".post-description-side-block").text(),
+          siteID: siteID(siteName),
+          articleCount: articleCount
+        }
+        addSiteData(siteData, siteName);
+        articleCount++;
+      });
+    }
+  });
+}, null, "start", location);
+
 // Get Weather Data and reset article count
-new CronJob(`0 24 ${scrapeHours} * * *`, function(){
+new CronJob(`0 26 ${scrapeHours} * * *`, function(){
   // Reset article count to 0 after all sites have been scraped
   articleCount = 0;
   weatherAPI.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
@@ -541,4 +576,3 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function(){
     console.log(result);
   });
 }, null, "start", location);
-

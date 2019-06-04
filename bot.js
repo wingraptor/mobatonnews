@@ -139,6 +139,12 @@ function siteInfo(siteID) {
       siteInfo.name = "Bajan Reporter";
       siteInfo.URL = "https://www.bajanreporter.com/category/new/";
       siteInfo.icon = "newspaper"
+      break;
+    case 10:
+      siteInfo.name = "The Broad Street Journal";
+      siteInfo.URL = "https://www.broadstjournal.com/";
+      siteInfo.icon = "newspaper"
+      break;
   }
   return siteInfo;
 }
@@ -176,6 +182,9 @@ function siteIDGenerator(userCommand) {
       siteID = 8;
       break;
     case "/bajanreporter":
+      siteID = 9;
+      break;
+    case "/broadstreet":
       siteID = 9;
       break;
   }
