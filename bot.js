@@ -150,42 +150,43 @@ function siteInfo(siteID) {
   return siteInfo;
 }
 
+console.log(siteInfo(1).command())
 
 // Convert userCommand to a siteID - reverse function is found in main.js
 function siteIDGenerator(userCommand) {
   let siteID = "";
   switch (userCommand) {
-    case "/barbadostoday":
+    case siteInfo(0).command():
       siteID = 0;
       break;
-    case "/nationnews":
+    case siteInfo(1).command():
       siteID = 1;
       break;
-    case "/loopnews":
+    case siteInfo(2).command():
       siteID = 2;
       break;
-    case "/barbadosadvocate":
+    case siteInfo(3).command():
       siteID = 3;
       break;
-    case "/biba":
+    case siteInfo(4).command():
       siteID = 4;
       break;
-    case "/barbadosict":
+    case siteInfo(5).command():
       siteID = 5;
       break;
-    case "/businessbarbados":
+    case siteInfo(6).command():
       siteID = 6;
       break;
-    case "/gis":
+    case siteInfo(7).command():
       siteID = 7;
       break;
-    case "/cbcnews":
+    case siteInfo(8).command():
       siteID = 8;
       break;
-    case "/bajanreporter":
+    case siteInfo(9).command():
       siteID = 9;
       break;
-    case "/thebroadstreetjournal":
+    case siteInfo(10).command():
       siteID = 10;
       break;
   }
