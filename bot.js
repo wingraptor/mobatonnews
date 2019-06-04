@@ -185,7 +185,7 @@ function siteIDGenerator(userCommand) {
       siteID = 9;
       break;
     case "/broadstreet":
-      siteID = 9;
+      siteID = 10;
       break;
   }
   return siteID;
