@@ -32,7 +32,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Number of new websites that are crawled
+// Number of news websites that are crawled
 let siteCount = 11;
 
 // Error and Command Messages
@@ -68,6 +68,7 @@ function addDescriptionToCommands(commands) {
   return commandsAndDescript;
 }
 
+//Determine if command  sent by user to get site news is valid
 function siteCommandValidator(userCommand, validSiteCommands) {
   let validCommand = false;
   validSiteCommands.forEach(function (siteCommand) {
@@ -184,7 +185,7 @@ function siteIDGenerator(userCommand) {
     case "/bajanreporter":
       siteID = 9;
       break;
-    case "/broadstreet":
+    case "/broadstreetjournal":
       siteID = 10;
       break;
   }
@@ -244,7 +245,9 @@ app.post('/sms', (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
     });
-  } else if (siteCommandValidator(userCommand, commandsGenerator())) {
+  } 
+  // Handle commands user sends to get news from specific sites
+  else if (siteCommandValidator(userCommand, commandsGenerator())) {
     let siteID = siteIDGenerator(userCommand);
     let articlesList = "";
     Article.find({ siteID: siteID }, null, { sort: { articleCount: 1 } }, function (error, articles) {
@@ -264,14 +267,14 @@ app.post('/sms', (req, res) => {
         res.end(twiml.toString());
       }
     });
-  } else {
-
+  } 
+  // Handle invalid commands
+  else {
     twiml.message(invalidCommandMsg);
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
   }
 });
-
 
 app.listen(port, IP, function () {
   console.log("Server started");
