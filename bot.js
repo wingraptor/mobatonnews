@@ -185,7 +185,7 @@ function siteIDGenerator(userCommand) {
     case "/bajanreporter":
       siteID = 9;
       break;
-    case "/broadstreetjournal":
+    case "/thebroadstreetjournal":
       siteID = 10;
       break;
   }
