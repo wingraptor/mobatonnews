@@ -150,45 +150,14 @@ function siteInfo(siteID) {
   return siteInfo;
 }
 
-console.log(siteInfo(1).command())
-
-// Convert userCommand to a siteID - reverse function is found in main.js
+// Convert userCommand to a siteID
 function siteIDGenerator(userCommand) {
   let siteID = "";
-  switch (userCommand) {
-    case siteInfo(0).command():
-      siteID = 0;
-      break;
-    case siteInfo(1).command():
-      siteID = 1;
-      break;
-    case siteInfo(2).command():
-      siteID = 2;
-      break;
-    case siteInfo(3).command():
-      siteID = 3;
-      break;
-    case siteInfo(4).command():
-      siteID = 4;
-      break;
-    case siteInfo(5).command():
-      siteID = 5;
-      break;
-    case siteInfo(6).command():
-      siteID = 6;
-      break;
-    case siteInfo(7).command():
-      siteID = 7;
-      break;
-    case siteInfo(8).command():
-      siteID = 8;
-      break;
-    case siteInfo(9).command():
-      siteID = 9;
-      break;
-    case siteInfo(10).command():
-      siteID = 10;
-      break;
+// Generate siteID depending on userCommand sent
+  for (var i = 0; i <= siteCount - 1; i++) {
+    if (siteInfo(i).command() === userCommand){
+      siteID = i;
+    }
   }
   return siteID;
 }
@@ -246,7 +215,7 @@ app.post('/sms', (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
     });
-  } 
+  }
   // Handle commands user sends to get news from specific sites
   else if (siteCommandValidator(userCommand, commandsGenerator())) {
     let siteID = siteIDGenerator(userCommand);
@@ -268,7 +237,7 @@ app.post('/sms', (req, res) => {
         res.end(twiml.toString());
       }
     });
-  } 
+  }
   // Handle invalid commands
   else {
     twiml.message(invalidCommandMsg);
