@@ -33,7 +33,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Number of new websites that are crawled
-let siteCount = 10;
+let siteCount = 11;
 
 // Error and Command Messages
 const generalInvalidCommandMsg = `🤖BEEP BOOP🤖 I don't understand that command, human😒.\n\n`;
