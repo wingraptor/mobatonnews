@@ -31,9 +31,9 @@ Declare Global Variables
 *************************/
 // Count articles as data is scraped from website
 let articleCount = 0,
-    location = "America/Barbados",
-    scrapeHours = "5-21",
-    scrapeMins = 0;
+  location = "America/Barbados",
+  scrapeHours = "5-21",
+  scrapeMins = 0;
 
 
 // Convert siteName to a siteID - reverse function is found in main.js
@@ -151,37 +151,42 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
 // Schedule NationNews to be scrapped every hour on minute 2, second 0 between 5am and 9pm inclusive
 new CronJob(`0 2 ${scrapeHours} * * *`, function () {
   //Scrape NationNews
-  request.get("http://www.nationnews.com/type/news", function (error, response, body) {
-    let siteName = "Nation News"
-    if (error) {
-      console.log(`Error scraping ${siteName}: ${error}`);
-    } else {
-      let $ = cheerio.load(body);
-      //Clear Article collection
-      Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
-        if (error) {
-          console.log(`Error deleting ${siteName} data`);
-        }
-      });
-      //Generate siteData object from scraped data
-      //Iterate through news
-      $(".latest_block").each(function (index, element) {
-        let summary = $(this).find(".latest_content p").text();
-        //Add scraped data to articles document
-        let siteData = {
-          link: "http://www.nationnews.com" + $(this).find(".latest_content h3 a").attr("href"),
-          headline: $(this).find(".latest_content h3 a").text(),
-          date: $(this).find(".latest_content span").text(),
-          //Remove spaces and new line character before, after and within summary text
-          summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
-          siteID: siteID(siteName),
-          articleCount: articleCount
-        }
-        addSiteData(siteData, siteName);
-        articleCount++;       
-      });
-    }
-  })
+  request.get(
+    {
+      // deflate response from server using gzip --> https://stackoverflow.com/questions/8880741/node-js-easy-http-requests-with-gzip-deflate-compression
+      gzip: true,
+      uri: "http://www.nationnews.com/type/news"
+    }, function (error, response, body) {
+      let siteName = "Nation News"
+      if (error) {
+        console.log(`Error scraping ${siteName}: ${error}`);
+      } else {
+        let $ = cheerio.load(body);
+        //Clear Article collection
+        Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+          if (error) {
+            console.log(`Error deleting ${siteName} data`);
+          }
+        });
+        //Generate siteData object from scraped data
+        //Iterate through news
+        $(".latest_block").each(function (index, element) {
+          let summary = $(this).find(".latest_content p").text();
+          //Add scraped data to articles document
+          let siteData = {
+            link: "http://www.nationnews.com" + $(this).find(".latest_content h3 a").attr("href"),
+            headline: $(this).find(".latest_content h3 a").text(),
+            date: $(this).find(".latest_content span").text(),
+            //Remove spaces and new line character before, after and within summary text
+            summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
+            siteID: siteID(siteName),
+            articleCount: articleCount
+          }
+          addSiteData(siteData, siteName);
+          articleCount++;
+        });
+      }
+    })
 }, null, "start", location);
 
 // Schedule LoopNews to be scrapped every hour on minute 4, second 0 between 5am and 9pm inclusive
@@ -247,7 +252,7 @@ new CronJob(`0 6 ${scrapeHours} * * *`, function () {
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
-        articleCount++;      
+        articleCount++;
       });
     }
   });
@@ -280,7 +285,7 @@ new CronJob(`0 8 ${scrapeHours} * * *`, function () {
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
-        articleCount++; 
+        articleCount++;
       });
     }
   });
@@ -312,7 +317,7 @@ new CronJob(`0 10 ${scrapeHours} * * *`, function () {
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
-        articleCount++;    
+        articleCount++;
       });
     }
   });
@@ -344,7 +349,7 @@ new CronJob(`0 12 ${scrapeHours} * * *`, function () {
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
-        articleCount++;   
+        articleCount++;
       });
     }
   });
@@ -385,7 +390,7 @@ new CronJob(`0 14 ${scrapeHours} * * *`, function () {
 // Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
 new CronJob(`0 16 ${scrapeHours} * * *`, function () {
   // Scrape GIS
-request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
+  request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
     let siteName = "Government Info Service";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
@@ -439,7 +444,7 @@ new CronJob(`0 18 ${scrapeHours} * * *`, function () {
       $(".catItemView").each(function (index, element) {
         //Limit news articles to first 16 only
         let siteData = {
-          link:"https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
+          link: "https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
           headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
           date: $(this).find(".itemDate  span").text(),
           summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
@@ -456,33 +461,33 @@ new CronJob(`0 18 ${scrapeHours} * * *`, function () {
 
 // Schedule CBC News to be scrapped every hour on minute 20, second 0 between 5am and 8pm inclusive
 new CronJob(`0 20 ${scrapeHours} * * *`, function () {
-// Scrape CBC
+  // Scrape CBC
   request.get("https://www.cbc.bb/index.php/news/barbados-news?start=6", function (error, response, body) {
-  let siteName = "CBC News";
-  if (error) {
-    console.log(`Error scraping ${siteName}: ${error}`);
-  } else {
-    let $ = cheerio.load(body);
-    // Do not clear Article collection because it contains info about for page 1 of CBC news
-    // Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
-    //   if (error) {
-    //     console.log(`Error deleting ${siteName} data`);
-    //   }
-    // });
-    //Generate siteData object from scraped data
-    $(".catItemView").each(function (index, element) {
-      //Limit news articles to first 16 only
-      let siteData = {
-        link: "https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
-        headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
-        date: $(this).find(".itemDate  span").text(),
-        summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
-        siteID: siteID(siteName)
-      }
-      addSiteData(siteData, siteName);
-    });
-  }
-});
+    let siteName = "CBC News";
+    if (error) {
+      console.log(`Error scraping ${siteName}: ${error}`);
+    } else {
+      let $ = cheerio.load(body);
+      // Do not clear Article collection because it contains info about for page 1 of CBC news
+      // Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+      //   if (error) {
+      //     console.log(`Error deleting ${siteName} data`);
+      //   }
+      // });
+      //Generate siteData object from scraped data
+      $(".catItemView").each(function (index, element) {
+        //Limit news articles to first 16 only
+        let siteData = {
+          link: "https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
+          headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
+          date: $(this).find(".itemDate  span").text(),
+          summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
+          siteID: siteID(siteName)
+        }
+        addSiteData(siteData, siteName);
+      });
+    }
+  });
 }, null, "start", location);
 
 
@@ -558,7 +563,7 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 // Get Weather Data and reset article count
-new CronJob(`0 26 ${scrapeHours} * * *`, function(){
+new CronJob(`0 26 ${scrapeHours} * * *`, function () {
   // Reset article count to 0 after all sites have been scraped
   articleCount = 0;
   weatherAPI.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
@@ -568,11 +573,11 @@ new CronJob(`0 26 ${scrapeHours} * * *`, function(){
       skytext: result[0].current.skytext,
       imageUrl: result[0].current.imageUrl
     },
-    { upsert: true }, function(err, data){
-      if (err) {
-        console.log(`Error adding weather to DB: ${err}`);
-      }
-    });
+      { upsert: true }, function (err, data) {
+        if (err) {
+          console.log(`Error adding weather to DB: ${err}`);
+        }
+      });
     console.log(result);
   });
 }, null, "start", location);
