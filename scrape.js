@@ -139,6 +139,7 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
           date: $(this).find(".cat-post-date").text(),
           summary: $(this).find("p").text(),
           siteID: siteID(siteName),
+          imgURL: $(this).find("img").attr("src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -180,6 +181,7 @@ new CronJob(`0 2 ${scrapeHours} * * *`, function () {
             //Remove spaces and new line character before, after and within summary text
             summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
             siteID: siteID(siteName),
+            imgURL: "http://www.nationnews.com"+ $(this).find("img").attr("src"),
             articleCount: articleCount
           }
           addSiteData(siteData, siteName);
@@ -217,6 +219,7 @@ new CronJob(`0 4 ${scrapeHours} * * *`, function () {
           summary: $(this).find("p").text().replace(/^\s+|\s+$|\n/g, ' '),
           date: $(this).find(".date span").text(),
           siteID: siteID(siteName),
+          imgURL: $(this).find("img").attr("src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -249,6 +252,7 @@ new CronJob(`0 6 ${scrapeHours} * * *`, function () {
           date: $(this).find(".date span").text(),
           summary: $(this).find(".field-item p").text() + "...",
           siteID: siteID(siteName),
+          imgURL: $(this).find("img").attr("src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -282,6 +286,7 @@ new CronJob(`0 8 ${scrapeHours} * * *`, function () {
           date: $(this).find(".date span").text(),
           summary: $(this).find(".field-item p").text() + "...",
           siteID: siteID(siteName),
+          imgURL: $(this).find("img").attr("src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -346,7 +351,8 @@ new CronJob(`0 12 ${scrapeHours} * * *`, function () {
           headline: $(this).find(".title a").text(),
           date: $(this).find(".date").text(),
           siteID: siteID(siteName),
-          articleCount: articleCount
+          imgURL: $(this).find("img").attr("src"),
+          articleCount: articleCount,
         }
         addSiteData(siteData, siteName);
         articleCount++;
@@ -416,6 +422,7 @@ new CronJob(`0 16 ${scrapeHours} * * *`, function () {
           date: $(this).find(".published").text(),
           summary: $(this).find(".post-content p").text(),
           siteID: siteID(siteName),
+          imgURL: $(this).find("img").attr("src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -448,6 +455,7 @@ new CronJob(`0 18 ${scrapeHours} * * *`, function () {
           headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
           date: $(this).find(".itemDate  span").text(),
           summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
+          imgURL: "https://www.cbc.bb/" + $(this).find("img").attr("src"),
           siteID: siteID(siteName),
           articleCount: articleCount
         }
@@ -482,6 +490,7 @@ new CronJob(`0 20 ${scrapeHours} * * *`, function () {
           headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
           date: $(this).find(".itemDate  span").text(),
           summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
+          imgURL: "https://www.cbc.bb/" + $(this).find("img").attr("src"),
           siteID: siteID(siteName)
         }
         addSiteData(siteData, siteName);
@@ -520,6 +529,7 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
           // to only select text of summary and not text in <noscript> element - https://stackoverflow.com/questions/3442394/using-text-to-retrieve-only-text-not-nested-in-child-tags
           summary: $(this).find(".article-summary").clone().children().remove().end(".article-summary").text().replace(/^\s+|\s+$/g, ''),
           siteID: siteID(siteName),
+          imgURL: $(this).find("img").attr("data-lazy-src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);

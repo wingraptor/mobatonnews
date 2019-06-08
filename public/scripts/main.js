@@ -33,9 +33,9 @@ togglers.forEach(function (toggler) {
 });
 
 
-/****************************************
-Handle Toggler To Share Articles
-****************************************/
+/**************************************************
+Handle Toggler To Share Articles and see Meta Data
+**************************************************/
 
 // Select all share link togglers on page
 var linkTogglers = document.querySelectorAll(".share-toggler");
@@ -52,12 +52,12 @@ linkTogglers.forEach(function (toggler) {
       //Display div with sharing links
       shareDiv.style.display = "block";
       //Change arrow to up arrow
-      toggler.classList = "fas fa-angle-up share-toggler";
+      toggler.classList = "fas fa-minus share-toggler";
     } else {
       //Remove div from page
       shareDiv.style.display = "none";
       //Change arrow to down arrow
-      toggler.classList = "fas fa-angle-down share-toggler";
+      toggler.classList = "fas fa-plus share-toggler";
     }
   });
 })

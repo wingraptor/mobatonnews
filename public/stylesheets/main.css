@@ -177,6 +177,11 @@ html[data-scroll='3'] #footer-link{
   color:white;
 }
 
+.article-thumbnail{
+  height:136px;
+  width: 205px;
+}
+
 /* Style Icons */
 .fas {
   color: #578039;

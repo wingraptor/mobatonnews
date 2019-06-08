@@ -17,9 +17,14 @@
             <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
               <%= articles[i].data[j].headline %>
             </a>
-            <i class="fas fa-angle-down share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
+            <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
           </li>
           <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
+            <h3>Preview</h3>
+            <%# Show image if an image was scrapped  %>
+            <% if(articles[i].data[j].imgURL){ %>
+              <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
+            <% } %>    
             <p>
               <%= articles[i].data[j].date %></em> 
             </p>
@@ -41,10 +46,14 @@
             <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
               <%= articles[i].data[j].headline %>
             </a>
-            <i class="fas fa-angle-down share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
+            <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
           </li>
           <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
             <h3>Preview</h3>
+            <%# Show image if an image was scrapped  %>
+            <% if(articles[i].data[j].imgURL){ %>
+              <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
+            <% } %>
             <p>
               <em><%= articles[i].data[j].date %></em> 
             </p>
