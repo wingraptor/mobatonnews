@@ -180,6 +180,7 @@ html[data-scroll='3'] #footer-link{
 .article-thumbnail{
   height:136px;
   width: 205px;
+  border-radius: 2%;
 }
 
 /* Style Icons */
