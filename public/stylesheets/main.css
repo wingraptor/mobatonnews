@@ -63,7 +63,7 @@ a {
 
 
 .logo{
-  fill: var(--alt-highlight-color);
+  fill: var(--scroll-color-two);
   transition: var(--transition-values);
 }
 /* Change color of logo svg depending position of scroll */
@@ -74,7 +74,7 @@ html[data-scroll='2'] .logo{
   fill: var(--scroll-color-two);
 }
 html[data-scroll='3'] .logo{
-  fill: var(--scroll-color-three);
+  fill: var(--scroll-color-one);
 }
 
 
