@@ -140,14 +140,19 @@ html[data-scroll='3'] #footer-link{
 .links-list li {
   border-bottom: dotted rgba(70, 70, 83, 0.5) 1px;
   display: flex;
-  padding-left: 2%;
+  padding: 0 2% 0 2%;
+  /* padding-left: 2%;
+  padding-right: 2% */
   align-items: baseline;
   /* Spaces flex items equally in parent, in this case pushes items to opposite ends of parent element */
   justify-content: space-between;
+  box-shadow: 0px 0px 0.5px #111214;
 }
 
 .links-share {
-  padding: 1% 0 1% 0;
+  padding: 5%;
+  background-color: #397580;
+  border-radius: 1%;
   text-align: center;
 }
 
