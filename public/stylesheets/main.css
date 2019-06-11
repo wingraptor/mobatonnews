@@ -63,7 +63,7 @@ a {
 
 
 .logo{
-  fill: var(--scroll-color-two);
+  fill: var(--alt-highlight-color);
   transition: var(--transition-values);
 }
 /* Change color of logo svg depending position of scroll */
@@ -74,7 +74,7 @@ html[data-scroll='2'] .logo{
   fill: var(--scroll-color-two);
 }
 html[data-scroll='3'] .logo{
-  fill: var(--scroll-color-one);
+  fill: var(--scroll-color-three);
 }
 
 
@@ -151,7 +151,7 @@ html[data-scroll='3'] #footer-link{
 
 .links-share {
   padding: 2%;
-  background-color: var(--scroll-color-one);
+  background-color: var(--scroll-color-two);
   border-radius: 1%;
   text-align: center;
   transition: var(--transition-values);
@@ -159,13 +159,13 @@ html[data-scroll='3'] #footer-link{
 
 /* Change backgroundcolor of list of article meta info. (Summar, date etc.) depending position of scroll */
 html[data-scroll='1'] .links-share{
-  background-color: var(--alt-highlight-color);
+  background-color: var(--scroll-color-one);
 }
 html[data-scroll='2'] .links-share{
-  background-color: var(--scroll-color-three);
+  background-color: var(--scroll-color-two);
 }
 html[data-scroll='3'] .links-share{
-  background-color: var(--scroll-color-two);
+  background-color: var(--scroll-color-one);
 }
 
 .links-share .fab {
