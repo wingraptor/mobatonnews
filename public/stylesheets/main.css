@@ -150,10 +150,22 @@ html[data-scroll='3'] #footer-link{
 }
 
 .links-share {
-  padding: 5%;
-  background-color: #397580;
+  padding: 2%;
+  background-color: var(--scroll-color-one);
   border-radius: 1%;
   text-align: center;
+  transition: var(--transition-values);
+}
+
+/* Change backgroundcolor of list of article meta info. (Summar, date etc.) depending position of scroll */
+html[data-scroll='1'] .links-share{
+  background-color: var(--alt-highlight-color);
+}
+html[data-scroll='2'] .links-share{
+  background-color: var(--scroll-color-three);
+}
+html[data-scroll='3'] .links-share{
+  background-color: var(--scroll-color-two);
 }
 
 .links-share .fab {
