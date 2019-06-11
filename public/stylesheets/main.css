@@ -140,7 +140,7 @@ html[data-scroll='3'] #footer-link{
 .links-list li {
   border-bottom: dotted rgba(70, 70, 83, 0.5) 1px;
   display: flex;
-  padding: 0 2% 0 2%;
+  padding: 10px;
   /* padding-left: 2%;
   padding-right: 2% */
   align-items: baseline;
@@ -151,21 +151,11 @@ html[data-scroll='3'] #footer-link{
 
 .links-share {
   padding: 2%;
-  background-color: var(--scroll-color-two);
-  border-radius: 1%;
+  background-color: var(--alt-bg-color);
+  border-radius: 2%;
   text-align: center;
   transition: var(--transition-values);
-}
-
-/* Change backgroundcolor of list of article meta info. (Summar, date etc.) depending position of scroll */
-html[data-scroll='1'] .links-share{
-  background-color: var(--scroll-color-one);
-}
-html[data-scroll='2'] .links-share{
-  background-color: var(--scroll-color-two);
-}
-html[data-scroll='3'] .links-share{
-  background-color: var(--scroll-color-one);
+  border: var(--main-bg-color) solid 5px;
 }
 
 .links-share .fab {
@@ -197,7 +187,7 @@ html[data-scroll='3'] .links-share{
 .article-thumbnail{
   height:136px;
   width: 205px;
-  border-radius: 2%;
+  border-radius: 3%;
 }
 
 /* Style Icons */
