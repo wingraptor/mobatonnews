@@ -93,7 +93,7 @@ function siteInfo(siteID) {
   switch (siteID) {
     case 0:
       siteInfo.name = "Barbados Today";
-      siteInfo.URL = "http://barbadostoday.bb/";
+      siteInfo.URL = "https://barbadostoday.bb/";
       siteInfo.icon = "newspaper";
       break;
     case 1:
