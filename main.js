@@ -1,10 +1,11 @@
-const mongoose = require("mongoose"),
-      Article = require("./models/scrapedData.js"),
-      Archive = require("./models/archive.js"),
-      Weather = require("./models/weatherData");
-      express = require("express"),
-      ejs = require("ejs");
-
+const bodyParser = require("body-parser"),
+  mongoose = require("mongoose"),
+  Article = require("./models/scrapedData.js"),
+  Archive = require("./models/archive.js"),
+  Weather = require("./models/weatherData"),
+  express = require("express"),
+  moment = require("moment"),
+  ejs = require("ejs");
 
 
 //Environment variable setup
@@ -21,18 +22,20 @@ mongoose.connect(
 
 //EJS + Express config
 const app = express();
+// Set express to recognise all res.render files as .ejs 
 app.set("view engine", "ejs");
+// Make express aware of public folder; location of stylesheets, scripts and images
 app.use(express.static(__dirname + "/public"));
-
-
+// Body Parser Config
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Use siteID to get siteName and URL - reverse function is found in scrape.js
 function siteInfo(siteID) {
   let siteInfo = {
-    name:"",
+    name: "",
     URL: "",
     icon: ""
-};
+  };
   switch (siteID) {
     case 0:
       siteInfo.name = "Barbados Today";
@@ -79,7 +82,7 @@ function siteInfo(siteID) {
       siteInfo.URL = "https://www.cbc.bb/index.php/news/barbados-news"
       siteInfo.icon = "newspaper";
       break;
-    case 9: 
+    case 9:
       siteInfo.name = "Barbados Reporter";
       siteInfo.URL = "https://www.bajanreporter.com/category/new/";
       siteInfo.icon = "newspaper"
@@ -88,24 +91,24 @@ function siteInfo(siteID) {
       siteInfo.name = "The Broad Street Journal";
       siteInfo.URL = "https://www.broadstjournal.com/";
       siteInfo.icon = "newspaper"
-      break;   
+      break;
   }
   return siteInfo;
 }
 
 
 // Home Page Route
-app.get("/", function(req,res){
+app.get("/", function (req, res) {
   // Query Articles DB
   Article.aggregate([
     //Sort articles in each document (Sorts in ascending order )
-    {$sort: { articleCount: 1} },
+    { $sort: { articleCount: 1 } },
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
     //sort according siteID
     { $sort: { _id: 1 } },
   ], function (error, articles) {
-    if(error){
+    if (error) {
       console.log("Error quering articles DB on home page");
     }
     else {
@@ -123,18 +126,104 @@ app.get("/", function(req,res){
 });
 
 // Archive Page Route
-app.get("/history", function(req, res){
-  // Get Local Weather To Be Used in Widget
-  Weather.find({}, function (error, data) {
-    // Render archive template
-    res.render("archive", {
-      weather: data[0]
+app.get("/archive", function (req, res) {
+  // Query Articles DB and return a list of unique news sites (as the SiteIDs) currently in DB
+  Archive.distinct(
+    "siteID"
+    , function (error, articles) {
+      if (error) {
+        console.log("Error quering archives DB on archives page");
+      }
+      else {
+        // Get Local Weather To Be Used in Widget
+        Weather.find({}, function (error, data) {
+          // Render homepage template
+          res.render("archive", {
+            articles: articles,
+            siteInfo: siteInfo,
+            weather: data[0]
+          });
+        })
+      }
     });
-  })
+});
+
+// Convert from UTC to Unix
+// function unixTime(UTCDate) {
+//   return Date.parse(UTCDate) / 1000;
+// }
+
+// Gives the moment JS format code for the specific date format used by each site
+// function momentDateFormat(siteID) {
+//   let dateFormat = "";
+
+//   switch (siteID) {
+//     case 0:
+//       dateFormat = "LLL";
+//       break;
+//     case 1:
+//       dateFormat = "D MMMM YYYY";
+//       break;
+//     case 2:
+//     case 4:
+//     case 5:
+//     case 7:
+//     case 8:
+//       dateFormat = "LL";
+//       break;
+//     case 3:
+//       dateFormat = "ddd, MM/DD/YYYY - H:mma";
+//     case 9:
+//       dateFormat = "MMMM Do, YYYY";
+//       break;
+//   }
+//   return dateFormat;
+// }
+
+// Converts date to UTC format
+function dateStandardiser(date) {
+  return moment(date).format();
+}
+
+// Results Page Route
+app.get("/results", function (req, res) {
+  let siteID = Number(req.query.siteID),
+    startDate = req.query.startDate,
+    // If endDate not given in form, then endDate is today's date
+    endDate = req.query.endDate || new Date().toISOString().slice(0, 10);
+
+  Archive.aggregate([
+
+    // Filter DB to only show website which was searched for by user
+    { $match: { "siteID": siteID } },
+    // Filter search results based on  start date and end date given by the user
+    { $match: { "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } },
+    // Group articles according to created date; note that date has been formated to the YYYYMMDD format
+    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } }, data: { $push: "$$ROOT" } } },
+    // Sort articles according to date in ascending order
+    { $sort: { _id: 1 } }
+  ], function (error, articles) {
+    if (error) {
+      console.log(error)
+    } else {
+      // Get Local Weather To Be Used in Widget
+      Weather.find({}, function (error, data) {
+        // Render results template
+        res.render("results", {
+          weather: data[0],
+          siteInfo: siteInfo(Number(siteID)),
+          articles: articles
+        });
+        // res.send(articles);
+      })
+      // console.log(siteInfo(Number(siteID)).name);
+    }
+  }
+  )
 });
 
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
-app.listen(port, IP, function(){
+app.listen(port, IP, function () {
   console.log("Server started");
 });

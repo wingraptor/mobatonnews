@@ -137,6 +137,20 @@ storeScroll();
 
 
 
+/**********************************************************
+Set Max Date of End Date Form Field to Current Date
+*********************************************************/
+
+// Select End Date Element
+let endDate = document.getElementById("endDate");
+
+// Generate current date in UTC format -- https://stackoverflow.com/a/35922073
+let today = new Date().toISOString().slice(0,10);
+
+// Set Max date Attr.
+endDate.setAttribute("max", today);
+
+
 /**************************************
 Load Tippy tool tips with custom option
 ****************************************/

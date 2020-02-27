@@ -1,6 +1,23 @@
 <% include partials/header %>
 
+<main class="archive-content">
+  <form action="/results" method="GET">
+    <label for="siteName">Website:</label>
+    <select name="siteID" id="siteName" required>
+      <% for(let i = 0; i < articles.length; i++){ %>
+      <option value="<%= articles[i] %>"><%= siteInfo(articles[i]).name %></option>
+      <% } %>
+    </select>
 
+    <label for="startDate"></label>Start Date:</label>
+    <input type="date" id="startDate" min="2019-01-01" name="startDate" required>
 
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" min="2019-01-01" max="" name="endDate">
+    
+
+    <button>Search</button>
+  </form>
+</main>
 
 <% include partials/footer %>
