@@ -362,9 +362,9 @@ new CronJob(`0 12 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule bbBusiness to be scrapped every hour on minute 14, second 0 between 5am and 9pm inclusive
+// Schedule Business Barbados to be scrapped every hour on minute 14, second 0 between 5am and 9pm inclusive
 new CronJob(`0 14 ${scrapeHours} * * *`, function () {
-  // Scrape BusinessBarbados
+  // Scrape Business Barbados
   request.get("http://businessbarbados.com/", function (error, response, body) {
     let siteName = "Business Barbados";
     if (error) {

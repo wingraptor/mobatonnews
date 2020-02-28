@@ -237,6 +237,35 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
     transform: scale(1.1);
 } */
 
+/* Form  and Form Field Styling */
+
+input[type="date"] {
+  padding-left: 1.5em;
+  padding-right: 0;
+  background-repeat: no-repeat;
+  background-position: 0.25em center;
+  background-size: 1em;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23aaa' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/></g></svg>");
+}
+
+input, select {
+  box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
+  box-sizing: border-box;
+  padding-right: 0.5em;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0.1235em;
+  /* font-size: 6vw; */
+  height: 2em;
+}
+
+input:focus, select:focus {
+  outline: 2px dashed var(--alt-highlight-color);
+  outline-offset: 0.25em;
+}
+
+
+
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
 @media all and (max-width: 500px){
   .main-content {

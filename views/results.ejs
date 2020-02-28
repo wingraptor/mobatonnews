@@ -1,0 +1,60 @@
+<% include partials/header %>
+
+<main class="results-content">
+
+  <section class="links-section <%= siteInfo.name.toLowerCase().replace(/ /g, "-") %>-section" ">
+    <div class=" header">
+    <h2 class="links-header">
+      <a href="<%= siteInfo.URL %>" target="_blank">
+        <i class="fas fa-<%= siteInfo.icon %>"></i>
+        <%= siteInfo.name %>
+      </a>
+    </h2>
+    </div>
+    <div class="date-chooser">
+      <% for(var i = 0; i < articles.length; i++) { %>
+        <span><%= articles[i]._id%></span>
+      <% } %>
+    </div>
+    <div class="results-list">
+      <%# Iterate through each results array element %>
+      <% for(var i = 0; i < articles.length; i++){ %>
+      <div class="articles-list">
+        <h2 class="results-date" id="<%= articles[i]._id %>%>">Date: <%= articles[i]._id%></h2>
+        <ul class="links-list">
+        <%# Iterate through each archive document %>
+        <% for(var j = 0; j < articles[i].data.length; j++){ %>
+          <% if(j>=10){ %>
+            <li style="display:none" class="list-hidden--<%= siteInfo.name.toLowerCase().replace(/ /g, "-") %>">
+              <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
+                <%= articles[i].data[j].headline %>
+              </a>
+            </li>
+          <% } else { %>
+            <li>
+              <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
+                <%= articles[i].data[j].headline %>
+              </a>
+            </li>
+          <% }%>
+        <% } %>
+        </ul>
+
+
+          
+          <%# Only display show/hide toggler for lists of > 10 articles %>
+          <% if (articles[i].data.length > 10) { %>
+          <!-- Show/Hide Toggler -->
+          <p class="articles-toggler"
+            data-website="<%= siteInfo.name.toLowerCase().replace(/ /g, "-") %>">
+            More
+            <i class="fas fa-arrow-down"></i>
+          </p>
+        <% } %>
+      </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<% include partials/footer %>

@@ -198,8 +198,9 @@ app.get("/results", function (req, res) {
     { $match: { "siteID": siteID } },
     // Filter search results based on  start date and end date given by the user
     { $match: { "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } },
+
     // Group articles according to created date; note that date has been formated to the YYYYMMDD format
-    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } }, data: { $push: "$$ROOT" } } },
+    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } } , data: { $push: "$$ROOT" } } },
     // Sort articles according to date in ascending order
     { $sort: { _id: 1 } }
   ], function (error, articles) {
@@ -214,10 +215,9 @@ app.get("/results", function (req, res) {
           siteInfo: siteInfo(Number(siteID)),
           articles: articles
         });
-        // res.send(articles);
       })
-      // console.log(siteInfo(Number(siteID)).name);
     }
+      // res.send(articles);
   }
   )
 });
