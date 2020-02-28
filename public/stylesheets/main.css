@@ -95,6 +95,10 @@ html[data-scroll='3'] .logo{
   background-color:var(--alt-bg-color);
   text-transform: uppercase;
   font-size: 0.7em;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 #footer-link{
