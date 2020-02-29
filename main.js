@@ -137,7 +137,7 @@ app.get("/archive", function (req, res) {
       else {
         // Get Local Weather To Be Used in Widget
         Weather.find({}, function (error, data) {
-          // Render homepage template
+          // Render archive template
           res.render("archive", {
             articles: articles,
             siteInfo: siteInfo,

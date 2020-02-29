@@ -180,7 +180,7 @@ html[data-scroll='3'] #footer-link{
 .headline {
     /* padding: .5rem 1rem; */
     padding: 1.8% 2%;
-    display: inline-block;
+    display: block;
 }
 
 .headline:visited {
