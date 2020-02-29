@@ -48,6 +48,10 @@ a {
   color:inherit;
 }
 
+button{
+  font-family: inherit;
+}
+
 /* CSS Rulesets for Main Header */
 .main-header {
   /* border: solid red 1px; */
@@ -242,6 +246,48 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
 } */
 
 /* Form  and Form Field Styling */
+.search-fields{
+  margin-top: 5%;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.search-fields label {
+  display: block;
+  padding-right: 15px;
+  font-size: 2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-fields div{
+  margin-bottom:25px;
+}
+
+.search-form button {
+  box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
+  box-sizing: border-box;
+  border-radius: 0.1235em;
+  font-size: 1.2em;
+  background-color: var(--alt-highlight-color);
+  color:white;
+  padding-left:10px;
+  padding-right: 10px; 
+  width:100px
+}
+
+.search-button-div{
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  height: 50px;
+}
+
+#siteName{
+  max-width: 276px;
+}
+
 
 input[type="date"] {
   padding-left: 1.5em;
@@ -259,8 +305,8 @@ input, select {
   box-sizing: border-box;
   border: 0;
   border-radius: 0.1235em;
-  /* font-size: 6vw; */
-  height: 2em;
+  font-size: 2em;
+  height: 50px;
 }
 
 input:focus, select:focus {
@@ -269,6 +315,16 @@ input:focus, select:focus {
 }
 
 
+@media all and (max-width: 980px){
+  .search-fields {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  } 
+  .search-fields label {
+    text-align: center;
+}
+}
 
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
 @media all and (max-width: 500px){
