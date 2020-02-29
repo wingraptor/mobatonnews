@@ -13,7 +13,7 @@
     </div>
     <div class="date-chooser">
       <% for(var i = 0; i < articles.length; i++) { %>
-        <span><%= articles[i]._id%></span>
+        <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
       <% } %>
     </div>
     <div class="results-list">
@@ -40,8 +40,6 @@
         <% } %>
         </ul>
 
-
-          
           <%# Only display show/hide toggler for lists of > 10 articles %>
           <% if (articles[i].data.length > 10) { %>
           <!-- Show/Hide Toggler -->
