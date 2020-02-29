@@ -179,7 +179,7 @@ html[data-scroll='3'] #footer-link{
 /* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
 .headline {
     /* padding: .5rem 1rem; */
-    padding: 1.8% 2%;
+    padding: 10px 10px;
     display: block;
 }
 
