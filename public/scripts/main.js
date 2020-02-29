@@ -150,6 +150,10 @@ let today = new Date().toISOString().slice(0, 10);
 // Set Max date Attr.
 endDate.setAttribute("max", today);
 
+// Ensures that endDate does not come before startDate
+document.querySelector("#startDate").addEventListener("input", function(){
+  endDate.setAttribute("min", this.value);
+});
 
 
 /*****************************************
