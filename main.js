@@ -29,6 +29,10 @@ app.use(express.static(__dirname + "/public"));
 // Body Parser Config
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+/************************************
+Helper Functions!!!
+************************************/
 // Use siteID to get siteName and URL - reverse function is found in scrape.js
 function siteInfo(siteID) {
   let siteInfo = {
@@ -97,6 +101,60 @@ function siteInfo(siteID) {
 }
 
 
+// Convert from UTC to Unix
+// function unixTime(UTCDate) {
+//   return Date.parse(UTCDate) / 1000;
+// }
+
+// Gives the moment JS format code for the specific date format used by each site
+// function momentDateFormat(siteID) {
+//   let dateFormat = "";
+
+//   switch (siteID) {
+//     case 0:
+//       dateFormat = "LLL";
+//       break;
+//     case 1:
+//       dateFormat = "D MMMM YYYY";
+//       break;
+//     case 2:
+//     case 4:
+//     case 5:
+//     case 7:
+//     case 8:
+//       dateFormat = "LL";
+//       break;
+//     case 3:
+//       dateFormat = "ddd, MM/DD/YYYY - H:mma";
+//     case 9:
+//       dateFormat = "MMMM Do, YYYY";
+//       break;
+//   }
+//   return dateFormat;
+// }
+
+// Converts date to UTC format
+function dateStandardiser(date) {
+  return moment(date).format();
+}
+
+function articleCounter(queryResult) {
+  let count = 0;
+  // Iterate through artidcles query array
+  queryResult.forEach(document => {
+    // Iterate through articles in the data array
+    document.data.forEach(function () {
+      // Increment count variable for each article in data array
+      count++;
+    })
+  });
+  return count;
+}
+
+/*********************************
+ROUTES
+************************************/
+
 // Home Page Route
 app.get("/", function (req, res) {
   // Query Articles DB
@@ -148,43 +206,6 @@ app.get("/archive", function (req, res) {
     });
 });
 
-// Convert from UTC to Unix
-// function unixTime(UTCDate) {
-//   return Date.parse(UTCDate) / 1000;
-// }
-
-// Gives the moment JS format code for the specific date format used by each site
-// function momentDateFormat(siteID) {
-//   let dateFormat = "";
-
-//   switch (siteID) {
-//     case 0:
-//       dateFormat = "LLL";
-//       break;
-//     case 1:
-//       dateFormat = "D MMMM YYYY";
-//       break;
-//     case 2:
-//     case 4:
-//     case 5:
-//     case 7:
-//     case 8:
-//       dateFormat = "LL";
-//       break;
-//     case 3:
-//       dateFormat = "ddd, MM/DD/YYYY - H:mma";
-//     case 9:
-//       dateFormat = "MMMM Do, YYYY";
-//       break;
-//   }
-//   return dateFormat;
-// }
-
-// Converts date to UTC format
-function dateStandardiser(date) {
-  return moment(date).format();
-}
-
 // Results Page Route
 app.get("/results", function (req, res) {
   let siteID = Number(req.query.siteID),
@@ -193,14 +214,11 @@ app.get("/results", function (req, res) {
     endDate = req.query.endDate || new Date().toISOString().slice(0, 10);
 
   Archive.aggregate([
-
-    // Filter DB to only show website which was searched for by user
-    { $match: { "siteID": siteID } },
-    // Filter search results based on  start date and end date given by the user
-    { $match: { "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } },
-
+    // Filter search results based on siteID,  start date and end date given by the user
+    { $match: { "siteID": siteID, "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } },
     // Group articles according to created date; note that date has been formated to the YYYYMMDD format
-    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } } , data: { $push: "$$ROOT" } } },
+    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } }, data: { $push: "$$ROOT" } } },
+    { $addFields: { articleCount: { $size: "$data" } } },
     // Sort articles according to date in ascending order
     { $sort: { _id: 1 } }
   ], function (error, articles) {
@@ -213,13 +231,13 @@ app.get("/results", function (req, res) {
         res.render("results", {
           weather: data[0],
           siteInfo: siteInfo(Number(siteID)),
-          articles: articles
+          articles: articles,
+          articleCount: articleCounter(articles)
         });
-      })
+      });
     }
-      // res.send(articles);
   }
-  )
+  );
 });
 
 //Tell Express to listen for requests on port 3000 (starts local server)

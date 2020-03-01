@@ -16,11 +16,20 @@
         <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
       <% } %>
     </div>
+    <h2>
+      <%=articleCount%> Results Found
+    </h2>
     <div class="results-list">
       <%# Iterate through each results array element %>
       <% for(var i = 0; i < articles.length; i++){ %>
       <div class="articles-list">
         <h2 class="results-date" id="<%= articles[i]._id %>%>">Date: <%= articles[i]._id%></h2>
+        <% if(articles[i].data.length === 1){ %>
+            <span><%= articles[i].data.length%> article found for this date</span>
+        <% } else { %>
+            <span><%= articles[i].data.length%> articles found for this date</span>
+        <% }%>
+        
         <ul class="links-list">
         <%# Iterate through each archive document %>
         <% for(var j = 0; j < articles[i].data.length; j++){ %>
