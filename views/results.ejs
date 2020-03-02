@@ -1,66 +1,95 @@
 <% include partials/header %>
 
 <main class="results-content">
+  <form action="/results" method="GET" class="search-form">
+    <div class="search-fields">
+      <div>
+        <label for="siteName">Website</label>
+        <select name="siteID" id="siteName" required>
+          <%# ensure that searched website option is the first option available to user %>
+          <option value="<%= siteID %>"><%= siteInfo(siteID).name %></option>
+          <% for(let i = 0; i < siteInfo().count; i++){ %>
+            <%# Ensure that website name option element is not duplicated (element created two lines above this one) %>
+            <% if(i !== siteID) { %>
+              <option value="<%= i %>"><%= siteInfo(i).name %></option>
+            <% } %>
+          <% } %>
+        </select>
+      </div>
 
-  <section class="links-section <%= siteInfo.name.toLowerCase().replace(/ /g, "-") %>-section" ">
-    <div class=" header">
-    <h2 class="links-header">
-      <a href="<%= siteInfo.URL %>" target="_blank">
-        <i class="fas fa-<%= siteInfo.icon %>"></i>
-        <%= siteInfo.name %>
-      </a>
-    </h2>
+      <div>
+        <label for="startDate">Start Date</label>
+        <input type="date" id="startDate" min="2019-01-01" name="startDate" value="<%=dates.startDate%>" required>
+      </div>
+
+      <div>
+        <label for="endDate">End Date</label>
+        <input type="date" id="endDate" min="2019-01-01" max="" name="endDate" value="<%= dates.endDate%>">
+      </div>
     </div>
+
+    <div class="search-button-div">
+      <button>Search</button>
+    </div>
+  </form>
+
+  <section class="results-header<%= siteInfo(siteID).name.toLowerCase().replace(/ /g, "-") %>-section" ">
+    <h1 class=" site-name">
+    <a href="<%= siteInfo(siteID).URL %>" target="_blank">
+      <i class="fas fa-<%= siteInfo(siteID).icon %>"></i>
+      <%= siteInfo(siteID).name %>
+    </a>
+    </h1>
     <div class="date-chooser">
       <% for(var i = 0; i < articles.length; i++) { %>
-        <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
+      <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
       <% } %>
     </div>
     <h2>
-      <%=articleCount%> Results Found
+      <%=articleCount%> Articles Found
     </h2>
-    <div class="results-list">
-      <%# Iterate through each results array element %>
-      <% for(var i = 0; i < articles.length; i++){ %>
-      <div class="articles-list">
-        <h2 class="results-date" id="<%= articles[i]._id %>%>">Date: <%= articles[i]._id%></h2>
-        <% if(articles[i].data.length === 1){ %>
-            <span><%= articles[i].data.length%> article found for this date</span>
-        <% } else { %>
-            <span><%= articles[i].data.length%> articles found for this date</span>
-        <% }%>
-        
-        <ul class="links-list">
+  </section>
+  <!--Results Lists-->
+  <section class="main-content results-list">
+    <%# Iterate through each results array element %>
+    <% for(var i = 0; i < articles.length; i++){ %>
+    <div class="articles-list">
+      <h2 class="results-date" id="<%= articles[i]._id %>%>">Date: <%= articles[i]._id%></h2>
+      <% if(articles[i].data.length === 1){ %>
+      <h3><%= articles[i].data.length%> article found for this date</h3>
+      <% } else { %>
+      <h3><%= articles[i].data.length%> articles found for this date</h3>
+      <% }%>
+
+      <ul class="links-list">
         <%# Iterate through each archive document %>
         <% for(var j = 0; j < articles[i].data.length; j++){ %>
-          <% if(j>=10){ %>
-            <li style="display:none" class="list-hidden--<%= siteInfo.name.toLowerCase().replace(/ /g, "-") %>">
-              <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
-                <%= articles[i].data[j].headline %>
-              </a>
-            </li>
-          <% } else { %>
-            <li>
-              <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
-                <%= articles[i].data[j].headline %>
-              </a>
-            </li>
-          <% }%>
+        <% if(j>=10){ %>
+        <li style="display:none" class="list-hidden--<%= siteInfo(siteID).name.toLowerCase().replace(/ /g, "-") %>">
+          <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
+            <%= articles[i].data[j].headline %>
+          </a>
+        </li>
+        <% } else { %>
+        <li>
+          <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
+            <%= articles[i].data[j].headline %>
+          </a>
+        </li>
+        <% }%>
         <% } %>
-        </ul>
+      </ul>
 
-          <%# Only display show/hide toggler for lists of > 10 articles %>
-          <% if (articles[i].data.length > 10) { %>
-          <!-- Show/Hide Toggler -->
-          <p class="articles-toggler"
-            data-website="<%= siteInfo.name.toLowerCase().replace(/ /g, "-") %>">
-            More
-            <i class="fas fa-arrow-down"></i>
-          </p>
-        <% } %>
-      </div>
+      <%# Only display show/hide toggler for lists of > 10 articles %>
+      <% if (articles[i].data.length > 10) { %>
+      <!-- Show/Hide Toggler -->
+      <p class="articles-toggler" data-website="<%= siteInfo(siteID).name.toLowerCase().replace(/ /g, "-") %>">
+        More
+        <i class="fas fa-arrow-down"></i>
+      </p>
       <% } %>
     </div>
+    <% } %>
   </section>
 </main>
 

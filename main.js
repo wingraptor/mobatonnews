@@ -38,7 +38,8 @@ function siteInfo(siteID) {
   let siteInfo = {
     name: "",
     URL: "",
-    icon: ""
+    icon: "",
+    count: 10 //UPDATE WHENEVER ADDING A NEW SITE
   };
   switch (siteID) {
     case 0:
@@ -230,9 +231,14 @@ app.get("/results", function (req, res) {
         // Render results template
         res.render("results", {
           weather: data[0],
-          siteInfo: siteInfo(Number(siteID)),
+          siteID: siteID,
+          siteInfo: siteInfo,
           articles: articles,
-          articleCount: articleCounter(articles)
+          articleCount: articleCounter(articles),
+          dates: {
+            startDate: startDate,
+            endDate: endDate
+          }
         });
       });
     }
