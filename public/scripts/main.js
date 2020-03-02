@@ -107,9 +107,9 @@ const debounce = (fn) => {
 // so we can use it in our stylesheets
 const storeScroll = () => {
 
-  /************************************* 
-  Calculates Fraction of Page Scrolled - https://stackoverflow.com/questions/2481350/how-to-get-scrollbar-position-with-javascript
-  **************************************/
+/************************************* 
+Calculates Fraction of Page Scrolled - https://stackoverflow.com/questions/2481350/how-to-get-scrollbar-position-with-javascript
+**************************************/
 
   // Position of scroll: from 0 to distance scrolled on page
   let heightScrolled = document.documentElement.scrollTop;
@@ -172,6 +172,14 @@ document.querySelectorAll("input[type='date']").forEach(function (input) {
     }
   });
 });
+
+
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
 
 
 

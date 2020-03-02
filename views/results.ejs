@@ -1,6 +1,7 @@
 <% include partials/header %>
 
 <main class="results-content">
+  <!-- Search Form -->
   <form action="/results" method="GET" class="search-form">
     <div class="search-fields">
       <div>
@@ -9,11 +10,11 @@
           <%# ensure that searched website option is the first option available to user %>
           <option value="<%= siteID %>"><%= siteInfo(siteID).name %></option>
           <% for(let i = 0; i < siteInfo().count; i++){ %>
-            <%# Ensure that website name option element is not duplicated (element created two lines above this one) %>
+          <%# Ensure that website name option element is not duplicated (element created two lines above this one) %>
             <% if(i !== siteID) { %>
               <option value="<%= i %>"><%= siteInfo(i).name %></option>
             <% } %>
-          <% } %>
+        <% } %>
         </select>
       </div>
 
@@ -29,36 +30,43 @@
     </div>
 
     <div class="search-button-div">
-      <button>Search</button>
+      <button>
+        <i class="fas fa-search"></i>
+      </button>
     </div>
   </form>
 
-  <section class="results-header<%= siteInfo(siteID).name.toLowerCase().replace(/ /g, "-") %>-section" ">
-    <h1 class=" site-name">
-    <a href="<%= siteInfo(siteID).URL %>" target="_blank">
-      <i class="fas fa-<%= siteInfo(siteID).icon %>"></i>
-      <%= siteInfo(siteID).name %>
-    </a>
-    </h1>
+  <section class="results-header">
+    <h2>
+      <% if(articleCount === 1){ %>
+      <%=articleCount%> Result
+      <% } else { %>
+      <%=articleCount%> Results
+      <% } %>
+    </h2>
     <div class="date-chooser">
+      <h3>Scroll to Date</h3>
       <% for(var i = 0; i < articles.length; i++) { %>
       <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
       <% } %>
     </div>
-    <h2>
-      <%=articleCount%> Articles Found
-    </h2>
+    <h1 class="results-site-name">
+      <a href="<%= siteInfo(siteID).URL %>" target="_blank">
+        <i class="fas fa-<%= siteInfo(siteID).icon %>"></i>
+        <%= siteInfo(siteID).name %>
+      </a>
+    </h1>
   </section>
   <!--Results Lists-->
   <section class="main-content results-list">
     <%# Iterate through each results array element %>
     <% for(var i = 0; i < articles.length; i++){ %>
     <div class="articles-list">
-      <h2 class="results-date" id="<%= articles[i]._id %>%>">Date: <%= articles[i]._id%></h2>
+      <h2 class="links-header results-date" id="<%= articles[i]._id %>%>"><i class="fas fa-calendar-alt"></i>  Date: <%= articles[i]._id%></h2>
       <% if(articles[i].data.length === 1){ %>
-      <h3><%= articles[i].data.length%> article found for this date</h3>
+        <h4 class="article-count"><%= articles[i].data.length%> article found for this date</h4>
       <% } else { %>
-      <h3><%= articles[i].data.length%> articles found for this date</h3>
+        <h4 class="article-count"><%= articles[i].data.length%> articles found for this date</h4>
       <% }%>
 
       <ul class="links-list">
