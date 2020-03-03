@@ -560,7 +560,7 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function () {
         let siteData = {
           link: "https://www.broadstjournal.com" + $(this).find(".post-v3-thumbnail").attr("href"),
           headline: $(this).find(".post-v3-content h3").text(),
-          date: $(this).find(".post-v3-content .post-info .post-info-block div").text(),
+          date: $(this).find(".post-v3-content .post-info .post-info-block div").text().replace(" min read",""),
           summary: $(this).find(".post-v3-content .post-summary").text(),
           siteID: siteID(siteName),
           articleCount: articleCount
@@ -588,6 +588,5 @@ new CronJob(`0 26 ${scrapeHours} * * *`, function () {
           console.log(`Error adding weather to DB: ${err}`);
         }
       });
-    console.log(result);
   });
 }, null, "start", location);

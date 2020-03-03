@@ -44,18 +44,24 @@
       <%=articleCount%> Results
       <% } %>
     </h2>
-    <div class="date-chooser">
-      <h3>Scroll to Date</h3>
-      <% for(var i = 0; i < articles.length; i++) { %>
-      <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
-      <% } %>
-    </div>
-    <h1 class="results-site-name">
-      <a href="<%= siteInfo(siteID).URL %>" target="_blank">
-        <i class="fas fa-<%= siteInfo(siteID).icon %>"></i>
-        <%= siteInfo(siteID).name %>
-      </a>
-    </h1>
+    <%# Only display elements below if artiles are returned from query %>
+    <% if(articleCount > 0){ %>
+      <div class="date-chooser">
+        <h3>Scroll to Date</h3>
+        <% for(var i = 0; i < articles.length; i++) { %>
+        <a class="date-link" href="#<%= articles[i]._id%>"><%= articles[i]._id%></a>
+        <% } %>
+      </div>
+      <h1 class="results-site-name">
+        <a href="<%= siteInfo(siteID).URL %>" target="_blank">
+          <i class="fas fa-<%= siteInfo(siteID).icon %>"></i>
+          <%= siteInfo(siteID).name %>
+        </a>
+      </h1>
+    <% } else { %>
+      <div></div>
+    <% } %>
+
   </section>
   <!--Results Lists-->
   <section class="main-content results-list">
