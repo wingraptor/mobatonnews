@@ -394,48 +394,48 @@ new CronJob(`0 14 ${scrapeHours} * * *`, function () {
 
 
 // Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
-new CronJob(`0 16 ${scrapeHours} * * *`, function () {
-  // Scrape GIS
-  request.get("http://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
-    let siteName = "Government Info Service";
-    if (error) {
-      console.log(`Error scraping ${siteName}: ${error}`);
-    } else {
-      let $ = cheerio.load(body);
-      // Clear Article collection
-      Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
-        if (error) {
-          console.log(`Error deleting ${siteName} data`);
-        }
-      });
+// new CronJob(`0 16 ${scrapeHours} * * *`, function () {
+//   // Scrape GIS
+//   request.get("https://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
+//     let siteName = "Government Info Service";
+//     if (error) {
+//       console.log(`Error scraping ${siteName}: ${error}`);
+//     } else {
+//       let $ = cheerio.load(body);
+//       // Clear Article collection
+//       Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+//         if (error) {
+//           console.log(`Error deleting ${siteName} data`);
+//         }
+//       });
 
-      //Generate siteData object from scraped data
-      $(".et_pb_ajax_pagination_container article").each(function (index, element) {
-        console.log(index);
-        //Limit news articles to first 12 only
-        if (index > 11) {
-          return;
-        }
-        let siteData = {
-          link: $(this).find(".entry-title a").attr("href"),
-          headline: $(this).find(".entry-title").text(),
-          date: $(this).find(".published").text(),
-          summary: $(this).find(".post-content p").text(),
-          siteID: siteID(siteName),
-          imgURL: $(this).find("img").attr("src"),
-          articleCount: articleCount
-        }
-        addSiteData(siteData, siteName);
-        articleCount++;
-      });
-    }
-  });
-}, null, "start", location);
+//       //Generate siteData object from scraped data
+//       $(".et_pb_post").each(function (index, element) {
+//         console.log(index);
+//         // //Limit news articles to first 12 only
+//         // if (index > 11) {
+//         //   return;
+//         // }
+//         let siteData = {
+//           link: $(this).find(".entry-title a").attr("href"),
+//           headline: $(this).find(".entry-title").text(),
+//           date: $(this).find(".post-meta .published").text(),
+//           summary: $(this).find(".post-content p").text(),
+//           siteID: siteID(siteName),
+//           imgURL: $(this).find("img").attr("src"),
+//           articleCount: articleCount
+//         }
+//         addSiteData(siteData, siteName);
+//         articleCount++;
+//       });
+//     }
+//   });
+// }, null, "start", location);
 
 // Schedule CBC News to be scrapped every hour on minute 18, second 0 between 5am and 8pm inclusive
 new CronJob(`0 18 ${scrapeHours} * * *`, function () {
   // Scrape CBC
-  request.get("https://www.cbc.bb/index.php/news/barbados-news", function (error, response, body) {
+  request.get("https://www.cbc.bb/category/barbados-news/", function (error, response, body) {
     let siteName = "CBC News";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
@@ -448,14 +448,14 @@ new CronJob(`0 18 ${scrapeHours} * * *`, function () {
         }
       });
       //Generate siteData object from scraped data
-      $(".catItemView").each(function (index, element) {
+      $(".post").each(function (index, element) {
         //Limit news articles to first 16 only
         let siteData = {
-          link: "https://www.cbc.bb" + $(this).find(".catItemHeader a").attr("href"),
-          headline: $(this).find(".catItemHeader a").text().replace(/^\s+|\s+$/g, ''),
-          date: $(this).find(".itemDate  span").text(),
-          summary: $(this).find(".catItemIntroText").text().replace(/^\s+|\s+$/g, '').replace("Twitter", ""),
-          imgURL: "https://www.cbc.bb/" + $(this).find("img").attr("src"),
+          link: $(this).find(".archive-desc-wrapper .entry-title a").attr("href"),
+          headline: $(this).find(".archive-desc-wrapper .entry-title a").text(),
+          date: $(this).find(".archive-desc-wrapper .entry-footer .entry-meta .posted-on a .entry-date").text(),
+          summary: $(this).find(".archive-desc-wrapper .entry-content p").text(),
+          imgURL: $(this).find(".post-image a figure img").attr("src"),
           siteID: siteID(siteName),
           articleCount: articleCount
         }
@@ -543,7 +543,7 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
 // Schedule The Broad Street Journal to be scrapped every hour on minute 26, second 0 between 5am and 9pm inclusive
 new CronJob(`0 24 ${scrapeHours} * * *`, function () {
   // Scrape The Broad Street Journal
-  request.get("https://www.broadstjournal.com/", function (error, response, body) {
+  request.get("https://www.broadstjournal.com/categories/marketing", function (error, response, body) {
     let siteName = "The Broad Street Journal";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
@@ -556,12 +556,12 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function () {
         }
       });
       //Generate siteData object from scraped data
-      $(".recent-post-item").each(function (index, element) {
+      $(".post-v3-card").each(function (index, element) {
         let siteData = {
-          link: "https://www.broadstjournal.com" + $(this).find(".heading-link-box").attr("href"),
-          headline: $(this).find(".heading-hover").text(),
-          date: $(this).find(".date .details-text").text(),
-          summary: $(this).find(".post-description-side-block").text(),
+          link: "https://www.broadstjournal.com" + $(this).find(".post-v3-thumbnail").attr("href"),
+          headline: $(this).find(".post-v3-content h3").text(),
+          date: $(this).find(".post-v3-content .post-info .post-info-block div").text(),
+          summary: $(this).find(".post-v3-content .post-summary").text(),
           siteID: siteID(siteName),
           articleCount: articleCount
         }
