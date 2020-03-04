@@ -212,11 +212,19 @@ app.get("/results", function (req, res) {
   let siteID = Number(req.query.siteID),
     startDate = req.query.startDate,
     // If endDate not given in form, then endDate is today's date
-    endDate = req.query.endDate || new Date().toISOString().slice(0, 10);
+    endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
+    filter = {};
+
+  // If start date and end are the same, then return articles with the created at date of greater than or equal to the startDate (startdate is generated as midnight on the date given)
+  if (startDate === endDate){
+    filter = { $match: { "siteID": siteID, "created_at": {"$gte": new Date(dateStandardiser(startDate))} }};
+  } else {
+      filter = { $match: { "siteID": siteID, "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } };
+  }
 
   Archive.aggregate([
     // Filter search results based on siteID,  start date and end date given by the user
-    { $match: { "siteID": siteID, "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } },
+    filter,
     // Group articles according to created date; note that date has been formated to the YYYYMMDD format
     { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } }, data: { $push: "$$ROOT" } } },
     { $addFields: { articleCount: { $size: "$data" } } },
