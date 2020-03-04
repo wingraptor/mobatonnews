@@ -392,6 +392,9 @@ new CronJob(`0 14 ${scrapeHours} * * *`, function () {
   });
 }, null, "start", location);
 
+/**************************************************************************
+ * GIS uses anti-scraping software and therefore I am unable to scrape it
+ **************************************************************************/
 
 // Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
 // new CronJob(`0 16 ${scrapeHours} * * *`, function () {
