@@ -90,9 +90,9 @@ function addSiteData(siteData, siteName) {
 
 //Adds data to archive collection
 function archiver(siteData, siteName) {
-  Archive.findOne({ headline: siteData.headline }, function (error, document) {
+  Archive.findOne({ headline: siteData.headline, siteID:siteData.siteID }, function (error, document) {
     if (error) {
-      console.log(`Error finding ${siteName} in Articles collection: ${error}`)
+      console.log(`Error finding ${siteName} in Archives collection: ${error}`)
     } else {
       // Add site data to Archive if not already in archive
       if (!document) {
@@ -117,7 +117,7 @@ function archiver(siteData, siteName) {
 // Schedule Barbados Today to be scrapped every hour on minute 0, second 0 between 5am and 9pm inclusive
 new CronJob(`0 0 ${scrapeHours} * * *`, function () {
   // Scrape Barbados Today
-  request.get("https://barbadostoday.bb/", function (error, response, body) {
+  request.get("https://barbadostoday.bb/category/local-news/", function (error, response, body) {
     let siteName = "Barbados Today";
     if (error) {
       console.log(`Error scraping ${siteName}: ${error}`);
@@ -131,15 +131,15 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
       });
       //Generate siteData object from scraped data
       //Iterate through each local news element on page
-      $('#category-posts-10-internal .cat-post-item a').each(function (index, element) {
+      $('.post').each(function (index, element) {
         //Add scraped data to articles document
         let siteData = {
-          link: $(this).attr("href"),
-          headline: $(this).find(".cat-post-title").text(),
-          date: $(this).find(".cat-post-date").text(),
-          summary: $(this).find("p").text(),
+          link: $(this).find(".post-thumbnail a").attr("href"),
+          headline: $(this).find(".title_caption_wrap .post-header .post-title a").text(),
+          summary: $(this).find(".title_caption_wrap").contents().last().text(),
           siteID: siteID(siteName),
-          imgURL: $(this).find("img").attr("src"),
+          // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
+          imgURL: $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0],
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
