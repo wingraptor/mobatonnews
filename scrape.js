@@ -132,15 +132,28 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
       //Generate siteData object from scraped data
       //Iterate through each local news element on page
       $('.post').each(function (index, element) {
-        //Add scraped data to articles document
-        let siteData = {
-          link: $(this).find(".post-thumbnail a").attr("href"),
-          headline: $(this).find(".title_caption_wrap .post-header .post-title a").text(),
-          summary: $(this).find(".title_caption_wrap").contents().last().text(),
-          siteID: siteID(siteName),
-          // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
-          imgURL: $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0],
-          articleCount: articleCount
+        // First element on page has different structure to other elements
+        if(index === 0){
+          //Add scraped data to articles document
+          let siteData = {
+            link: $(this).find(".post-thumbnail a").attr("href"),
+            headline: $(this).find(".post-header .post-title a").text(),
+            siteID: siteID(siteName),
+            // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
+            imgURL: $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0],
+            articleCount: articleCount
+          }        
+        } else {
+          //Add scraped data to articles document
+          let siteData = {
+            link: $(this).find(".post-thumbnail a").attr("href"),
+            headline: $(this).find(".title_caption_wrap .post-header .post-title a").text(),
+            summary: $(this).find(".title_caption_wrap").contents().last().text(),
+            siteID: siteID(siteName),
+            // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
+            imgURL: $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0],
+            articleCount: articleCount
+          }
         }
         addSiteData(siteData, siteName);
         articleCount++;
