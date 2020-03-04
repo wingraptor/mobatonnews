@@ -147,20 +147,30 @@ let endDate = document.getElementById("endDate");
 // Generate current date in UTC format -- https://stackoverflow.com/a/35922073
 let today = new Date().toISOString().slice(0, 10);
 
-// Set Max date Attr.
-endDate.setAttribute("max", today);
+// Only when date is on element is on page
+if(endDate){
+  // Set Max date Attr.
+  endDate.setAttribute("max", today);
 
-// Ensures that endDate does not come before startDate
-document.querySelector("#startDate").addEventListener("input", function(){
-  endDate.setAttribute("min", this.value);
-});
+  // Ensures that endDate does not come before startDate
+  document.querySelector("#startDate").addEventListener("input", function () {
+    endDate.setAttribute("min", this.value);
+  });
+}
+
+
+
 
 
 /*****************************************
-Forms --> taken from https://codepen.io/alvaromontoro/pen/YzXNjwm
+Forms
 ****************************************/
 
-document.querySelectorAll("input[type='date']").forEach(function (input) {
+
+// Date Input styling --> https://codepen.io/alvaromontoro/pen/YzXNjwm
+let dateInputs = document.querySelectorAll("input[type='date']");
+
+dateInputs.forEach(function (input) {
   input.addEventListener("input", function () {
     if (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.exec(this.value)) {
       const day = parseInt(this.value.substring(8, 12));
@@ -173,6 +183,19 @@ document.querySelectorAll("input[type='date']").forEach(function (input) {
   });
 });
 
+// Add coloration to calendar icon in date form when the dates already have a value (On results page)
+if(dateInputs){
+  dateInputs.forEach(function (input) {
+    if (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.exec(input.value)) {
+      const day = parseInt(input.value.substring(8, 12));
+      const top = Math.floor((day - 1) / 7) * 5 + 10;
+      const left = ((day - 1) % 7) * 5 + 3;
+      input.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23e9a' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/><path d='M${left},${top} ${left + 5},${top} ${left + 5},${top + 5} ${left},${top + 5}Z' fill='%23d00' /></g></svg>")`;
+    } else {
+      input.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23aaa' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/></g></svg>")`;
+    }
+  });
+}
 
 
 // When the user clicks on the button, scroll to the top of the document
