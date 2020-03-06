@@ -108,37 +108,43 @@ function siteInfo(siteID) {
 // }
 
 // Gives the moment JS format code for the specific date format used by each site
-// function momentDateFormat(siteID) {
-//   let dateFormat = "";
+function momentDateFormat(siteID) {
+  let dateFormat = "";
 
-//   switch (siteID) {
-//     case 0:
-//       dateFormat = "LLL";
-//       break;
-//     case 1:
-//       dateFormat = "D MMMM YYYY";
-//       break;
-//     case 2:
-//     case 4:
-//     case 5:
-//     case 7:
-//     case 8:
-//       dateFormat = "LL";
-//       break;
-//     case 3:
-//       dateFormat = "ddd, MM/DD/YYYY - H:mma";
-//     case 9:
-//       dateFormat = "MMMM Do, YYYY";
-//       break;
-//   }
-//   return dateFormat;
-// }
-
-// Converts date to UTC format
-function dateStandardiser(date) {
-  return moment(date).format();
+  switch (siteID) {
+    case 0:
+      dateFormat = "LLL";
+      break;
+    case 1:
+      dateFormat = "D MMMM YYYY";
+      break;
+    case 2:
+    case 4:
+    case 5:
+    case 7:
+    case 8:
+      dateFormat = "LL";
+      break;
+    case 3:
+      dateFormat = "ddd, MM/DD/YYYY - H:mma";
+    case 9:
+      dateFormat = "MMMM Do, YYYY";
+      break;
+  }
+  return dateFormat;
 }
 
+// Format dates to UTC format and be able to set either the end of date or start of day
+const dateStandardiser = {
+    endOfDay: function(date){
+    return moment.utc(date).endOf("day").format()
+  },
+    startOfDay: function(date) {
+    return moment.utc(date).startOf("day").format()
+  }
+}
+
+// Counts number of articles queried from DB
 function articleCounter(queryResult) {
   let count = 0;
   // Iterate through artidcles query array
@@ -210,17 +216,17 @@ app.get("/archive", function (req, res) {
 // Results Page Route
 app.get("/results", function (req, res) {
   let siteID = Number(req.query.siteID),
-    startDate = req.query.startDate,
-    // If endDate not given in form, then endDate is today's date
-    endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
-    filter = {};
-
-  // If start date and end are the same, then return articles with the created at date of greater than or equal to the startDate (startdate is generated as midnight on the date given)
-  if (startDate === endDate){
-    filter = { $match: { "siteID": siteID, "created_at": {"$gte": new Date(dateStandardiser(startDate))} }};
-  } else {
-      filter = { $match: { "siteID": siteID, "created_at": { "$gte": new Date(dateStandardiser(startDate)), "$lte": new Date(dateStandardiser(endDate)) } } };
-  }
+      startDate = req.query.startDate,
+      // If endDate not given in form, then endDate is today's date
+      endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
+      
+      filter = { $match: 
+        { "siteID": siteID, 
+        "created_at": { "$gte": new Date(dateStandardiser.startOfDay(startDate)), 
+        "$lte": new Date(dateStandardiser.endOfDay(endDate)) 
+      } 
+    } 
+  };
 
   Archive.aggregate([
     // Filter search results based on siteID,  start date and end date given by the user
