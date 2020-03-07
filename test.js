@@ -39,7 +39,7 @@ mongoose.connect(databaseUrl,
 // //Nation
 // console.log(moment("17 February 2019", "D MMMM YYYY").format("LL"));
 
-// // Loop News and BB Intl Business Assoc and BB ICT and GIS and CBC
+// // Loop News and BB Intl Business Assoc and BB ICT and GIS, CBC and Broadstreet journal
 // console.log(moment("February 15, 2019", "LL").format("LL"));
 
 // //Advocate
@@ -47,6 +47,9 @@ mongoose.connect(databaseUrl,
 
 // //BB reporter
 // console.log(moment("February 15th, 2019", "MMMM Do, YYYY").format("LL"));
+
+// // Broad Street Journal
+// console.log(moment("Jan 16, 2020", ""))
 
 // // Nation News
 
@@ -71,6 +74,7 @@ function momentDateFormat(siteID) {
     case 5:
     case 7:
     case 8:
+    case 10:
       dateFormat = "LL";
       break;
     case 3:
@@ -91,8 +95,15 @@ const dateStandardiser = {
   startOfDay: function (date) {
     return moment.utc(date).startOf("day").format();
   },
-  utcDate: function (date,siteID) {
-    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+  utcDate: function (date, siteID) {
+    return moment.utc(date).format(momentDateFormat(siteID));
+  },
+  localFormat: function (date, siteID) {
+    if (date) {
+      return moment(date, momentDateFormat(siteID)).format("LL");
+    } else {
+      return "";
+    }
   }
 }
 
