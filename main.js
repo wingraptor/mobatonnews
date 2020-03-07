@@ -101,12 +101,6 @@ function siteInfo(siteID) {
   return siteInfo;
 }
 
-
-// Convert from UTC to Unix
-// function unixTime(UTCDate) {
-//   return Date.parse(UTCDate) / 1000;
-// }
-
 // Gives the moment JS format code for the specific date format used by each site
 function momentDateFormat(siteID) {
   let dateFormat = "";
@@ -123,6 +117,7 @@ function momentDateFormat(siteID) {
     case 5:
     case 7:
     case 8:
+    case 10:
       dateFormat = "LL";
       break;
     case 3:
@@ -145,6 +140,13 @@ const dateStandardiser = {
   },
   utcDate: function(date, siteID) {
     return moment.utc(date).format(momentDateFormat(siteID));
+  },
+  localFormat: function(date, siteID){
+    if(date){
+      return moment(date, momentDateFormat(siteID)).format("LL");
+    } else{
+      return "";
+    }
   }
 }
 
@@ -187,7 +189,8 @@ app.get("/", function (req, res) {
         res.render("home", {
           articles: articles,
           siteInfo: siteInfo,
-          weather: data[0]
+          weather: data[0],
+          dateStandardiser: dateStandardiser.localFormat
         });
       })
     }

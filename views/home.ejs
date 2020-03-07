@@ -35,7 +35,7 @@
           <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
           <% } %>
           <p>
-            <%= articles[i].data[j].date %></em>
+            <%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %></em>
           </p>
           <p>
             <%= articles[i].data[j].summary %>
@@ -64,7 +64,7 @@
           <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
           <% } %>
           <p>
-            <em><%= articles[i].data[j].date %></em>
+            <em><%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %></em>
           </p>
           <p>
             <%= articles[i].data[j].summary %>
