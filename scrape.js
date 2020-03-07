@@ -200,7 +200,7 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
             headline: $(this).find(".post-header .post-title a").text(),
             siteID: siteID(siteName),
             // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
-            imgURL: $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0],
+            imgURL: $(this).find(".post-thumbnail a img").attr("src"),
             articleCount: articleCount
           }        
         } else {
@@ -266,7 +266,7 @@ new CronJob(`0 2 ${scrapeHours} * * *`, function () {
 
 // Schedule LoopNews to be scrapped every hour on minute 4, second 0 between 5am and 9pm inclusive
 new CronJob(`0 4 ${scrapeHours} * * *`, function () {
-  //Scrape LoopNews
+  // Scrape LoopNews
   request.get("http://www.loopnewsbarbados.com/category/loopnewsbarbados-barbados-news", function (error, response, body) {
     let siteName = "Loop News";
     if (error) {
