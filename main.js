@@ -127,6 +127,7 @@ function momentDateFormat(siteID) {
       break;
     case 3:
       dateFormat = "ddd, MM/DD/YYYY - H:mma";
+      break;
     case 9:
       dateFormat = "MMMM Do, YYYY";
       break;
@@ -137,10 +138,13 @@ function momentDateFormat(siteID) {
 // Format dates to UTC format and be able to set either the end of date or start of day
 const dateStandardiser = {
     endOfDay: function(date){
-    return moment.utc(date).endOf("day").format()
+    return moment.utc(date).endOf("day").format();
   },
     startOfDay: function(date) {
-    return moment.utc(date).startOf("day").format()
+    return moment.utc(date).startOf("day").format();
+  },
+  utcDate: function(date, siteID) {
+    return moment.utc(date).format(momentDateFormat(siteID));
   }
 }
 
@@ -222,7 +226,7 @@ app.get("/results", function (req, res) {
       
       filter = { $match: 
         { "siteID": siteID, 
-        "created_at": { "$gte": new Date(dateStandardiser.startOfDay(startDate)), 
+        "utcDate": { "$gte": new Date(dateStandardiser.startOfDay(startDate)), 
         "$lte": new Date(dateStandardiser.endOfDay(endDate)) 
       } 
     } 
@@ -232,7 +236,7 @@ app.get("/results", function (req, res) {
     // Filter search results based on siteID,  start date and end date given by the user
     filter,
     // Group articles according to created date; note that date has been formated to the YYYYMMDD format
-    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } }, data: { $push: "$$ROOT" } } },
+    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$utcDate" } }, data: { $push: "$$ROOT" } } },
     { $addFields: { articleCount: { $size: "$data" } } },
     // Sort articles according to date in ascending order
     { $sort: { _id: 1 } }
