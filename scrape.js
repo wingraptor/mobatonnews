@@ -5,6 +5,7 @@ const mongoose = require("mongoose"),
   cheerio = require("cheerio"),
   CronJob = require("cron").CronJob,
   Archive = require("./models/archive.js"),
+  moment = require("moment"),
   Weather = require("./models/weatherData");
 
 // const bbToday = [],
@@ -77,6 +78,47 @@ function siteID(siteName) {
   return siteID;
 }
 
+// Gives the moment JS format code for the specific date format used by each site
+function momentDateFormat(siteID) {
+  let dateFormat = "";
+
+  switch (siteID) {
+    case 0:
+      dateFormat = "LLL";
+      break;
+    case 1:
+      dateFormat = "D MMMM YYYY";
+      break;
+    case 2:
+    case 4:
+    case 5:
+    case 7:
+    case 8:
+      dateFormat = "LL";
+      break;
+    case 3:
+      dateFormat = "ddd, MM/DD/YYYY - H:mma";
+      break;
+    case 9:
+      dateFormat = "MMMM Do, YYYY";
+      break;
+  }
+  return dateFormat;
+}
+
+// Convert datestring to UTC format 
+const dateStandardiser = {
+  endOfDay: function (date) {
+    return moment.utc(date).endOf("day").format();
+  },
+  startOfDay: function (date) {
+    return moment.utc(date).startOf("day").format();
+  },
+  utcDate: function (date, siteID) {
+    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+  }
+}
+
 // Adds Scraped Data to Database
 function addSiteData(siteData, siteName) {
   Article.create(siteData, function (error) {
@@ -96,16 +138,33 @@ function archiver(siteData, siteName) {
     } else {
       // Add site data to Archive if not already in archive
       if (!document) {
-        Archive.create({
-          link: siteData.link,
-          headline: siteData.headline,
-          siteID: siteData.siteID,
-          date: siteData.date
-        }, function (error) {
-          if (error) {
-            console.log(`Error adding ${siteName} data to archive`);
-          }
-        });
+        // Articles that have scraped Dates, convert date to date object value for the utcDate field
+        if (siteData.date) {
+          Archive.create({
+            link: siteData.link,
+            headline: siteData.headline,
+            siteID: siteData.siteID,
+            date: siteData.date,
+            utcDate: dateStandardiser.utcDate(siteData.date, siteData.siteID) 
+          }, function (error) {
+            if (error) {
+              console.log(`Error adding ${siteName} data to archive`);
+            }
+          });
+        } else {
+          // For articles without dates, just use current date (date article created) as the utcDate field
+          Archive.create({
+            link: siteData.link,
+            headline: siteData.headline,
+            siteID: siteData.siteID,
+            utcDate: new Date()
+          }, function (error) {
+            if (error) {
+              console.log(`Error adding ${siteName} data to archive`);
+            }
+          });
+        }
+
       } else {
         return;
       }
