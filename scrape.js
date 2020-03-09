@@ -254,18 +254,20 @@ new CronJob(`0 2 ${scrapeHours} * * *`, function () {
         $(".latest_block").each(function (index, element) {
           let summary = $(this).find(".latest_content p").text();
           //Add scraped data to articles document
-          let siteData = {
-            link: "http://www.nationnews.com" + $(this).find(".latest_content h3 a").attr("href"),
-            headline: $(this).find(".latest_content h3 a").text(),
-            date: $(this).find(".latest_content span").text(),
-            //Remove spaces and new line character before, after and within summary text
-            summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
-            siteID: siteID(siteName),
-            imgURL: "http://www.nationnews.com"+ $(this).find("img").attr("src"),
-            articleCount: articleCount
+          if ($(this).find(".latest_content h3 a").text()!==""){
+            let siteData = {
+              link: "http://www.nationnews.com" + $(this).find(".latest_content h3 a").attr("href"),
+              headline: $(this).find(".latest_content h3 a").text(),
+              date: $(this).find(".latest_content span").text(),
+              //Remove spaces and new line character before, after and within summary text
+              summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
+              siteID: siteID(siteName),
+              imgURL: "http://www.nationnews.com" + $(this).find("img").attr("src"),
+              articleCount: articleCount
+            }
+            addSiteData(siteData, siteName);
+            articleCount++;
           }
-          addSiteData(siteData, siteName);
-          articleCount++;
         });
       }
     })
