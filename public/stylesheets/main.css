@@ -56,7 +56,7 @@ button{
 .main-header {
   /* border: solid red 1px; */
   background-color: var(--alt-bg-color);
-  width: 100%;
+  max-width: 100%;
   padding: 0.7rem;
   margin-bottom: 1rem;
   /* position: fixed; */
