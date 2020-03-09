@@ -139,7 +139,7 @@ const dateStandardiser = {
     return moment.utc(date).startOf("day").format();
   },
   utcDate: function(date, siteID) {
-    return moment.utc(date).format(momentDateFormat(siteID));
+    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
   },
   localFormat: function(date, siteID){
     if(date){
