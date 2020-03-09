@@ -29,7 +29,12 @@
             <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
           </li>
         <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
-          <h3>Preview</h3>
+          <%# Determine if either summary or image is available and display appropriate text%>
+          <% if(!articles[i].data[j].imgURL && !articles[i].data[j].summary){ %>
+            <h3>No Preview Available</h3>
+          <% } else { %>
+            <h3>Preview</h3>
+          <%  } %>
           <%# Show image if an image was scrapped  %>
           <% if(articles[i].data[j].imgURL){ %>
           <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
@@ -58,7 +63,12 @@
           <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
         </li>
         <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
-          <h3>Preview</h3>
+          <%# Determine if either summary or image is available and display appropriate text%>
+          <% if(!articles[i].data[j].imgURL && !articles[i].data[j].summary){ %>
+            <h3>No Preview Available</h3>
+          <% } else { %>
+            <h3>Preview</h3>
+          <%  } %>
           <%# Show image if an image was scrapped  %>
           <% if(articles[i].data[j].imgURL){ %>
           <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
