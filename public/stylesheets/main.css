@@ -403,6 +403,22 @@ input#startDate:focus{
   display: inline-block;
 }
 
+
+
+/* Error Page Rulesets */
+
+.error-div{
+  background-image: url(https://media.giphy.com/media/iF3M9gPPCdulq/source.gif);
+  background-size: cover;
+  background-position: 10%;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.error-text{
+  margin: 0px;
+}
+
 @media all and (max-width: 980px){
   .search-fields {
     flex-direction: column;
