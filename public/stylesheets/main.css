@@ -171,7 +171,6 @@ html[data-scroll='3'] #footer-link{
 
 /* Styles article headlines */
 .links-list li {
-  border-bottom: dotted rgba(70, 70, 83, 0.5) 1px;
   display: flex;
   padding: 10px;
   /* padding-left: 2%;
@@ -180,6 +179,8 @@ html[data-scroll='3'] #footer-link{
   /* Spaces flex items equally in parent, in this case pushes items to opposite ends of parent element */
   justify-content: space-between;
   box-shadow: 0px 0px 0.5px #111214;
+  border: 1px rgba(70, 70, 83, 0.5) dotted;
+  border-radius: 10px;
 }
 
 .links-share {
