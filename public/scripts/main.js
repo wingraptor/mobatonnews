@@ -66,7 +66,7 @@ linkTogglers.forEach(function (toggler) {
 /***********************************
 Strike through clicked article links; cannot use a:visited pseudo-class :- http://bit.ly/2D3B6K9 
 ************************************/
-var links = document.querySelectorAll(".headline");
+let links = document.querySelectorAll(".headline");
 links.forEach(function (link) {
   link.addEventListener("click", function () {
     this.style.textDecoration = "line-through";
@@ -204,6 +204,10 @@ function topFunction() {
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
+// Alert for sites that have inaccurate dates
+function dateInfo(){
+  alert("Date search results may be inaccurate for this site");
+}
 
 
 

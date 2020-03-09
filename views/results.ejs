@@ -44,7 +44,7 @@
       <%=articleCount%> Results
       <% } %>
     </h2>
-    <%# Only display elements below if artiles are returned from query %>
+    <%# Only display elements below if articles are returned from query %>
     <% if(articleCount > 0){ %>
       <div class="date-chooser">
         <h3>Scroll to Date</h3>
@@ -57,6 +57,9 @@
           <i class="fas fa-<%= siteInfo(siteID).icon %>"></i>
           <%= siteInfo(siteID).name %>
         </a>
+        <%if(!articles[0].data[0].date){ %>
+          <i class="fas fa-info-circle date-info-button" style="font-size: 0.5em;" onclick="dateInfo()"></i>
+        <% } %>
       </h1>
     <% } else { %>
       <div></div>
