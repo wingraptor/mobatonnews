@@ -96,7 +96,7 @@ const dateStandardiser = {
     return moment.utc(date).startOf("day").format();
   },
   utcDate: function (date, siteID) {
-    return moment.utc(date).format(momentDateFormat(siteID));
+    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
   },
   localFormat: function (date, siteID) {
     if (date) {
@@ -108,17 +108,22 @@ const dateStandardiser = {
 }
 
 
+// console.log(dateStandardiser.utcDate("Sun, 03/08/2020 - 7:47am", 3))
+
+
 // Create a new field (utcDate) using the date field value 
-// Archive.find({siteID: 9, date:{"$exists": true}}, function(err, data){
+// Archive.find({siteID: 10, utcDate:{"$exists": false}, date:{"$exists": true}}, function(err, data){
 //   // Iterate through each document
-//   // for (var i = 0; i < data.length; i++){
-//   //   // Update the UTCdate field to the UTC formatted date taken from the datestring from the date field
-//   //   Archive.updateOne({ _id: data[i]._id }, { $set: { utcDate: dateStandardiser.utcDate(data[i].date, data[i].siteID) }}, function(err, result){
-//   //     // console.log(result);
-//   //   })
-//   //   console.log("Done");
-//   // }
-//   console.log(data[data.length - 1]);
+//   for (var i = 0; i < data.length; i++) {
+//     // Update the UTCdate field to the UTC formatted date taken from the datestring from the date field
+//     Archive.updateOne({ _id: data[i]._id }, { $set: { utcDate: dateStandardiser.utcDate(data[i].date, data[i].siteID) } }, function (err, result) {
+//       // console.log(result);
+//     })
+//     console.log("Done");
+//   }
+//   // console.log(data[data.length-1]);
+//   // console.log(data);
+//   // console.log(data.length);
 // });
 
 // --------------------------------------------------------------------------------------------------------------------------
