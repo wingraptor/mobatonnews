@@ -116,6 +116,13 @@ const dateStandardiser = {
   },
   utcDate: function (date, siteID) {
     return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+  },
+  localFormat: function (date, siteID) {
+    if (date) {
+      return moment(date, momentDateFormat(siteID)).format("LL");
+    } else {
+      return "";
+    }
   }
 }
 
