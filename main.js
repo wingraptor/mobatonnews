@@ -267,6 +267,16 @@ app.get("/results", function (req, res) {
   );
 });
 
+app.get("*", function(req,res){
+  // Get Local Weather To Be Used in Widget
+  Weather.find({}, function (error, data) {
+    // Render results template
+    res.render("error", {
+      weather: data[0]
+    });
+  });
+})
+
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
 app.listen(port, IP, function () {
