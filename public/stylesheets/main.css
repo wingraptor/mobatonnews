@@ -186,10 +186,10 @@ html[data-scroll='3'] #footer-link{
 .links-share {
   padding: 2%;
   background-color: var(--alt-bg-color);
-  border-radius: 2%;
   text-align: center;
   transition: var(--transition-values);
   border: var(--main-bg-color) solid 5px;
+  border-radius: 10px;
 }
 
 .links-share .fab {
