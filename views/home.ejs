@@ -38,7 +38,9 @@
           <%# Show image if an image was scrapped  %>
           <% if(articles[i].data[j].imgURL){ %>
           <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
-          <% } %>
+          <% }  else { %>
+          <img src="https://img.icons8.com/dusk/64/000000/no-image.png">
+          <% }%>
           <p>
             <%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %></em>
           </p>
@@ -72,6 +74,8 @@
           <%# Show image if an image was scrapped  %>
           <% if(articles[i].data[j].imgURL){ %>
           <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
+          <% } else { %>
+          <img src="https://img.icons8.com/dusk/64/000000/no-image.png">
           <% } %>
           <p>
             <em><%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %></em>
