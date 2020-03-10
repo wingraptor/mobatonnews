@@ -58,7 +58,6 @@ button{
   background-color: var(--alt-bg-color);
   max-width: 100%;
   padding: 0.7rem;
-  margin-bottom: 1rem;
   /* position: fixed; */
   display: flex;
   justify-content: space-between;
