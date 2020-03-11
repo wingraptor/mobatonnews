@@ -262,7 +262,7 @@ new CronJob(`0 2 ${scrapeHours} * * *`, function () {
               //Remove spaces and new line character before, after and within summary text
               summary: $(this).find(".latest_content p").text().substring(21, summary.length - 20).replace(/\n/g, ''),
               siteID: siteID(siteName),
-              imgURL: "http://www.nationnews.com" + $(this).find("img").attr("src"),
+              imgURL: "https://www.nationnews.com" + $(this).find("img").attr("src"),
               articleCount: articleCount
             }
             addSiteData(siteData, siteName);
