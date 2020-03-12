@@ -2,9 +2,21 @@
 
 
 <main>
+  <!-- Weather Information -->
+  <div class="weather-widget">
+    <h3>Local Weather</h3>
+    The current weather in Barbados is: 
+    <span class="weather-info">
+      <%= weather.temperature %><span>&#176;C</span> and
+      <%= weather.skytext %> 
+      <img class="weather-img"src="<%=weather.imageUrl%>" alt="">
+    </span>
+  </div>
 
+  <!-- Website Description -->
   <div class="welcome-text">
-    <h2>Welcome to <span class="mobaton-a-news">Mobaton-a News</span>: Your Bajan News Aggregator Site</h2>
+    <h1 class="page-title">Mobaton-a News</h1>
+    <h3>Your Bajan News Aggregator Site</h3>
     <p>Browse the latest news from several local news sites updated hourly</p>
   </div>
 

@@ -91,22 +91,30 @@ html[data-scroll='3'] .logo{
 
 /* Weather Widget Styling */
 .weather-widget{
-  padding-right: 15px;
+  padding: 0px 10px 10px 10px;
+  display: inline-block;
+  background-color: var(--alt-bg-color);
+  border-radius: 10px;
+  margin: 10px 15px;
 }
-.weather-temp{
-  padding-right: 5px;
+.weather-info{
+  color: var(--alt-highlight-color)
 }
-.weather-info img{
+.weather-img {
   height: 22px;
 }
 
 
 .welcome-text{
   text-align:center;
-  margin-top: 5%;
+  background-color: var(--alt-bg-color);
+  padding: 20px;
+  margin: 15px auto;
+  width: 35%;
+  border-radius: 10px;
 }
 
-.mobaton-a-news{
+.page-title{
   color:var(--alt-highlight-color);
 }
 
@@ -427,14 +435,17 @@ input#startDate:focus{
   } 
   .search-fields label {
     text-align: center;
-}
+  }
+  .welcome-text{
+  width: 80%;
+  }
 }
 
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
 @media all and (max-width: 500px){
   .main-content {
     grid-template-columns: repeat(auto-fill, 100%);
-  } 
+  }
 }
 
 /* Change flex items to be verticle in header on smaller screensizes */
