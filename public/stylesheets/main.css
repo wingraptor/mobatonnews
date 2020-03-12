@@ -120,20 +120,16 @@ html[data-scroll='3'] .logo{
 
 /* Styles For Main Footer */
 .main-footer {
-  background-color:var(--alt-bg-color);
-  text-transform: uppercase;
-  font-size: 0.7em;
+  display: block;
   position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 0.8em 0; 
-  text-align: center;
+  bottom: 0px;
+  left: 10px;
 }
 
 .to-top-button{
-  font-size: 2em;
+  font-size: 1.2em;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 #footer-link{
