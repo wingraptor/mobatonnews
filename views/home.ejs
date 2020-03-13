@@ -20,6 +20,19 @@
     <p>Browse the latest news from several local news sites updated hourly</p>
   </div>
 
+  <div class="filter-div">
+    <p class="filter-text"> 
+      <i class="fas fa-filter"></i> 
+      Filters:
+    </p>
+    <p>
+      <a href="/" class="filter-type">Recent Articles</a>
+    </p>
+    <p>
+      <a href="/filter/daily" class="filter-type">Today Only</a>
+    </p>
+  </div>
+
   <div class="main-content">
     <% for(var i = 0; i < articles.length; i++){ %>
     <section class="links-section <%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>-section">

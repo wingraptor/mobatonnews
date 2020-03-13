@@ -197,6 +197,52 @@ app.get("/", function (req, res) {
   });
 });
 
+
+// Daily Articles Route
+app.get("/filter/:timeFrame", function (req, res) {
+  let timeFrame = req.params.timeFrame,
+  queryFilter;
+
+  if (timeFrame === "daily"){
+    queryFilter = {
+        $match:
+      {
+        "utcDate": {
+          "$gte": new Date(moment().utc().startOf("day").format()),
+          "$lte": new Date(moment().utc().endOf("day").format())
+        }
+      } 
+    }
+  }
+
+  // Query Articles DB
+  Archive.aggregate([
+    //Sort articles in from newest to oldest
+    { $sort: { _id: 1 } },
+    queryFilter,
+    //group articles according to siteIDs
+    { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
+    //sort according siteID
+    { $sort: { _id: 1 } },
+  ], function (error, articles) {
+    if (error) {
+      console.log("Error quering articles DB on home page");
+    }
+    else {
+      // Get Local Weather To Be Used in Widget
+      Weather.find({}, function (error, data) {
+        // Render homepage template
+        res.render("home", {
+          articles: articles,
+          siteInfo: siteInfo,
+          weather: data[0],
+          dateStandardiser: dateStandardiser.localFormat
+        });
+      })
+    }
+  });
+});
+
 // Archive Page Route
 app.get("/archive", function (req, res) {
   // Query Articles DB and return a list of unique news sites (as the SiteIDs) currently in DB

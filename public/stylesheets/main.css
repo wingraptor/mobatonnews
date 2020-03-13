@@ -97,8 +97,8 @@ html[data-scroll='3'] .logo{
   border-radius: 10px;
   margin: 10px 15px;
 }
-.weather-info{
-  color: var(--alt-highlight-color)
+.weather-info, .filter-type{
+  color: var(--alt-highlight-color);
 }
 .weather-img {
   height: 22px;
@@ -117,6 +117,24 @@ html[data-scroll='3'] .logo{
 .page-title{
   color:var(--alt-highlight-color);
 }
+
+
+.filter-div {
+  background-color: var(--alt-bg-color);
+  padding: 20px;
+  margin: 15px auto;
+  border-radius: 10px;
+  width: 25%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.filter-type {
+border: 1px rgba(70, 70, 83, 1) dotted;
+border-radius: 5px;
+font-weight: bold;
+}
+
 
 /* Styles For Main Footer */
 .main-footer {
@@ -157,7 +175,7 @@ html[data-scroll='3'] #footer-link{
   /* margin-top: 2.5%; */
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 5rem;
+  padding-top: 2rem;
 }
 
 /*  */
@@ -423,6 +441,13 @@ input#startDate:focus{
   margin: 0px;
 }
 
+
+@media all and (max-width: 1175px){
+  .filter-div {
+    width: 35%
+  }
+}
+
 @media all and (max-width: 980px){
   .search-fields {
     flex-direction: column;
@@ -435,12 +460,20 @@ input#startDate:focus{
   .welcome-text{
   width: 80%;
   }
+  .filter-div {
+    width: 57%;
+  }
 }
 
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
 @media all and (max-width: 500px){
   .main-content {
     grid-template-columns: repeat(auto-fill, 100%);
+  }
+  .filter-div {
+    flex-direction: column;
+    align-items: center;
+    width: 35%
   }
 }
 

@@ -114,8 +114,12 @@ const dateStandardiser = {
   startOfDay: function (date) {
     return moment.utc(date).startOf("day").format();
   },
-  utcDate: function (date, siteID) {
-    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+  utcDate: function (date, siteID, offset) {
+    if (offset){
+      return moment.utc(date, momentDateFormat(siteID)).startOf("day").utcOffset(-5).format();
+    } else {
+      return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+    }
   },
   localFormat: function (date, siteID) {
     if (date) {
@@ -147,16 +151,32 @@ function archiver(siteData, siteName) {
       if (!document) {
         // Check to see if article has a date value
         if (siteData.date) {
-          // Convert date value to urcDate object
-          siteData.utcDate = dateStandardiser.utcDate(siteData.date, siteData.siteID)
+          // Ensures that the utcDate saved corresponds to the same day as the current day in Barbados (UTC is 5hrs ahead of barbados time)
+          // 19 corresponds to 7 local time, which is 12 am UTC
+          if (new Date().getHours() >= 19){
+            // Convert date value to utcDate object
+            siteData.utcDate = dateStandardiser.utcDate(siteData.date, siteData.siteID, true)
+          } else {
+            // Convert date value to utcDate object
+            siteData.utcDate = dateStandardiser.utcDate(siteData.date, siteData.siteID, false)
+          }
+          // Convert date value to utcDate object
           Archive.create(siteData, function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);
             }
           });
-        } else {
           // For articles without dates, just use current date (the date article was created) as the utcDate field
-          siteData.utcDate = new Date();
+        } else {
+          // Ensures that the utcDate saved corresponds to the same day as the current day in Barbados (UTC is 5hrs ahead of barbados time)
+          // 19 corresponds to 7 local time, which is 12 am UTC
+          if (new Date().getHours() >= 19) {
+            // Convert date value to utcDate object
+            siteData.utcDate = new Date(new Date().setHours(19));
+          } else {
+            // Convert date value to utcDate object
+            siteData.utcDate = new Date();
+          }
           Archive.create(siteData , function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);

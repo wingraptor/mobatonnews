@@ -15,8 +15,10 @@ var archiveSchema = new mongoose.Schema({
   link: String,
   headline: String,
   date: String,
+  summary: String,
   siteID: Number,
-  utcDate: Date
+  utcDate: Date,
+  imgURL: String
 },
   { timestamps: { createdAt: 'created_at' } });
 
