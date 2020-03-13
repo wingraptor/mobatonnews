@@ -145,33 +145,24 @@ function archiver(siteData, siteName) {
     } else {
       // Add site data to Archive if not already in archive
       if (!document) {
-        // Articles that have scraped Dates, convert date to date object value for the utcDate field
+        // Check to see if article has a date value
         if (siteData.date) {
-          Archive.create({
-            link: siteData.link,
-            headline: siteData.headline,
-            siteID: siteData.siteID,
-            date: siteData.date,
-            utcDate: dateStandardiser.utcDate(siteData.date, siteData.siteID) 
-          }, function (error) {
+          // Convert date value to urcDate object
+          siteData.utcDate = dateStandardiser.utcDate(siteData.date, siteData.siteID)
+          Archive.create(siteData, function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);
             }
           });
         } else {
-          // For articles without dates, just use current date (date article created) as the utcDate field
-          Archive.create({
-            link: siteData.link,
-            headline: siteData.headline,
-            siteID: siteData.siteID,
-            utcDate: new Date()
-          }, function (error) {
+          // For articles without dates, just use current date (the date article was created) as the utcDate field
+          siteData.utcDate = new Date();
+          Archive.create(siteData , function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);
             }
           });
         }
-
       } else {
         return;
       }
@@ -217,9 +208,13 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
             headline: $(this).find(".title_caption_wrap .post-header .post-title a").text(),
             summary: $(this).find(".title_caption_wrap").contents().last().text(),
             siteID: siteID(siteName),
-            // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
-            imgURL: $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0],
             articleCount: articleCount
+          }
+          // imgURLs are not consistent on page, below checks to see how image is stored on page and records appropriate src
+          if ($(this).find(".post-thumbnail a img").attr("src")) {
+            siteData.imgURL = $(this).find(".post-thumbnail a img").attr("src")
+          } else if ($(this).find(".post-thumbnail a img").attr("srcset")) {
+            siteData.imgURL = $(this).find(".post-thumbnail a img").attr("srcset").split(" ")[0]
           }
         }
         addSiteData(siteData, siteName);
