@@ -3,7 +3,7 @@
 
 <main>
   <!-- Weather Information -->
-  <div class="weather-widget">
+  <div class="weather-widget element-style-1">
     <h3>Local Weather</h3>
     The current weather in Barbados is: 
     <span class="weather-info">
@@ -14,13 +14,13 @@
   </div>
 
   <!-- Website Description -->
-  <div class="welcome-text">
+  <div class="welcome-text element-style-1">
     <h1 class="page-title">Mobaton-a News</h1>
     <h3>Your Bajan News Aggregator Site</h3>
     <p>Browse the latest news from several local news sites updated hourly</p>
   </div>
 
-  <div class="filter-div">
+  <div class="filter-div element-style-1 flex-style-1">
     <p class="filter-text"> 
       <i class="fas fa-filter"></i> 
       Filters:
@@ -59,7 +59,7 @@
             </a>
             <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
           </li>
-        <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
+        <div class="links-share element-style-1" id="<%= [i] %>.<%= [j] %>" style="display:none">
           <%# Determine if either summary or image is available and display appropriate text%>
           <% if(!articles[i].data[j].imgURL && !articles[i].data[j].summary){ %>
             <h3>No Preview Available</h3>
@@ -95,7 +95,7 @@
           </a>
           <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
         </li>
-        <div class="links-share" id="<%= [i] %>.<%= [j] %>" style="display:none">
+        <div class="links-share element-style-1" id="<%= [i] %>.<%= [j] %>" style="display:none">
           <%# Determine if either summary or image is available and display appropriate text%>
           <% if(!articles[i].data[j].imgURL && !articles[i].data[j].summary){ %>
             <h3>No Preview Available</h3>
