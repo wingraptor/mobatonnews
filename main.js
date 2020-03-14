@@ -132,19 +132,19 @@ function momentDateFormat(siteID) {
 
 // Format dates to UTC format and be able to set either the end of date or start of day
 const dateStandardiser = {
-    endOfDay: function(date){
+  endOfDay: function (date) {
     return moment.utc(date).endOf("day").format();
   },
-    startOfDay: function(date) {
+  startOfDay: function (date) {
     return moment.utc(date).startOf("day").format();
   },
-  	utcDate: function(date, siteID) {
+  utcDate: function (date, siteID) {
     return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
   },
-  	localFormat: function(date, siteID){
-    if(date){
+  localFormat: function (date, siteID) {
+    if (date) {
       return moment(date, momentDateFormat(siteID)).format("LL");
-    } else{
+    } else {
       return "";
     }
   }
@@ -201,37 +201,37 @@ app.get("/", function (req, res) {
 // "Filtered" Articles Route
 app.get("/filter/:timeFrame", function (req, res) {
   let timeFrame = req.params.timeFrame,
-  queryFilter;
+    queryFilter;
 
-  if (timeFrame === "daily"){
+  if (timeFrame === "daily") {
     queryFilter = {
-        $match:
+      $match:
       {
         "utcDate": {
           "$gte": new Date(moment().utc().startOf("day").format()),
           "$lte": new Date(moment().utc().endOf("day").format())
         }
-      } 
+      }
     }
-  } else if(timeFrame === "yesterday") {
-		queryFilter = {
-		$match:
+  } else if (timeFrame === "yesterday") {
+    queryFilter = {
+      $match:
       {
         "utcDate": {
-          "$gte": new Date(moment().subtract(1,"day").utc().startOf("day").format()),
-          "$lte": new Date(moment().subtract(1,"day").utc().endOf("day").format())
+          "$gte": new Date(moment().subtract(1, "day").utc().startOf("day").format()),
+          "$lte": new Date(moment().subtract(1, "day").utc().endOf("day").format())
         }
-      } 
+      }
     }
-	} else if(timeFrame === "tomorrow"){
-		res.render("error");
-		return;
-	}
+  } else if (timeFrame === "tomorrow") {
+    res.render("error");
+    return;
+  }
 
   // Query Articles DB
   Archive.aggregate([
     //Sort articles in from newest to oldest
-    { $sort: { _id: 1 } },
+    { $sort: { _id: -1 } },
     queryFilter,
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
@@ -251,7 +251,7 @@ app.get("/filter/:timeFrame", function (req, res) {
           weather: data[0],
           dateStandardiser: dateStandardiser.localFormat
         });
-      })
+      });
     }
   });
 });
@@ -267,15 +267,11 @@ app.get("/archive", function (req, res) {
         console.log("Error quering archives DB on archives page");
       }
       else {
-        // Get Local Weather To Be Used in Widget
-        Weather.find({}, function (error, data) {
-          // Render archive template
-          res.render("archive", {
-            articles: articles,
-            siteInfo: siteInfo,
-            weather: data[0]
-          });
-        })
+        // Render archive template
+        res.render("archive", {
+          articles: articles,
+          siteInfo: siteInfo,
+        });
       }
     });
 });
@@ -283,17 +279,20 @@ app.get("/archive", function (req, res) {
 // Results Page Route
 app.get("/results", function (req, res) {
   let siteID = Number(req.query.siteID),
-      startDate = req.query.startDate,
-      // If endDate not given in form, then endDate is today's date
-      endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
-      
-      filter = { $match: 
-        { "siteID": siteID, 
-        "utcDate": { "$gte": new Date(dateStandardiser.startOfDay(startDate)), 
-        "$lte": new Date(dateStandardiser.endOfDay(endDate)) 
-      } 
-    } 
-  };
+    startDate = req.query.startDate,
+    // If endDate not given in form, then endDate is today's date
+    endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
+
+    filter = {
+      $match:
+      {
+        "siteID": siteID,
+        "utcDate": {
+          "$gte": new Date(dateStandardiser.startOfDay(startDate)),
+          "$lte": new Date(dateStandardiser.endOfDay(endDate))
+        }
+      }
+    };
 
   Archive.aggregate([
     // Filter search results based on siteID,  start date and end date given by the user
@@ -307,33 +306,27 @@ app.get("/results", function (req, res) {
     if (error) {
       console.log(error)
     } else {
-      // Get Local Weather To Be Used in Widget
-      Weather.find({}, function (error, data) {
-        // Render results template
-        res.render("results", {
-          weather: data[0],
-          siteID: siteID,
-          siteInfo: siteInfo,
-          articles: articles,
-          articleCount: articleCounter(articles),
-          dates: {
-            startDate: startDate,
-            endDate: endDate
-          }
-        });
+      // Render results template
+      res.render("results", {
+        siteID: siteID,
+        siteInfo: siteInfo,
+        articles: articles,
+        articleCount: articleCounter(articles),
+        dates: {
+          startDate: startDate,
+          endDate: endDate
+        }
       });
     }
   }
   );
 });
 
-app.get("*", function(req,res){
+app.get("*", function (req, res) {
   // Get Local Weather To Be Used in Widget
   Weather.find({}, function (error, data) {
     // Render results template
-    res.render("error", {
-      weather: data[0]
-    });
+    res.render("error");
   });
 })
 
