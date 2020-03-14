@@ -430,7 +430,7 @@ input#startDate:focus{
 /* Error Page Rulesets */
 
 .error-div{
-  background-image: url(https://media.giphy.com/media/iF3M9gPPCdulq/source.gif);
+  background-image: url(/images/nope.gif);
   background-size: cover;
   background-position: 10%;
   min-height: 100vh;
@@ -442,9 +442,9 @@ input#startDate:focus{
 }
 
 
-@media all and (max-width: 1175px){
+@media all and (max-width: 1551px){
   .filter-div {
-    width: 35%
+    width: 40%
   }
 }
 
@@ -461,9 +461,10 @@ input#startDate:focus{
   width: 80%;
   }
   .filter-div {
-    width: 57%;
+    width: 80%;
   }
 }
+
 
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
 @media all and (max-width: 500px){

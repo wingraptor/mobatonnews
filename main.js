@@ -138,10 +138,10 @@ const dateStandardiser = {
     startOfDay: function(date) {
     return moment.utc(date).startOf("day").format();
   },
-  utcDate: function(date, siteID) {
+  	utcDate: function(date, siteID) {
     return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
   },
-  localFormat: function(date, siteID){
+  	localFormat: function(date, siteID){
     if(date){
       return moment(date, momentDateFormat(siteID)).format("LL");
     } else{
@@ -198,7 +198,7 @@ app.get("/", function (req, res) {
 });
 
 
-// Daily Articles Route
+// "Filtered" Articles Route
 app.get("/filter/:timeFrame", function (req, res) {
   let timeFrame = req.params.timeFrame,
   queryFilter;
@@ -213,7 +213,20 @@ app.get("/filter/:timeFrame", function (req, res) {
         }
       } 
     }
-  }
+  } else if(timeFrame === "yesterday") {
+		queryFilter = {
+		$match:
+      {
+        "utcDate": {
+          "$gte": new Date(moment().subtract(1,"day").utc().startOf("day").format()),
+          "$lte": new Date(moment().subtract(1,"day").utc().endOf("day").format())
+        }
+      } 
+    }
+	} else if(timeFrame === "tomorrow"){
+		res.render("error");
+		return;
+	}
 
   // Query Articles DB
   Archive.aggregate([
@@ -242,6 +255,7 @@ app.get("/filter/:timeFrame", function (req, res) {
     }
   });
 });
+
 
 // Archive Page Route
 app.get("/archive", function (req, res) {
