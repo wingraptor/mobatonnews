@@ -429,10 +429,6 @@ input#startDate:focus{
   text-align: center;
 }
 
-.error-text{
-  margin: 0px;
-}
-
 
 @media all and (max-width: 1551px){
   .filter-div {
