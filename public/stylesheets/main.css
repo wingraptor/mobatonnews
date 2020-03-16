@@ -134,10 +134,15 @@ html[data-scroll='3'] .logo{
 }
 
 .filter-type {
-  border: 1px rgba(70, 70, 83, 1) dotted;
+  border: var(--border-style);
   border-radius: 5px;
   font-weight: bold;
   margin: 5px;
+  padding: 5px;
+}
+
+.filter-type:hover{
+  border-color: white
 }
 
 
