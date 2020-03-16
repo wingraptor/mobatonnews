@@ -204,6 +204,7 @@ html[data-scroll='3'] #footer-link{
 	margin-bottom: 2px;
   border-radius: 10px;
   background-color: var(--alt-bg-color);
+  cursor: pointer;
 }
 
 .links-list li:hover{
@@ -434,6 +435,10 @@ input#startDate:focus{
   background-position: 10%;
   min-height: 100vh;
   text-align: center;
+}
+
+.error-text{
+  margin: 0px;
 }
 
 

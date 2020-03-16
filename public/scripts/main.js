@@ -34,13 +34,13 @@ togglers.forEach(function (toggler) {
 
 
 /**************************************************
-Handle Toggler To Share Articles and see Meta Data
+Handle Toggler To Share Articles and see Article Info.
 **************************************************/
 
-// Select all share link togglers on page
-var linkTogglers = document.querySelectorAll(".share-toggler");
+// Select all article info togglers on page
+var linkTogglers = document.querySelectorAll(".links-list li");
 
-// Add event listener to all article togglers
+// Add event listener to all article info. toggler
 linkTogglers.forEach(function (toggler) {
   toggler.addEventListener("click", function () {
     // Get articleID of corresponding article
@@ -52,12 +52,12 @@ linkTogglers.forEach(function (toggler) {
       //Display div with sharing links
       shareDiv.style.display = "block";
       //Change arrow to up arrow
-      toggler.classList = "fas fa-minus share-toggler";
+      toggler.querySelector(".share-toggler").classList = "fas fa-minus share-toggler";
     } else {
       //Remove div from page
       shareDiv.style.display = "none";
       //Change arrow to down arrow
-      toggler.classList = "fas fa-plus share-toggler";
+      toggler.querySelector(".share-toggler").classList = "fas fa-plus share-toggler";
     }
   });
 })

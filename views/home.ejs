@@ -53,11 +53,11 @@
         <%# Controls number of headlines displayed per website list, (max of 10), other articles are hidden %>
         <% if (j >= 10){ %>
           <li style="display:none"
-            class="list-hidden--<%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>">
-            <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
+            class="list-hidden--<%= siteInfo(articles[i]._id).name.toLowerCase().replace(/ /g, "-") %>" data-articleID="<%= [i] %>.<%= [j] %>">
+            <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="event.stopPropagation()" class="headline hvr-grow">
               <%= articles[i].data[j].headline %>
             </a>
-            <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
+            <i class="fas fa-plus share-toggler"></i>
           </li>
         <div class="links-share element-style-1" id="<%= [i] %>.<%= [j] %>" style="display:none">
           <%# Determine if either summary or image is available and display appropriate text%>
@@ -89,11 +89,11 @@
           </a>
         </div>
         <% } else { %>
-        <li>
-          <a href="<%= articles[i].data[j].link %>" target="_blank" class="headline hvr-grow">
+        <li data-articleID="<%= [i] %>.<%= [j] %>">
+          <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="event.stopPropagation()" class="headline hvr-grow">
             <%= articles[i].data[j].headline %>
           </a>
-          <i class="fas fa-plus share-toggler" data-articleID="<%= [i] %>.<%= [j] %>"></i>
+          <i class="fas fa-plus share-toggler"></i>
         </li>
         <div class="links-share element-style-1" id="<%= [i] %>.<%= [j] %>" style="display:none">
           <%# Determine if either summary or image is available and display appropriate text%>
