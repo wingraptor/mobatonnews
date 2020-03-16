@@ -20,24 +20,28 @@
     <p>Browse the latest news from several local news sites updated hourly</p>
   </div>
 
-  <div class="filter-div element-style-1 flex-style-1">
-    <p class="filter-text"> 
-      <i class="fas fa-filter"></i> 
-      Filters:
-    </p>
-    <p>
-      <a href="/" class="filter-type">Most Recent</a>
-    </p>
-    <p>
-      <a href="/filter/daily" class="filter-type">Today</a>
-    </p>
-		<p>
-      <a href="/filter/yesterday" class="filter-type">Yesterday</a>
-    </p>
-		<p>
-      <a href="/filter/tomorrow" class="filter-type">Tomorrow👁️</a>
-    </p>
+  <!-- Filter Div -->
+  <div class="filter-div-container">
+    <div class="filter-div element-style-1">
+      <p class="filter-text">
+        <i class="fas fa-filter"></i>
+        Filters:
+      </p>
+      <p>
+        <a href="/" class="filter-type">Most Recent</a>
+      </p>
+      <p>
+        <a href="/filter/daily" class="filter-type">Today</a>
+      </p>
+      <p>
+        <a href="/filter/yesterday" class="filter-type">Yesterday</a>
+      </p>
+      <p>
+        <a href="/filter/tomorrow" class="filter-type">Tomorrow👁️</a>
+      </p>
+    </div>
   </div>
+
 
   <div class="main-content">
     <% for(var i = 0; i < articles.length; i++){ %>

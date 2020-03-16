@@ -123,16 +123,21 @@ html[data-scroll='3'] .logo{
 }
 
 
+.filter-div-container {
+  text-align: center;
+}
+
 .filter-div {
   padding: 20px;
-  margin: 15px auto;
-  width: 25%;
+  display: inline-flex;
+  justify-content: space-between;
 }
 
 .filter-type {
-border: 1px rgba(70, 70, 83, 1) dotted;
-border-radius: 5px;
-font-weight: bold;
+  border: 1px rgba(70, 70, 83, 1) dotted;
+  border-radius: 5px;
+  font-weight: bold;
+  margin: 5px;
 }
 
 
@@ -442,12 +447,6 @@ input#startDate:focus{
 }
 
 
-@media all and (max-width: 1551px){
-  .filter-div {
-    width: 40%
-  }
-}
-
 @media all and (max-width: 980px){
   .search-fields {
     flex-direction: column;
@@ -460,9 +459,6 @@ input#startDate:focus{
   .welcome-text{
   width: 80%;
   }
-  .filter-div {
-    width: 80%;
-  }
 }
 
 
@@ -474,7 +470,6 @@ input#startDate:focus{
   .filter-div {
     flex-direction: column;
     align-items: center;
-    width: 35%
   }
 }
 

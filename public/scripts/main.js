@@ -3,13 +3,13 @@ Handle Toggler To Show/Hide More Articles
 ****************************************/
 
 //Select all togglers on page
-var togglers = document.querySelectorAll(".articles-toggler");
+let togglers = document.querySelectorAll(".articles-toggler");
 
 togglers.forEach(function (toggler) {
   //Add click event listener to all togglers
   toggler.addEventListener("click", function () {
     //Select all hidden article items for the specifically clicked toggler
-    var hiddenItems = document.querySelectorAll(`.list-hidden--${this.getAttribute("data-website")}`);
+    let hiddenItems = document.querySelectorAll(`.list-hidden--${this.getAttribute("data-website")}`);
     console.log(`.list-hidden--${this.getAttribute("data-website")}`);
     //Make changes for all selected hidden article items
     hiddenItems.forEach(function (hiddenItem) {
@@ -47,10 +47,8 @@ linkTogglers.forEach(function (toggler) {
     let articleID = this.getAttribute("data-articleID");
     // Select corresponding div containing links to share article
     let shareDiv = document.getElementById(articleID);
-
     // Select toggler icon; either +/-
     let togglerIcon = toggler.querySelector(".share-toggler");
-    
     //Check to see if div with sharing links is not displayed
     if (shareDiv.style.display === "none") {
       //Display div with sharing links
