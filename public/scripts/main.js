@@ -38,29 +38,33 @@ Handle Toggler To Share Articles and see Article Info.
 **************************************************/
 
 // Select all article info togglers on page
-var linkTogglers = document.querySelectorAll(".links-list li");
+let linkTogglers = document.querySelectorAll(".links-list li");
 
 // Add event listener to all article info. toggler
 linkTogglers.forEach(function (toggler) {
   toggler.addEventListener("click", function () {
     // Get articleID of corresponding article
-    var articleID = this.getAttribute("data-articleID");
+    let articleID = this.getAttribute("data-articleID");
     // Select corresponding div containing links to share article
-    var shareDiv = document.getElementById(articleID);
+    let shareDiv = document.getElementById(articleID);
+
+    // Select toggler icon; either +/-
+    let togglerIcon = toggler.querySelector(".share-toggler");
+    
     //Check to see if div with sharing links is not displayed
     if (shareDiv.style.display === "none") {
       //Display div with sharing links
       shareDiv.style.display = "block";
       //Change arrow to up arrow
-      toggler.querySelector(".share-toggler").classList = "fas fa-minus share-toggler";
+      togglerIcon.classList = "fas fa-minus share-toggler";
     } else {
       //Remove div from page
       shareDiv.style.display = "none";
       //Change arrow to down arrow
-      toggler.querySelector(".share-toggler").classList = "fas fa-plus share-toggler";
+      togglerIcon.classList = "fas fa-plus share-toggler";
     }
   });
-})
+});
 
 
 /***********************************
