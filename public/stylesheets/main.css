@@ -10,6 +10,7 @@
   --transition-values: all 500ms ease-out;
   --headline-font: 'Work Sans', sans-serif;
   --body-font: 'Taviraj', serif;
+	--border-style: 1px rgb(70, 70, 83) solid;
 }
 
 
@@ -52,6 +53,7 @@ button {
 .element-style-1 {
 	border-radius: 10px;
 	background-color: var(--alt-bg-color);
+	border:var(--border-style);
 }
 
 .flex-style-1 {
@@ -198,9 +200,17 @@ html[data-scroll='3'] #footer-link{
   /* Spaces flex items equally in parent, in this case pushes items to opposite ends of parent element */
   justify-content: space-between;
   box-shadow: 0px 0px 0.5px #111214;
-  border: 1px rgba(70, 70, 83, 0.5) dotted;
+  border: var(--border-style);
+	margin-bottom: 2px;
   border-radius: 10px;
   background-color: var(--alt-bg-color);
+}
+
+.links-list li:hover{
+	border-color:white;
+	/* border-width:1px;
+	border-style:solid; */
+	color: white;
 }
 
 .links-share {
@@ -218,6 +228,8 @@ html[data-scroll='3'] #footer-link{
 
 .share-toggler {
   cursor: pointer;
+	padding-right: 5px;
+	font-size: 1.2em; 
 }
 
 /* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
@@ -230,10 +242,6 @@ html[data-scroll='3'] #footer-link{
 .headline:visited {
   /* color: var(--alt-bg-color); */
   text-decoration: line-through solid red;
-}
-
-.headline:hover {
-  color:white;
 }
 
 .article-thumbnail{
@@ -266,7 +274,6 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
 /* Styles of More/Less Button */
 .articles-toggler {
   text-align: center;
-  font-size: 0.9em;
   color:white;
   cursor: pointer;
 }
