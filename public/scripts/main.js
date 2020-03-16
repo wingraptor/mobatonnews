@@ -10,7 +10,6 @@ togglers.forEach(function (toggler) {
   toggler.addEventListener("click", function () {
     //Select all hidden article items for the specifically clicked toggler
     let hiddenItems = document.querySelectorAll(`.list-hidden--${this.getAttribute("data-website")}`);
-    console.log(`.list-hidden--${this.getAttribute("data-website")}`);
     //Make changes for all selected hidden article items
     hiddenItems.forEach(function (hiddenItem) {
       if (hiddenItem.style.display === "none") {
@@ -211,8 +210,19 @@ function dateInfo(){
   alert("Date search results may be inaccurate for this site");
 }
 
+/*********************
+Add styling 
+***********************/
+let urlArr = window.location.href.split("/"),
+  pageIdentifier = urlArr[urlArr.length - 1];
 
-
+  if (pageIdentifier === ""){
+    filter = document.querySelector("#recent");
+    filter.style.borderColor = "white";
+  } else {
+    filter = document.querySelector(`#${pageIdentifier}`);
+    filter.style.borderColor = "white";
+  }
 
 /**************************************
 Load Tippy tool tips with custom option

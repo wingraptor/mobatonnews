@@ -133,7 +133,7 @@ html[data-scroll='3'] .logo{
   justify-content: space-between;
 }
 
-.filter-type {
+.filter {
   border: var(--border-style);
   border-radius: 5px;
   font-weight: bold;
@@ -141,7 +141,7 @@ html[data-scroll='3'] .logo{
   padding: 5px;
 }
 
-.filter-type:hover{
+.filter:hover{
   border-color: white
 }
 
