@@ -69,6 +69,7 @@ button {
   padding: 0.7rem;
   /* position: fixed; */
   align-items: baseline;
+  margin-bottom: 2%;
 }
 
 .header-links h3,.header-link{
