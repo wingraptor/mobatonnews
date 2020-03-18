@@ -230,12 +230,13 @@ app.get("/filter/:timeFrame", function (req, res) {
 
   // Query Articles DB
   Archive.aggregate([
-    //Sort articles in from newest to oldest
+    //Sort articles in from newest to oldest, _id in this case refers to automatically assigned ID
     { $sort: { _id: -1 } },
+    // Filter articles according to page clicked
     queryFilter,
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    //sort according siteID
+    //sort according siteID: ID in this case refers to the siteID
     { $sort: { _id: 1 } },
   ], function (error, articles) {
     if (error) {
@@ -297,6 +298,8 @@ app.get("/results", function (req, res) {
   Archive.aggregate([
     // Filter search results based on siteID,  start date and end date given by the user
     filter,
+    // Sort articles according to created date/time, from newest to oldest
+    { $sort: {created_at: 1 }},
     // Group articles according to created date; note that date has been formated to the YYYYMMDD format
     { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$utcDate" } }, data: { $push: "$$ROOT" } } },
     { $addFields: { articleCount: { $size: "$data" } } },
