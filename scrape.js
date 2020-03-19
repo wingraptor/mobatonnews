@@ -149,7 +149,11 @@ function archiver(siteData, siteName) {
       // Add site data to Archive if not already in archive
       if (!document) {
         // Indicate that aritcle is new (newly scraped)
-        Article.findOneAndUpdate({ headline: siteData.headline, siteID: siteData.siteID}, {newArticle: true});
+        Article.findOneAndUpdate({ headline: siteData.headline, siteID: siteData.siteID}, {newArticle: true}, function(error, article){
+          if(error){
+            console.log(`Error updating newArticle field in document:::: ${error}`);
+          }
+        });
         // Check to see if article has a date value
         if (siteData.date) {
           // Ensures that the utcDate saved corresponds to the same day as the current day in Barbados (UTC is 5hrs ahead of barbados time)
