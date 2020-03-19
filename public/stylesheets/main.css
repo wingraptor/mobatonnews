@@ -247,9 +247,25 @@ html[data-scroll='3'] #footer-link{
 
 .new-article{
   margin-right: 10px;
-  color:var(--alt-highlight-color);
-  transition: var(--transition-values);
+  animation: smooth 7.5s infinite;
 }
+
+@keyframes smooth {
+  0% {
+    color: var(--alt-highlight-color);
+  }
+  33% {
+    color: var(--scroll-color-one);
+  }
+  66%{
+    color: var(--scroll-color-two);
+  }
+  100%{
+    color: var(--scroll-color-three);
+  }
+}
+
+
 /* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
 .headline {
     /* padding: .5rem 1rem; */
@@ -279,13 +295,13 @@ html[data-scroll='3'] #footer-link{
 }
 
 /* Changes Color of Icons (fas) on page depending on scroll position */
-html[data-scroll='1'] .fas, html[data-scroll='1'] .new-article{
+html[data-scroll='1'] .fas {
   color: var(--scroll-color-one);
 }
-html[data-scroll='2'] .fas, html[data-scroll='2'] .logo, html[data-scroll='2'] .new-article{
+html[data-scroll='2'] .fas, html[data-scroll='2'] .logo {
   color: var(--scroll-color-two);
 }
-html[data-scroll='3'] .fas, html[data-scroll='3'] .logo, html[data-scroll='3'] .new-article{
+html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
   color: var(--scroll-color-three);
 }
 
