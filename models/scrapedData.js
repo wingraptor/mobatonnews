@@ -18,7 +18,8 @@ var scrapedDataSchema = new mongoose.Schema({
     summary: String,
     siteID: Number,
     articleCount: Number,
-    imgURL: String
+    imgURL: String,
+    newArticle: Boolean
 }, 
 { timestamps: { createdAt: 'created_at' } });
 

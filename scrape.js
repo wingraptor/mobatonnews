@@ -5,19 +5,9 @@ const mongoose = require("mongoose"),
   cheerio = require("cheerio"),
   CronJob = require("cron").CronJob,
   Archive = require("./models/archive.js"),
-  moment = require("moment"),
+  Twitter = require("twitter"),
   Weather = require("./models/weatherData");
-
-// const bbToday = [],
-//       nationNews = [],
-//       loopNews = [],
-//       advocate = [],
-//       advocate2 = [],
-//       biba = [],
-//       bbict = [],
-//       businessbb = [],
-//       GIS = [];
-
+  moment = require("moment");
 
 //Environment variable setup
 require("dotenv").config();
@@ -26,6 +16,15 @@ const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrap
 //mongoose config
 mongoose.connect(databaseUrl,
   { useNewUrlParser: true });
+
+
+//  Twitter Config
+// let client = new Twitter({
+//   consumer_key: process.env.TWITTER_CONSUMER_KEY,
+//   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+//   access_token_key : process.env.TWITTER_ACCESS_TOKEN,
+//   access_token_secret: process.env.TWITTER_ACCESS_SECRET
+// });
 
 /************************
 Declare Global Variables
@@ -149,6 +148,8 @@ function archiver(siteData, siteName) {
     } else {
       // Add site data to Archive if not already in archive
       if (!document) {
+        // Indicate that aritcle is new (newly scraped)
+        Article.findOneAndUpdate({ headline: siteData.headline, siteID: siteData.siteID}, {newArticle: true});
         // Check to see if article has a date value
         if (siteData.date) {
           // Ensures that the utcDate saved corresponds to the same day as the current day in Barbados (UTC is 5hrs ahead of barbados time)

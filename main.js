@@ -178,9 +178,17 @@ app.get("/", function (req, res) {
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
     //sort according siteID
     { $sort: { _id: 1 } },
+    // { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
+    // { $sort: { _id: 1 } },
+    // { $sort: {"utcDate":-1} },
+    // {$project: {
+    //   "data": {
+    //     "$slice": ["$data", 15]
+    //   }
+    // }}
   ], function (error, articles) {
     if (error) {
-      console.log("Error quering articles DB on home page");
+      console.log("Error quering articles DB on home page" + error);
     }
     else {
       // Get Local Weather To Be Used in Widget
@@ -190,7 +198,8 @@ app.get("/", function (req, res) {
           articles: articles,
           siteInfo: siteInfo,
           weather: data[0],
-          dateStandardiser: dateStandardiser.localFormat
+          dateStandardiser: dateStandardiser.localFormat,
+          date: new Date()
         });
       })
     }
@@ -299,7 +308,7 @@ app.get("/results", function (req, res) {
     // Filter search results based on siteID,  start date and end date given by the user
     filter,
     // Sort articles according to created date/time, from newest to oldest
-    { $sort: {created_at: 1 }},
+    { $sort: { created_at: 1 } },
     // Group articles according to created date; note that date has been formated to the YYYYMMDD format
     { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$utcDate" } }, data: { $push: "$$ROOT" } } },
     { $addFields: { articleCount: { $size: "$data" } } },
