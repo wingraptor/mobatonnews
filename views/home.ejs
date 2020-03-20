@@ -1,10 +1,10 @@
 <% include partials/header %>
 
 
-<main>
+<main class="home-page-content">
   <!-- Weather Information -->
   <div class="weather-widget element-style-1">
-    <h3>Local Weather</h3>
+    <h3>⛅Local Weather</h3>
     The current weather in Barbados is: 
     <span class="weather-info">
       <%= weather.temperature %><span>&#176;C</span> and
@@ -15,9 +15,9 @@
 
   <!-- Website Description -->
   <div class="welcome-text element-style-1">
-    <h1 class="page-title">Mobaton-a News</h1>
+    <h1 class="page-title">📰Mobaton-a News</h1>
     <h3>Your Bajan News Aggregator Site</h3>
-    <p>Browse the latest news from several local news sites updated hourly</p>
+    <p>Browse the latest news from several local news sites updated hourly⏰</p>
   </div>
 
   <!-- Filter Div -->
@@ -28,16 +28,16 @@
         Filters:
       </p>
       <p>
-        <a href="/" class="filter" id="recent">Most Recent</a>
+        <a href="/" class="filter" id="recent">Most Recent⏳</a>
       </p>
       <p>
-        <a href="/filter/daily" class="filter" id="daily">Today</a>
+        <a href="/filter/corona" class="filter" id="corona">COVID-19🦠</a>
       </p>
       <p>
-        <a href="/filter/yesterday" class="filter" id="yesterday">Yesterday</a>
+        <a href="/filter/daily" class="filter" id="daily">Today⌚</a>
       </p>
       <p>
-        <a href="/filter/corona" class="filter">Corona🦠</a>
+        <a href="/filter/yesterday" class="filter" id="yesterday">Yesterday⌛</a>
       </p>
       <p>
         <a href="/filter/tomorrow" class="filter">Tomorrow👁️</a>

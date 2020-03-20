@@ -210,9 +210,9 @@ function dateInfo(){
   alert("Date search results may be inaccurate for this site");
 }
 
-/*********************
-Add styling 
-***********************/
+/*********************************
+Border control for Filter Elements 
+***********************************/
 let urlArr = window.location.href.split("/"),
   pageIdentifier = urlArr[urlArr.length - 1];
 

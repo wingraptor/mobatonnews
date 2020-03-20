@@ -7,7 +7,7 @@ const mongoose = require("mongoose"),
   Archive = require("./models/archive.js"),
   Twitter = require("twitter"),
   Weather = require("./models/weatherData");
-  moment = require("moment");
+moment = require("moment");
 
 //Environment variable setup
 require("dotenv").config();
@@ -15,7 +15,12 @@ const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrap
 
 //mongoose config
 mongoose.connect(databaseUrl,
-  { useNewUrlParser: true });
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  }
+);
 
 
 //  Twitter Config
@@ -32,7 +37,7 @@ Declare Global Variables
 // Count articles as data is scraped from website
 let articleCount = 0,
   location = "America/Barbados",
-  scrapeHours = "5-21",
+  scrapeHours = "*",
   scrapeMins = 0;
 
 
@@ -114,7 +119,7 @@ const dateStandardiser = {
     return moment.utc(date).startOf("day").format();
   },
   utcDate: function (date, siteID, offset) {
-    if (offset){
+    if (offset) {
       return moment.utc(date, momentDateFormat(siteID)).startOf("day").utcOffset(-5).format();
     } else {
       return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
@@ -142,15 +147,15 @@ function addSiteData(siteData, siteName) {
 
 //Adds data to archive collection
 function archiver(siteData, siteName) {
-  Archive.findOne({ headline: siteData.headline, siteID:siteData.siteID }, function (error, document) {
+  Archive.findOne({ headline: siteData.headline, siteID: siteData.siteID }, function (error, document) {
     if (error) {
       console.log(`Error finding ${siteName} in Archives collection: ${error}`)
     } else {
       // Add site data to Archive if not already in archive
       if (!document) {
         // Indicate that aritcle is new (newly scraped)
-        Article.findOneAndUpdate({ headline: siteData.headline, siteID: siteData.siteID}, {newArticle: true}, function(error, article){
-          if(error){
+        Article.findOneAndUpdate({ headline: siteData.headline, siteID: siteData.siteID }, { newArticle: true }, function (error, article) {
+          if (error) {
             console.log(`Error updating newArticle field in document:::: ${error}`);
           }
         });
@@ -158,7 +163,7 @@ function archiver(siteData, siteName) {
         if (siteData.date) {
           // Ensures that the utcDate saved corresponds to the same day as the current day in Barbados (UTC is 5hrs ahead of barbados time)
           // 19 corresponds to 7 local time, which is 12 am UTC
-          if (new Date().getHours() >= 19){
+          if (new Date().getHours() >= 19) {
             // Convert date value to utcDate object
             siteData.utcDate = dateStandardiser.utcDate(siteData.date, siteData.siteID, true)
           } else {
@@ -182,7 +187,7 @@ function archiver(siteData, siteName) {
             // Convert date value to utcDate object
             siteData.utcDate = new Date();
           }
-          Archive.create(siteData , function (error) {
+          Archive.create(siteData, function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);
             }
@@ -216,7 +221,7 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
       $('.post').each(function (index, element) {
         let siteData;
         // First element on page has different structure to other elements
-        if(index === 0){
+        if (index === 0) {
           //Add scraped data to articles document
           siteData = {
             link: $(this).find(".post-thumbnail a").attr("href"),
@@ -225,7 +230,7 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
             // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
             imgURL: $(this).find(".post-thumbnail a img").attr("src"),
             articleCount: articleCount
-          }        
+          }
         } else {
           //Add scraped data to articles document
           siteData = {
@@ -274,7 +279,7 @@ new CronJob(`0 2 ${scrapeHours} * * *`, function () {
         $(".latest_block").each(function (index, element) {
           let summary = $(this).find(".latest_content p").text();
           //Add scraped data to articles document
-          if ($(this).find(".latest_content h3 a").text()!==""){
+          if ($(this).find(".latest_content h3 a").text() !== "") {
             let siteData = {
               link: "http://www.nationnews.com" + $(this).find(".latest_content h3 a").attr("href"),
               headline: $(this).find(".latest_content h3 a").text(),
@@ -665,7 +670,7 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function () {
         let siteData = {
           link: "https://www.broadstjournal.com" + $(this).find(".post-v3-thumbnail").attr("href"),
           headline: $(this).find(".post-v3-content h3").text(),
-          date: $(this).find(".post-v3-content .post-info .post-info-block div").text().replace(" min read",""),
+          date: $(this).find(".post-v3-content .post-info .post-info-block div").text().replace(" min read", ""),
           summary: $(this).find(".post-v3-content .post-summary").text(),
           siteID: siteID(siteName),
           articleCount: articleCount
