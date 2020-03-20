@@ -17,8 +17,11 @@ const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrap
 //mongoose config
 mongoose.connect(
   databaseUrl,
-  { useNewUrlParser: true }
+  { useNewUrlParser: true,
+    useCreateIndex: true
+  }
 );
+mongoose.set('useUnifiedTopology', true);
 
 //EJS + Express config
 const app = express();
@@ -208,11 +211,11 @@ app.get("/", function (req, res) {
 
 
 // "Filtered" Articles Route
-app.get("/filter/:timeFrame", function (req, res) {
-  let timeFrame = req.params.timeFrame,
+app.get("/filter/:filterValue", function (req, res) {
+  let filterValue = req.params.filterValue,
     queryFilter;
 
-  if (timeFrame === "daily") {
+  if (filterValue === "daily") {
     queryFilter = {
       $match:
       {
@@ -222,7 +225,7 @@ app.get("/filter/:timeFrame", function (req, res) {
         }
       }
     }
-  } else if (timeFrame === "yesterday") {
+  } else if (filterValue === "yesterday") {
     queryFilter = {
       $match:
       {
@@ -232,24 +235,32 @@ app.get("/filter/:timeFrame", function (req, res) {
         }
       }
     }
-  } else if (timeFrame === "tomorrow") {
+  } else if (filterValue === "tomorrow") {
     res.render("error");
     return;
+  } else if (filterValue === "corona"){
+    queryFilter = {
+      $match: {
+        $text:{
+          $search:"corona covid"
+        }
+      }
+    }
   }
 
   // Query Articles DB
   Archive.aggregate([
-    //Sort articles in from newest to oldest, _id in this case refers to automatically assigned ID
-    { $sort: { _id: -1 } },
     // Filter articles according to page clicked
     queryFilter,
+    //Sort articles in from newest to oldest, _id in this case refers to automatically assigned ID
+    { $sort: { _id: -1 } },
     //group articles according to siteIDs
     { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
     //sort according siteID: ID in this case refers to the siteID
     { $sort: { _id: 1 } },
   ], function (error, articles) {
     if (error) {
-      console.log("Error quering articles DB on home page");
+      console.log(error + "     Error quering articles DB on home page");
     }
     else {
       // Get Local Weather To Be Used in Widget
@@ -265,7 +276,6 @@ app.get("/filter/:timeFrame", function (req, res) {
     }
   });
 });
-
 
 // Archive Page Route
 app.get("/archive", function (req, res) {

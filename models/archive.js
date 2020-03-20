@@ -18,8 +18,13 @@ var archiveSchema = new mongoose.Schema({
   summary: String,
   siteID: Number,
   utcDate: Date,
-  imgURL: String
+  imgURL: String, 
 },
   { timestamps: { createdAt: 'created_at' } });
+
+archiveSchema.index({
+  headline: "text"
+})
+
 
 module.exports = mongoose.model("Archive", archiveSchema);
