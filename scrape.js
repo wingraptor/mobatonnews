@@ -6,8 +6,9 @@ const mongoose = require("mongoose"),
   CronJob = require("cron").CronJob,
   Archive = require("./models/archive.js"),
   Twitter = require("twitter"),
-  Weather = require("./models/weatherData");
-moment = require("moment");
+  Weather = require("./models/weatherData"),
+  moment = require("moment"),
+  Data = require("./models/dataFeed.js");
 
 //Environment variable setup
 require("dotenv").config();
@@ -201,7 +202,7 @@ function archiver(siteData, siteName) {
 }
 
 
-// Schedule Barbados Today to be scrapped every hour on minute 0, second 0 between 5am and 9pm inclusive
+// Schedule Barbados Today to be scrapped every hour on minute 0
 new CronJob(`0 0 ${scrapeHours} * * *`, function () {
   // Scrape Barbados Today
   request.get("https://barbadostoday.bb/category/local-news/", function (error, response, body) {
@@ -254,7 +255,7 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
   });
 }, null, "start", location);
 
-// Schedule NationNews to be scrapped every hour on minute 2, second 0 between 5am and 9pm inclusive
+// Schedule NationNews to be scrapped every hour on minute 2
 new CronJob(`0 2 ${scrapeHours} * * *`, function () {
   //Scrape NationNews
   request.get(
@@ -298,7 +299,7 @@ new CronJob(`0 2 ${scrapeHours} * * *`, function () {
     })
 }, null, "start", location);
 
-// Schedule LoopNews to be scrapped every hour on minute 4, second 0 between 5am and 9pm inclusive
+// Schedule LoopNews to be scrapped every hour on minute 4
 new CronJob(`0 4 ${scrapeHours} * * *`, function () {
   // Scrape LoopNews
   request.get("http://www.loopnewsbarbados.com/category/loopnewsbarbados-barbados-news", function (error, response, body) {
@@ -336,7 +337,7 @@ new CronJob(`0 4 ${scrapeHours} * * *`, function () {
   });
 }, null, "start", location);
 
-// Schedule Advocate1 to be scrapped every hour on minute 6, second 0 between 5am and 9pm inclusive
+// Schedule Advocate1 to be scrapped every hour on minute 6
 new CronJob(`0 6 ${scrapeHours} * * *`, function () {
   // Scrape Advocate Page 1
   request.get("https://www.barbadosadvocate.com/news", function (error, response, body) {
@@ -370,7 +371,7 @@ new CronJob(`0 6 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule Advocate2 to be scrapped every hour on minute 8, second 0 between 5am and 9pm inclusive
+// Schedule Advocate2 to be scrapped every hour on minute 8
 new CronJob(`0 8 ${scrapeHours} * * *`, function () {
   // Scrape Advocate Page 2
   request.get("https://www.barbadosadvocate.com/news?page=1", function (error, response, body) {
@@ -404,7 +405,7 @@ new CronJob(`0 8 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule BIBA to be scrapped every hour on minute 10, second 0 between 5am and 9pm inclusive
+// Schedule BIBA to be scrapped every hour on minute 10
 new CronJob(`0 10 ${scrapeHours} * * *`, function () {
   // Scrape BIBA
   request.get("http://biba.bb/category/news/local-news/", function (error, response, body) {
@@ -436,7 +437,7 @@ new CronJob(`0 10 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule BBICT to be scrapped every hour on minute 12, second 0 between 5am and 9pm inclusive
+// Schedule BBICT to be scrapped every hour on minute 12
 new CronJob(`0 12 ${scrapeHours} * * *`, function () {
   // Scrape Barbados ICT
   request.get("http://barbadosict.org/news/", function (error, response, body) {
@@ -469,7 +470,7 @@ new CronJob(`0 12 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule Business Barbados to be scrapped every hour on minute 14, second 0 between 5am and 9pm inclusive
+// Schedule Business Barbados to be scrapped every hour on minute 14
 new CronJob(`0 14 ${scrapeHours} * * *`, function () {
   // Scrape Business Barbados
   request.get("http://businessbarbados.com/", function (error, response, body) {
@@ -503,7 +504,7 @@ new CronJob(`0 14 ${scrapeHours} * * *`, function () {
  * GIS uses anti-scraping software and therefore I am unable to scrape it
  **************************************************************************/
 
-// Schedule GIS to be scrapped every hour on minute 16, second 0 between 5am and 9pm inclusive
+// Schedule GIS to be scrapped every hour on minute 16
 // new CronJob(`0 16 ${scrapeHours} * * *`, function () {
 //   // Scrape GIS
 //   request.get("https://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
@@ -610,7 +611,7 @@ new CronJob(`0 20 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule Barbados Reporter to be scrapped every hour on minute 18, second 0 between 5am and 9pm inclusive
+// Schedule Barbados Reporter to be scrapped every hour on minute 18
 new CronJob(`0 22 ${scrapeHours} * * *`, function () {
   // Scrape Barbados Reporter
   request.get("https://www.bajanreporter.com/category/new/", function (error, response, body) {
@@ -650,7 +651,7 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
 }, null, "start", location);
 
 
-// Schedule The Broad Street Journal to be scrapped every hour on minute 26, second 0 between 5am and 9pm inclusive
+// Schedule The Broad Street Journal to be scrapped every hour on minute 24
 new CronJob(`0 24 ${scrapeHours} * * *`, function () {
   // Scrape The Broad Street Journal
   request.get("https://www.broadstjournal.com/categories/marketing", function (error, response, body) {
@@ -682,13 +683,13 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function () {
   });
 }, null, "start", location);
 
-// Get Weather Data and reset article count
+// Get Weather Data and FX Data and reset article count
 new CronJob(`0 26 ${scrapeHours} * * *`, function () {
   // Reset article count to 0 after all sites have been scraped
   articleCount = 0;
   weatherAPI.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
     if (err) console.log(`Error getting weather data: ${err}`);
-    Weather.replaceOne({}, {
+    Data.findOneAndUpdate({}, {
       temperature: result[0].current.temperature,
       skytext: result[0].current.skytext,
       imageUrl: result[0].current.imageUrl
@@ -698,5 +699,82 @@ new CronJob(`0 26 ${scrapeHours} * * *`, function () {
           console.log(`Error adding weather to DB: ${err}`);
         }
       });
+  });
+  // Get Fx rates
+  request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
+    if (error) {
+      console.log(`Error getting currency data: ${error}`);
+    } else {
+      Data.findOneAndUpdate({}, {
+        gbp: JSON.parse(body).GBP_BBD,
+        cad: JSON.parse(body).CAD_BBD
+      }, function (err, data) {
+        if (err) {
+          console.log(`Error adding currency data to page: ${err}`)
+        }
+      });
+    }
+  });
+}, null, "start", location);
+
+
+// Get Fuel Price Data - once a day
+new CronJob(`0 0 12 * * *`, function () {
+  const gasoptions = {
+    method: "GET",
+    url: "https://api.collectapi.com/gasPrice/otherCountriesGasoline",
+    headers: {
+      "content-type": "application/json",
+      authorization: `apikey ${process.env.FUEL_API_KEY}`
+    }
+  }
+
+  const dieseloptions = {
+    method: "GET",
+    url: "https://api.collectapi.com/gasPrice/otherCountriesDiesel",
+    headers: {
+      "content-type": "application/json",
+      authorization: `apikey ${process.env.FUEL_API_KEY}`
+    }
+  }
+
+  // Get Gasoline Prices
+  request.get(gasoptions, function (error, response, body) {
+    if (error) {
+      console.log(`Error getting currency data: ${error}`);
+    } else {
+      let arr = JSON.parse(body).results;
+      arr.forEach(element => {
+        if (element.country === "Barbados") {
+          Data.findOneAndUpdate({}, {
+            gasPrice: element.price
+          }, function (err, data) {
+            if (err) {
+              console.log(`Error adding gas price to DB: ${err}`);
+            }
+          })
+        }
+      });
+    }
+  });
+
+  // Get Diesel Prices
+  request.get(dieseloptions, function (error, response, body) {
+    if (error) {
+      console.log(`Error getting currency data: ${error}`);
+    } else {
+      let arr = JSON.parse(body).results;
+      arr.forEach(element => {
+        if (element.country === "Barbados") {
+          Data.findOneAndUpdate({}, {
+            dieselPrice: element.price
+          }, function (err, data) {
+            if (err) {
+              console.log(`Error adding diesel price to DB: ${err}`);
+            }
+          })
+        }
+      });
+    }
   });
 }, null, "start", location);

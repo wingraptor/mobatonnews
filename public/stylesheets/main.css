@@ -103,12 +103,12 @@ html[data-scroll='3'] .logo{
 }
 
 /* Weather Widget Styling */
-.weather-widget{
+.info-widget{
   padding: 0px 10px 10px 10px;
   display: inline-block;
   margin: 10px 15px;
 }
-.weather-info, .filter-type{
+.main-highlight{
   color: var(--alt-highlight-color);
 }
 .weather-img {

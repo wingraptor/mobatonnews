@@ -5,6 +5,7 @@ const bodyParser = require("body-parser"),
   Weather = require("./models/weatherData"),
   express = require("express"),
   moment = require("moment"),
+  Data = require("./models/dataFeed.js"),
   ejs = require("ejs");
 
 
@@ -195,12 +196,12 @@ app.get("/", function (req, res) {
     }
     else {
       // Get Local Weather To Be Used in Widget
-      Weather.find({}, function (error, data) {
+      Data.find({}, function (error, data) {
         // Render homepage template
         res.render("home", {
           articles: articles,
           siteInfo: siteInfo,
-          weather: data[0],
+          data: data[0],
           dateStandardiser: dateStandardiser.localFormat,
           date: new Date()
         });
@@ -263,13 +264,13 @@ app.get("/filter/:filterValue", function (req, res) {
       console.log(error + "     Error quering articles DB on home page");
     }
     else {
-      // Get Local Weather To Be Used in Widget
-      Weather.find({}, function (error, data) {
+      // Get Data To Be Used in Widget
+      Data.find({}, function (error, data) {
         // Render homepage template
         res.render("home", {
           articles: articles,
           siteInfo: siteInfo,
-          weather: data[0],
+          data: data[0],
           dateStandardiser: dateStandardiser.localFormat
         });
       });
