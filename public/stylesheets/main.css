@@ -230,6 +230,56 @@ html[data-scroll='3'] #footer-link{
 	color: white;
 }
 
+.article-card {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto auto auto auto auto;
+  grid-template-areas: 
+  "image"
+  "image"
+  "headline"
+  "summary"
+  "header"
+  "footer";
+  padding: 10px;
+  /* padding-left: 2%;
+  padding-right: 2% */
+  /* Spaces flex items equally in parent, in this case pushes items to opposite ends of parent element */
+  align-items: center;
+  border: var(--border-style);
+	margin-bottom: 50px;
+  border-radius: 10px;
+  background-color: var(--alt-bg-color);
+  cursor: pointer;
+}
+
+.article.card:hover {
+	border-color:white;
+	/* border-width:1px;
+	border-style:solid; */
+	color: white;
+}
+
+.article-card-top {
+  grid-area: header;
+}
+
+.article-thumbnail-div {
+  grid-area: image;
+}
+
+.article-headline-div {
+  grid-area: headline;
+}
+
+.article-summary-div {
+  grid-area: summary;
+}
+
+.article-share-div {
+  grid-area: footer;
+}
+
 .links-share {
   padding: 2%;
   text-align: center;
@@ -284,9 +334,8 @@ html[data-scroll='3'] #footer-link{
 }
 
 .article-thumbnail{
-  height:136px;
-  width: 205px;
-  border-radius: 3%;
+    height: 300px;
+    width: 100%;
 }
 
 /* Style Icons */

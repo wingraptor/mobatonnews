@@ -121,46 +121,57 @@
           </a>
         </div>
         <% } else { %>
-        <li data-articleID="<%= [i] %>.<%= [j] %>">
-          <a href="<%= articles[i].data[j].link %>" target="_blank" <%#prevent event bubbling from anchor element to parent list element%> onclick="event.stopPropagation()" class="headline hvr-grow">
-          <% if (articles[i].data[j].newArticle){ %>
-            <span class="new-article">New</span>
-          <% } %>
-            <%= articles[i].data[j].headline %>
-          </a>
-          <i class="fas fa-plus share-toggler"></i>
-        </li>
-        <div class="links-share element-style-1" id="<%= [i] %>.<%= [j] %>" style="display:none">
-          <%# Determine if either summary or image is available and display appropriate text%>
-          <% if(!articles[i].data[j].imgURL && !articles[i].data[j].summary){ %>
-            <h3>No Preview Available</h3>
-          <% } else { %>
-            <h3>Preview</h3>
-          <%  } %>
-          <%# Show image if an image was scrapped  %>
-          <% if(articles[i].data[j].imgURL){ %>
-          <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
-          <% } else { %>
-          <img src="https://img.icons8.com/dusk/64/000000/no-image.png">
-          <% } %>
-          <p>
-            <em><%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %></em>
-          </p>
-          <p>
-            <%= articles[i].data[j].summary %>
-          </p>
-          <span>Share:</span>
-          <!-- WhatsApp Share Link -->
-          <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
-            <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
-          </a>
-          <!--Facebook Share Link  -->
-          <a href="https://www.facebook.com/sharer/sharer.php?u=<%= articles[i].data[j].link %>" class="whatsApp-icon">
-            <i class="fab fa-facebook" style="color:#3B5998"></i>
-          </a>
-        </div>
+
+          <div class="article-card">
+
+            <!-- Date and website name -->
+            <div class="article-card-top">
+              <span class="article-date">
+                <em><%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %></em>
+              </span>
+              <span class="website-name">
+                <%= siteInfo(articles[i]._id).name %>
+              </span>
+            </div>
+
+            <!-- Article thumbnail -->
+            <div class="article-thumbnail-div">
+              <%# Show image if an image was scrapped  %>
+              <% if(articles[i].data[j].imgURL){ %>
+              <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
+              <% } else { %>
+              <img src="https://img.icons8.com/dusk/64/000000/no-image.png" class="article-thumbnail">
+              <% } %>
+            </div>
+
+            <div class="article-headline-div">
+              <a href="<%= articles[i].data[j].link %>" target="_blank"<%#prevent event bubbling from anchor element to parent list element%> onclick="event.stopPropagation()" class="article-headline">
+                <%= articles[i].data[j].headline %>
+              </a>
+            </div>
+
+            <!-- Article Summary Information -->
+            <div class="article-summary-div">
+              <p><%= articles[i].data[j].summary %></p>     
+            </div>
+
+            <!-- Article Share Div -->
+            <div class="article-share-div">
+              <span>Share:</span>
+              <!-- WhatsApp Share Link -->
+              <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
+                <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
+              </a>
+              <!--Facebook Share Link  -->
+              <a href="https://www.facebook.com/sharer/sharer.php?u=<%= articles[i].data[j].link %>" class="facebook-icon">
+                <i class="fab fa-facebook" style="color:#3B5998"></i>
+              </a>
+            </div>
+
+          </div>
+
         <% } %>
-        <% } %>
+      <% } %>
       </ul>
       <%# Only display show/hide toggler for lists of > 10 articles %>
       <% if (articles[i].data.length > 10) { %>
