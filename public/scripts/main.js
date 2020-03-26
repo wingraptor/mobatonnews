@@ -1,3 +1,28 @@
+/********************************************************
+Border Control and Page Title Depending on Filter Choosen 
+*********************************************************/
+let urlArr = window.location.href.split("/"),
+  pageIdentifier = urlArr[urlArr.length - 1],
+  pageName = document.querySelector("#page-name");
+
+if (pageIdentifier === "") {
+  filter = document.querySelector("#recent");
+  filter.style.borderColor = "white";
+  pageName.innerHTML = "<h2>Most Recent Articles</h2>";
+} else if (pageIdentifier === "corona") {
+  pageName.innerHTML = "<h2>Recent COVID-19 Articles</h2>";
+  filter = document.querySelector(`#${pageIdentifier}`);
+  filter.style.borderColor = "white";
+} else if (pageIdentifier === "daily") {
+  pageName.innerHTML = `<h2>Today's Articles</h2>`;
+  filter = document.querySelector(`#${pageIdentifier}`);
+  filter.style.borderColor = "white";
+} else if (pageIdentifier === "yesterday") {
+  pageName.innerHTML = `<h2>Yesterday's Articles</h2>`;
+  filter = document.querySelector(`#${pageIdentifier}`);
+  filter.style.borderColor = "white";
+}
+
 /**************************************** 
 Handle Toggler To Show/Hide More Articles  
 ****************************************/
@@ -108,9 +133,9 @@ const debounce = (fn) => {
 // so we can use it in our stylesheets
 const storeScroll = () => {
 
-/************************************* 
-Calculates Fraction of Page Scrolled - https://stackoverflow.com/questions/2481350/how-to-get-scrollbar-position-with-javascript
-**************************************/
+  /************************************* 
+  Calculates Fraction of Page Scrolled - https://stackoverflow.com/questions/2481350/how-to-get-scrollbar-position-with-javascript
+  **************************************/
 
   // Position of scroll: from 0 to distance scrolled on page
   let heightScrolled = document.documentElement.scrollTop;
@@ -136,8 +161,6 @@ document.addEventListener('scroll', debounce(storeScroll));
 // Update scroll position for first time
 storeScroll();
 
-
-
 /**********************************************************
 Set Max Date of End Date Form Field to Current Date
 *********************************************************/
@@ -149,7 +172,7 @@ let endDate = document.getElementById("endDate");
 let today = new Date().toISOString().slice(0, 10);
 
 // Only when date is on element is on page
-if(endDate){
+if (endDate) {
   // Set Max date Attr.
   endDate.setAttribute("max", today);
 
@@ -158,10 +181,6 @@ if(endDate){
     endDate.setAttribute("min", this.value);
   });
 }
-
-
-
-
 
 /*****************************************
 Forms
@@ -185,7 +204,7 @@ dateInputs.forEach(function (input) {
 });
 
 // Add coloration to calendar icon in date form when the dates already have a value (On results page)
-if(dateInputs){
+if (dateInputs) {
   dateInputs.forEach(function (input) {
     if (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.exec(input.value)) {
       const day = parseInt(input.value.substring(8, 12));
@@ -206,23 +225,9 @@ function topFunction() {
 }
 
 // Alert for sites that have inaccurate dates
-function dateInfo(){
+function dateInfo() {
   alert("Date search results may be inaccurate for this site");
 }
-
-/*********************************
-Border control for Filter Elements 
-***********************************/
-let urlArr = window.location.href.split("/"),
-  pageIdentifier = urlArr[urlArr.length - 1];
-
-  if (pageIdentifier === ""){
-    filter = document.querySelector("#recent");
-    filter.style.borderColor = "white";
-  } else {
-    filter = document.querySelector(`#${pageIdentifier}`);
-    filter.style.borderColor = "white";
-  }
 
 /**************************************
 Load Tippy tool tips with custom option

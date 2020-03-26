@@ -186,12 +186,15 @@ html[data-scroll='3'] #footer-link{
 .main-content {
   /* Arrange lists of articles in a flexible grid */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-column-gap: 40px;
+  grid-row-gap: 40px;
   /* justify-content: center; */
   /* margin-top: 2.5%; */
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 2rem;
+
 }
 
 /*  */
@@ -242,7 +245,6 @@ html[data-scroll='3'] #footer-link{
   "footer footer footer";
   /* padding: 5px; */
   border: var(--border-style);
-	margin-bottom: 50px;
   border-radius: 5px;
   background-color: var(--alt-bg-color);
 }
