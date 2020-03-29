@@ -2,26 +2,27 @@
 :root {
   --main-bg-color: #1a1c20;
   --alt-bg-color: #111214;
+  --main-text-color: #d2d6da;
+  --alt-text-color: #fff;
   --main-highlight-color: rgba(80, 200, 120, 0.5);
   --alt-highlight-color: #578039;
   --scroll-color-one: #803957;
   --scroll-color-two: #397580;
   --scroll-color-three: #804d39;
-  --transition-values: all 500ms ease-out;
-  --headline-font: 'Work Sans', sans-serif;
-  --body-font: 'Taviraj', serif;
-	--border-style: 1px rgb(70, 70, 83) solid;
+  --transition-values: all 100ms linear;
+  --headline-font: "Work Sans", sans-serif;
+  --body-font: "Taviraj", serif;
+  --border-style: 1px rgb(70, 70, 83) solid;
 }
-
 
 /* Setting Related to Body Element */
 body {
-color: #d2d6da;
-background-color: var(--main-bg-color);
-/* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23803957' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E"); */
-font-family: var(--body-font);
-line-height: 1.5;
-margin:0;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23803957' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E"); */
+  font-family: var(--body-font);
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* Change colors of background svg when page scrolled to certain position */
@@ -36,14 +37,18 @@ html[data-scroll='3'] body{
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23397580' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
 } */
 
-h1,h2,h3,h4,.search-fields label {
+h1,
+h2,
+h3,
+h4,
+.search-fields label {
   font-family: var(--headline-font);
-  color:white;
+  color: var(--alt-text-color);
 }
 
 a {
   text-decoration: none;
-  color:inherit;
+  color: inherit;
 }
 
 button {
@@ -51,14 +56,22 @@ button {
 }
 
 .element-style-1 {
-	border-radius: 10px;
-	background-color: var(--alt-bg-color);
-	border:var(--border-style);
+  border-radius: 10px;
+  background-color: var(--alt-bg-color);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .flex-style-1 {
   display: flex;
   justify-content: space-between;
+}
+
+.hidden {
+  display: none;
+}
+
+.visuallyHidden {
+  opacity: 0;
 }
 
 /* CSS Rulesets for Main Header */
@@ -72,62 +85,58 @@ button {
   margin-bottom: 2%;
 }
 
-.header-links h3,.header-link{
+.header-links h3 {
   display: inline;
 }
 
-.header-link{
-  margin-left: 10px
+.header-link {
+  margin-left: 10px;
+  display: inline;
 }
 
-
-.logo{
+.logo {
   fill: var(--alt-highlight-color);
   transition: var(--transition-values);
 }
 /* Change color of logo svg depending position of scroll */
-html[data-scroll='1'] .logo{
+html[data-scroll="1"] .logo {
   fill: var(--scroll-color-one);
 }
-html[data-scroll='2'] .logo{
+html[data-scroll="2"] .logo {
   fill: var(--scroll-color-two);
 }
-html[data-scroll='3'] .logo{
+html[data-scroll="3"] .logo {
   fill: var(--scroll-color-three);
 }
 
-
-
-.home-page-content{
+.home-page-content {
   margin-bottom: 5%;
 }
 
 /* Weather Widget Styling */
-.info-widget{
+.info-widget {
   padding: 0px 10px 10px 10px;
   display: inline-block;
   margin: 10px 15px;
 }
-.main-highlight{
+.main-highlight {
   color: var(--alt-highlight-color);
 }
 .weather-img {
   height: 22px;
 }
 
-
-.welcome-text{
-  text-align:center;
+.welcome-text {
+  text-align: center;
 
   padding: 20px;
   margin: 15px auto;
   width: 35%;
 }
 
-.page-title{
-  color:var(--alt-highlight-color);
+.page-title {
+  color: var(--alt-highlight-color);
 }
-
 
 .filter-div-container {
   text-align: center;
@@ -147,10 +156,9 @@ html[data-scroll='3'] .logo{
   padding: 5px;
 }
 
-.filter:hover{
-  border-color: white
+.filter:hover {
+  border-color: var(--alt-text-color);
 }
-
 
 /* Styles For Main Footer */
 .main-footer {
@@ -160,25 +168,25 @@ html[data-scroll='3'] .logo{
   left: 10px;
 }
 
-.to-top-button{
+.to-top-button {
   font-size: 1.2em;
   cursor: pointer;
   margin-left: 10px;
 }
 
-#footer-link{
+#footer-link {
   color: var(--alt-highlight-color);
   transition: var(--transition-values);
 }
 
 /* Changes color of footer link depending on scroll position  */
-html[data-scroll='1'] #footer-link{
+html[data-scroll="1"] #footer-link {
   color: var(--scroll-color-one);
 }
-html[data-scroll='2'] #footer-link{
+html[data-scroll="2"] #footer-link {
   color: var(--scroll-color-two);
 }
-html[data-scroll='3'] #footer-link{
+html[data-scroll="3"] #footer-link {
   color: var(--scroll-color-three);
 }
 
@@ -194,7 +202,6 @@ html[data-scroll='3'] #footer-link{
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 2rem;
-
 }
 
 /*  */
@@ -203,7 +210,8 @@ html[data-scroll='3'] #footer-link{
 } */
 
 /* Styles header for each list of links --> Nation News */
-.links-header, ul {
+.links-header,
+ul {
   /* Remove bullet point */
   list-style-type: none;
   padding-left: 1rem;
@@ -220,40 +228,29 @@ html[data-scroll='3'] #footer-link{
   justify-content: space-between;
   box-shadow: 0px 0px 0.5px #111214;
   border: var(--border-style);
-	margin-bottom: 2px;
+  margin-bottom: 2px;
   border-radius: 10px;
   background-color: var(--alt-bg-color);
   cursor: pointer;
 }
 
-.links-list li:hover{
-	border-color:white;
-	/* border-width:1px;
+.links-list li:hover {
+  border-color: var(--alt-text-color);
+  /* border-width:1px;
 	border-style:solid; */
-	color: white;
+  color: var(--alt-text-color);
 }
 
 .article-card {
   display: grid;
   grid-template-columns: 33% auto 33%;
   grid-template-rows: auto auto auto auto auto;
-  grid-template-areas: 
-  "image image image"
-  "image image image"
-  "headline headline headline"
-  "summary summary summary" 
-  "footer footer footer";
-  /* padding: 5px; */
-  border: var(--border-style);
-  border-radius: 5px;
-  background-color: var(--alt-bg-color);
-}
-
-.article.card:hover {
-	border-color:white;
-	/* border-width:1px;
-	border-style:solid; */
-	color: white;
+  grid-template-areas:
+    "image image image"
+    "image image image"
+    "headline headline headline"
+    "summary summary summary"
+    "footer footer footer";
 }
 
 .article-thumbnail-div {
@@ -265,6 +262,7 @@ html[data-scroll='3'] #footer-link{
   text-transform: capitalize;
   color: var(--alt-highlight-color);
   padding: 5px 10px 0 10px;
+  font-size: 1.1em;
 }
 
 .article-summary-div {
@@ -275,37 +273,41 @@ html[data-scroll='3'] #footer-link{
 
 .article-card-footer {
   grid-area: footer;
-  display: flex;
-  justify-content: space-between;
   font-weight: 700;
-  padding: 0 10px 5px 10px;
+  padding: 0 15px 10px 15px;
+  align-items: center;
+}
+
+.share-button, .hide-share-button{
+  font-size: 1.2em;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.website-name-div{
+  transition: var(--transition-values);
+}
+
+.article-date-div{
+  transition: var(--transition-values);
+}
+
+.article-card-share {
+  transition: var(--transition-values);
+}
+
+.article-card-share .fab {
+  font-size: 1.5em;
+  padding-right: 10px;
+  transition: var(--transition-values);
 }
 
 .website-favicon {
   border-radius: 5px;
 }
 
-.links-share {
-  padding: 2%;
-  text-align: center;
-  transition: var(--transition-values);
-  border: var(--main-bg-color) solid 5px;
-}
-
-.links-share .fab {
-  margin-left: 1%;
-  margin-right: 1%;
-  font-size: 1.3em;
-}
-
-.share-toggler {
-  cursor: pointer;
-	padding-right: 5px;
-	font-size: 1.2em; 
-}
-
-
-.new-article{
+/* Color animation for new article */
+/* .new-article {
   margin-right: 10px;
   animation: smooth 7.5s infinite;
 }
@@ -317,28 +319,15 @@ html[data-scroll='3'] #footer-link{
   33% {
     color: var(--scroll-color-one);
   }
-  66%{
+  66% {
     color: var(--scroll-color-two);
   }
-  100%{
+  100% {
     color: var(--scroll-color-three);
   }
-}
+} */
 
-
-/* Allow headline a elements to have a bottom padding; without this a elements are simply inline elements */
-.headline {
-    /* padding: .5rem 1rem; */
-    padding: 10px 10px;
-    display: block;
-}
-
-.headline:visited {
-  /* color: var(--alt-bg-color); */
-  text-decoration: line-through solid red;
-}
-
-.article-thumbnail{
+.article-thumbnail {
   height: 300px;
   width: 100%;
 }
@@ -354,45 +343,22 @@ html[data-scroll='3'] #footer-link{
 }
 
 /* Changes Color of Icons (fas) on page depending on scroll position */
-html[data-scroll='1'] .fas {
+html[data-scroll="1"] .fas {
   color: var(--scroll-color-one);
 }
-html[data-scroll='2'] .fas, html[data-scroll='2'] .logo {
+html[data-scroll="2"] .fas,
+html[data-scroll="2"] .logo {
   color: var(--scroll-color-two);
 }
-html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
+html[data-scroll="3"] .fas,
+html[data-scroll="3"] .logo {
   color: var(--scroll-color-three);
 }
 
-/* Styles of More/Less Button */
-.articles-toggler {
-  text-align: center;
-  color:white;
-  cursor: pointer;
-}
-
-/* CSS Hover Effect */
-/* Grow */
-/* .hvr-grow {
-    display: inline-block;
-    vertical-align: middle;
-    transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
-    transition-duration: 0.3s;
-    transition-property: transform;
-}
-.hvr-grow:hover,
-.hvr-grow:focus,
-.hvr-grow:active {
-    transform: scale(1.1);
-} */
-
 /* Form  and Form Field Styling */
-.search-fields{
+.search-fields {
   margin-top: 5%;
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
@@ -405,8 +371,8 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
   margin-right: auto;
 }
 
-.search-fields div{
-  margin-bottom:25px;
+.search-fields div {
+  margin-bottom: 25px;
 }
 
 .search-form button {
@@ -415,38 +381,38 @@ html[data-scroll='3'] .fas, html[data-scroll='3'] .logo{
   border-radius: 0.1235em;
   font-size: 1.2em;
   background-color: var(--alt-highlight-color);
-  color:white;
-  padding-left:10px;
-  padding-right: 10px; 
-  width:100px
+  color: var(--alt-text-color);
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100px;
 }
 
-.search-form{
+.search-form {
   border-bottom: dotted rgba(70, 70, 83, 0.5) 1px;
   padding-bottom: 20px;
 }
 
-.search-button-div{
+.search-button-div {
   display: flex;
   justify-content: center;
   margin-top: 15px;
   height: 50px;
-  color:white;
+  color: var(--alt-text-color);
 }
 
-.search-button-div button i{
-  color:white;
+.search-button-div button i {
+  color: var(--alt-text-color);
 }
 
-#siteName{
+#siteName {
   max-width: 276px;
 }
 
-input, select {
+input,
+select {
   box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
   box-sizing: border-box;
   padding-right: 0.5em;
-  border: 0;
   border-radius: 0.1235em;
   font-size: 2em;
   height: 50px;
@@ -462,103 +428,94 @@ input[type="date"] {
   box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   outline: 2px dashed var(--alt-highlight-color);
   outline-offset: 0.25em;
 }
 
-
-input#endDate{
+input#endDate {
   box-shadow: 0 0 0 0.175em var(--scroll-color-one);
 }
 
-input#startDate{
+input#startDate {
   box-shadow: 0 0 0 0.175em var(--scroll-color-two);
 }
 
-input#endDate:focus{
+input#endDate:focus {
   outline: 2px dashed var(--scroll-color-one);
   outline-offset: 0.25em;
 }
 
-input#startDate:focus{
+input#startDate:focus {
   outline: 2px dashed var(--scroll-color-two);
   outline-offset: 0.25em;
 }
 
-
 /* Results Page */
-
-.results-header{
+.results-header {
   text-align: center;
-	margin-top:3%;
+  margin-top: 3%;
 }
 
-.results-site-name{
+.results-site-name {
   font-size: 2em;
 }
 
-.results-list{
+.results-list {
   padding-top: 1rem;
 }
 
-.article-count{
+.article-count {
   padding-left: 1rem;
 }
 
-.date-link{
+.date-link {
   border: dotted rgba(140, 140, 166, 0.8) 1px;
   border-radius: 5px;
   padding-right: 0.5%;
   padding-left: 0.5%;
   margin-bottom: 0.5%;
-  color:var(--alt-highlight-color);
+  color: var(--alt-highlight-color);
   font-weight: bold;
   display: inline-block;
 }
 
-
-
 /* Error Page Rulesets */
-
-.error-div{
+.error-div {
   background-image: url(/images/nope.gif);
   background-size: cover;
   background-position: 10%;
   min-height: 100vh;
   text-align: center;
 }
-
-.error-text{
+.error-text {
   margin: 0px;
 }
 
-
-@media all and (max-width: 980px){
+@media all and (max-width: 980px) {
   .search-fields {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-  } 
+  }
   .search-fields label {
     text-align: center;
   }
-  .welcome-text{
-  width: 80%;
+  .welcome-text {
+    width: 80%;
   }
 }
 
-
-@media all and (max-width: 681px){
+@media all and (max-width: 681px) {
   .filter-div {
     flex-direction: column;
     align-items: center;
   }
 }
 
-
 /* For Mobile devices adjusts minimum width of page content such that it takes up full width of screen and is not bigger than screen width (prevents zoomed in on page load on mobile devices)*/
-@media all and (max-width: 500px){
+@media all and (max-width: 500px) {
   .main-content {
     grid-template-columns: repeat(auto-fill, 100%);
   }
@@ -569,13 +526,8 @@ input#startDate:focus{
 }
 
 /* Change flex items to be verticle in header on smaller screensizes */
-@media all and (max-width: 413px){
+@media all and (max-width: 413px) {
   .main-header {
     font-size: 0.8em;
   }
 }
-
-/* li, ul, h2, section {
-  border: solid red 1px;
-  list-style-type: none;
-} */

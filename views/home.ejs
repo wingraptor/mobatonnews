@@ -3,7 +3,6 @@
 
 <main class="home-page-content">
   <section class="widgets-section">
-
     <!-- Weather Widget -->
     <div class="weather-widget element-style-1 info-widget">
       <h3>⛅ Local Weather</h3>
@@ -14,7 +13,6 @@
         <img class="weather-img" src="<%=data.imageUrl%>" alt="">
       </span>
     </div>
-    
     <!-- Fuel Price widget -->
     <div class="fuel-price-widget element-style-1 info-widget">
       <h3>⛽ Prices - $/liter </h3>
@@ -23,7 +21,6 @@
         <p>Diesel ($/liter): <span class="fuel-price main-highlight">$<%= data.dieselPrice * 2 %></span></p>
       </span>
     </div>
-    
     <!-- Fx widget -->
     <div class="currency-info-widget element-style-1 info-widget">
       <h3>💱 FX Rates</h3>
@@ -74,7 +71,7 @@
   <div class="main-content">
     <% for(var i = 0; i < articles.length; i++){ %>
         <% for(var j = 0; j < articles[i].data.length; j++){ %>
-          <div class="article-card">
+          <div class="article-card element-style-1">
             <!-- Article thumbnail -->
             <div class="article-thumbnail-div">
               <%# Show image if an image was scrapped  %>
@@ -84,7 +81,7 @@
                 </a>       
               <% } else { %>
                 <a href="<%= articles[i].data[j].link %>" target="_blank">
-                  <img src="https://img.icons8.com/dusk/64/000000/no-image.png" class="article-thumbnail">
+                  <img src="https://cdn.pixabay.com/photo/2019/04/29/16/11/new-4166472_960_720.png" class="article-thumbnail">
                 </a>
               <% } %>
             </div>
@@ -96,16 +93,16 @@
             <!-- Article Summary Information -->
             <div class="article-summary-div">
               <a href="<%= articles[i].data[j].link %>" target="_blank"">
-              <p>
-                <%# LIMIT CHARACTER COUNT TO 285 %>
-                <%= articles[i].data[j].summary ? articles[i].data[j].summary.substring(0, 285) : "" %>      
-              </p>
-              </a>
-              <p></p>     
+                <p>
+                  <%# LIMIT CHARACTER COUNT TO 285 %>
+                  <%- articles[i].data[j].summary ? articles[i].data[j].summary.substring(0, 285) : "<br>" %>      
+                </p>
+              </a>  
             </div>
             <!-- Article Card Footer Div -->
-            <div class="article-card-footer">
-              <div class="website-name-div">
+            <div class="article-card-footer flex-style-1">
+              <i class="fas fa-times hide-share-button hidden" data-articleID="<%=`${i}.${j}`%>"></i>
+              <div class="website-name-div" data-articleID="<%=`${i}.${j}`%>">
                 <span class="website-name">
                   <a href="<%= siteInfo(articles[i]._id).URL %>" target="_blank">
                     <img class="website-favicon"
@@ -114,13 +111,13 @@
                   </a>
                 </span>
               </div>
-              <div class="article-date-div">
+              <div class="article-date-div" data-articleID="<%=`${i}.${j}`%>">
                 <span class="article-date">
                 📅 <%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %>
                 </span>
               </div>
-              <div class="article-card-share">
-                <span>Share: </span>
+              <i class="fas fa-share-alt share-button" data-articleID="<%=`${i}.${j}`%>"></i>
+              <div class="article-card-share hidden" data-articleID="<%=`${i}.${j}`%>">
                 <!-- WhatsApp Share Link -->
                 <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
                   <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
