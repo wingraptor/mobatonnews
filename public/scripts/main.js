@@ -23,43 +23,56 @@ if (pageIdentifier === "") {
   filter.style.borderColor = "white";
 }
 
+
+
+/****************
+Night Mode Toggle
+******************/
+
+let nightModeButton = document.querySelector("#night-mode-button");
+
+nightModeButton.addEventListener("click", function(){
+  document.body.classList.toggle("daymode");
+});
+
+
 /**************************************** 
 Handle Toggler To Show/Hide More Articles  
 ****************************************/
 
-//Select all togglers on page
-let togglers = document.querySelectorAll(".articles-toggler");
+// //Select all togglers on page
+// let togglers = document.querySelectorAll(".articles-toggler");
 
-togglers.forEach(function(toggler) {
-  //Add click event listener to all togglers
-  toggler.addEventListener("click", function() {
-    //Select all hidden article items for the specifically clicked toggler
-    let hiddenItems = document.querySelectorAll(
-      `.list-hidden--${this.getAttribute("data-website")}`
-    );
-    //Make changes for all selected hidden article items
-    hiddenItems.forEach(function(hiddenItem) {
-      if (hiddenItem.style.display === "none") {
-        // Make hidden article item visible
-        hiddenItem.style.display = "flex";
-        // Change text of p element (first child of toggler element) to 'less'
-        toggler.firstChild.textContent = "Less";
-        //Change down arrow of arrow in toggler element to up
-        toggler.firstChild.nextSibling.classList = "fas fa-arrow-up";
-      } else {
-        // Remove article item from page
-        hiddenItem.style.display = "none";
-        // Change text of p element (first child of toggler element) to 'more'
-        toggler.firstChild.textContent = "More";
-        //Change down arrow of arrow in toggler element to down
-        toggler.firstChild.nextSibling.classList = "fas fa-arrow-down";
-      }
-    });
-  });
-});
+// togglers.forEach(function(toggler) {
+//   //Add click event listener to all togglers
+//   toggler.addEventListener("click", function() {
+//     //Select all hidden article items for the specifically clicked toggler
+//     let hiddenItems = document.querySelectorAll(
+//       `.list-hidden--${this.getAttribute("data-website")}`
+//     );
+//     //Make changes for all selected hidden article items
+//     hiddenItems.forEach(function(hiddenItem) {
+//       if (hiddenItem.style.display === "none") {
+//         // Make hidden article item visible
+//         hiddenItem.style.display = "flex";
+//         // Change text of p element (first child of toggler element) to 'less'
+//         toggler.firstChild.textContent = "Less";
+//         //Change down arrow of arrow in toggler element to up
+//         toggler.firstChild.nextSibling.classList = "fas fa-arrow-up";
+//       } else {
+//         // Remove article item from page
+//         hiddenItem.style.display = "none";
+//         // Change text of p element (first child of toggler element) to 'more'
+//         toggler.firstChild.textContent = "More";
+//         //Change down arrow of arrow in toggler element to down
+//         toggler.firstChild.nextSibling.classList = "fas fa-arrow-down";
+//       }
+//     });
+//   });
+// });
 
 /**************************************************
-Handle Toggler To Share Articles and see Article Info.
+Handle Toggler To Share Articles
 **************************************************/
 
 // Select all article info togglers on page
@@ -161,12 +174,12 @@ if (shareButton.length > 0) {
 /***********************************
 Strike through clicked article links; cannot use a:visited pseudo-class :- http://bit.ly/2D3B6K9 
 ************************************/
-let links = document.querySelectorAll(".headline");
-links.forEach(function(link) {
-  link.addEventListener("click", function() {
-    this.style.textDecoration = "line-through";
-  });
-});
+// let links = document.querySelectorAll(".headline");
+// links.forEach(function(link) {
+//   link.addEventListener("click", function() {
+//     this.style.textDecoration = "line-through";
+//   });
+// });
 
 /************************************************
 

@@ -15,6 +15,16 @@
   --border-style: 1px rgb(70, 70, 83) solid;
 }
 
+
+.daymode {
+  --main-bg-color: #efefef;
+  --alt-bg-color: #fff;
+  --main-text-color: #292b2c;
+  --alt-text-color: #292b2c;
+  --border-style: 1px rgb(200, 200, 200) solid;
+}
+
+
 /* Setting Related to Body Element */
 body {
   color: var(--main-text-color);
@@ -92,6 +102,13 @@ button {
 .header-link {
   margin-left: 10px;
   display: inline;
+}
+
+#night-mode-button{
+  color: var(--main-text-color);
+  font-size: 1.5em;
+  padding-right: 15px;
+  cursor: pointer;
 }
 
 .logo {
