@@ -15,15 +15,14 @@
   --border-style: 1px rgb(70, 70, 83) solid;
 }
 
-
 .daymode {
   --main-bg-color: #efefef;
   --alt-bg-color: #fff;
   --main-text-color: #292b2c;
   --alt-text-color: #292b2c;
   --border-style: 1px rgb(200, 200, 200) solid;
+  --alt-highlight-color: mediumpurple;
 }
-
 
 /* Setting Related to Body Element */
 body {
@@ -104,7 +103,7 @@ button {
   display: inline;
 }
 
-#night-mode-button{
+#night-mode-button {
   color: var(--main-text-color);
   font-size: 1.5em;
   padding-right: 15px;
@@ -279,7 +278,8 @@ ul {
   text-transform: capitalize;
   color: var(--alt-highlight-color);
   padding: 5px 10px 0 10px;
-  font-size: 1.1em;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .article-summary-div {
@@ -291,32 +291,31 @@ ul {
 .article-card-footer {
   grid-area: footer;
   font-weight: 700;
-  padding: 0 15px 10px 15px;
-  align-items: center;
+  min-height: 2.1em;
+  padding: 0 15px 5px 15px;
+
+  transition: var(--transition-values);
 }
 
-.share-button, .hide-share-button{
-  font-size: 1.2em;
-  padding-right: 10px;
+.share-button,
+.hide-share-button {
+  /* padding-right: 10px; */
   cursor: pointer;
 }
-
-.website-name-div{
-  transition: var(--transition-values);
+.share-button {
+  font-size: 1.2em;
 }
 
-.article-date-div{
+.article-card-info-div {
   transition: var(--transition-values);
+  align-items: flex-start;
 }
 
-.article-card-share {
+.article-share-div {
+  font-size: 1.3em;
+  /* padding-right: 10px; */
   transition: var(--transition-values);
-}
-
-.article-card-share .fab {
-  font-size: 1.5em;
-  padding-right: 10px;
-  transition: var(--transition-values);
+  align-items: flex-start;
 }
 
 .website-favicon {

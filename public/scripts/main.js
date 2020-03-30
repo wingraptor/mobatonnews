@@ -7,23 +7,21 @@ let urlArr = window.location.href.split("/"),
 
 if (pageIdentifier === "") {
   filter = document.querySelector("#recent");
-  filter.style.borderColor = "white";
+  filter.style.borderColor = "var(--alt-highlight-color)";
   pageName.innerHTML = "<h2>Most Recent Articles</h2>";
 } else if (pageIdentifier === "corona") {
   pageName.innerHTML = "<h2>Recent COVID-19 Articles</h2>";
   filter = document.querySelector(`#${pageIdentifier}`);
-  filter.style.borderColor = "white";
+  filter.style.borderColor = "var(--alt-highlight-color)";
 } else if (pageIdentifier === "daily") {
   pageName.innerHTML = `<h2>Today's Articles</h2>`;
   filter = document.querySelector(`#${pageIdentifier}`);
-  filter.style.borderColor = "white";
+  filter.style.borderColor = "var(--alt-highlight-color)";
 } else if (pageIdentifier === "yesterday") {
   pageName.innerHTML = `<h2>Yesterday's Articles</h2>`;
   filter = document.querySelector(`#${pageIdentifier}`);
-  filter.style.borderColor = "white";
+  filter.style.borderColor = "var(--alt-highlight-color)";
 }
-
-
 
 /****************
 Night Mode Toggle
@@ -31,10 +29,9 @@ Night Mode Toggle
 
 let nightModeButton = document.querySelector("#night-mode-button");
 
-nightModeButton.addEventListener("click", function(){
+nightModeButton.addEventListener("click", function() {
   document.body.classList.toggle("daymode");
 });
-
 
 /**************************************** 
 Handle Toggler To Show/Hide More Articles  
@@ -81,7 +78,9 @@ let hideShareDivButton = document.querySelectorAll(".hide-share-button");
 
 function displayToggle(element, time) {
   if (element.classList.contains("hidden")) {
-    element.classList.remove("hidden");
+    setTimeout(function() {
+      element.classList.remove("hidden");
+    }, time);
     setTimeout(function() {
       element.classList.remove("visuallyHidden");
     }, time);
@@ -102,41 +101,6 @@ function displayToggle(element, time) {
 }
 
 // Check to make sure button is on page
-if (hideShareDivButton.length > 0) {
-  // Add event listener to all article info. toggler
-  hideShareDivButton.forEach(function(hideShareDivButton) {
-    hideShareDivButton.addEventListener("click", function() {
-      // Get articleID of corresponding article
-      let articleID = this.getAttribute("data-articleID"),
-        // Select corresponding div containing links to share article
-        shareDiv = document.querySelector(
-          `.article-card-share[data-articleID="${articleID}"]`
-        ),
-        // Select corresponding footer elements
-        articleDateDiv = document.querySelector(
-          `.article-date-div[data-articleID="${articleID}"]`
-        ),
-        websiteNameDiv = document.querySelector(
-          `.website-name-div[data-articleID="${articleID}"]`
-        ),
-        shareButton = document.querySelector(
-          `.share-button[data-articleID="${articleID}"]`
-        );
-      // Hide this button
-      displayToggle(this, 1);
-      // Hide Share Div
-      displayToggle(shareDiv, 1);
-      // Show Article Date
-      displayToggle(articleDateDiv, 50);
-      // Show article date
-      displayToggle(websiteNameDiv, 50);
-      // Show share button
-      displayToggle(shareButton, 50);
-    });
-  }, false);
-}
-
-// Check to make sure button is on page
 if (shareButton.length > 0) {
   // Add event listener to all article info. toggler
   shareButton.forEach(function(shareButton) {
@@ -145,28 +109,43 @@ if (shareButton.length > 0) {
       let articleID = this.getAttribute("data-articleID"),
         // Select corresponding div containing links to share article
         shareDiv = document.querySelector(
-          `.article-card-share[data-articleID="${articleID}"]`
+          `.article-share-div[data-articleID="${articleID}"]`
         ),
-        // Select corresponding footer elements
-        articleDateDiv = document.querySelector(
-          `.article-date-div[data-articleID="${articleID}"]`
-        ),
-        websiteNameDiv = document.querySelector(
-          `.website-name-div[data-articleID="${articleID}"]`
-        ),
-        hideShareDivButton = document.querySelector(
-          `.hide-share-button[data-articleID="${articleID}"]`
+        footerDiv = document.querySelector(
+          `.article-card-info-div[data-articleID="${articleID}"]`
         );
-      // Hide button
-      displayToggle(this, 1);
-      // Hide article date
-      displayToggle(articleDateDiv, 1);
-      // Hide Website Name
-      displayToggle(websiteNameDiv, 1);
-      // Display Share Div as a whole
-      displayToggle(shareDiv, 50);
-      // Display button to hide share div
-      displayToggle(hideShareDivButton, 50);
+      // // Hide button
+      // displayToggle(this, 1);
+      // Hide Footer Div
+      displayToggle(footerDiv, 1);
+      // // Hide Website Name
+      // displayToggle(websiteNameDiv, 1);
+      // Display Share Div
+      displayToggle(shareDiv, 300);
+      // // Display button to hide share div
+      // displayToggle(hideShareDivButton, 50);
+    });
+  }, false);
+}
+
+// Check to make sure button is on page
+if (hideShareDivButton.length > 0) {
+  // Add event listener to all article info. toggler
+  hideShareDivButton.forEach(function(hideShareDivButton) {
+    hideShareDivButton.addEventListener("click", function() {
+      // Get articleID of corresponding article
+      let articleID = this.getAttribute("data-articleID"),
+        // Select corresponding div containing links to share article
+        shareDiv = document.querySelector(
+          `.article-share-div[data-articleID="${articleID}"]`
+        ),
+        footerDiv = document.querySelector(
+          `.article-card-info-div[data-articleID="${articleID}"]`
+        );
+      // Hide Share Div
+      displayToggle(shareDiv, 1);
+      // Display Footer Div
+      displayToggle(footerDiv, 300);
     });
   }, false);
 }

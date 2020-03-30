@@ -100,24 +100,28 @@
               </a>  
             </div>
             <!-- Article Card Footer Div -->
-            <div class="article-card-footer flex-style-1">
-              <i class="fas fa-times hide-share-button hidden" data-articleID="<%=`${i}.${j}`%>"></i>
-              <div class="website-name-div" data-articleID="<%=`${i}.${j}`%>">
-                <span class="website-name">
-                  <a href="<%= siteInfo(articles[i]._id).URL %>" target="_blank">
-                    <img class="website-favicon"
-                      src="https://s2.googleusercontent.com/s2/favicons?domain=<%= siteInfo(articles[i]._id).URL %>" alt="">
-                    <%= siteInfo(articles[i]._id).name %>
-                  </a>
-                </span>
-              </div>
-              <div class="article-date-div" data-articleID="<%=`${i}.${j}`%>">
-                <span class="article-date">
-                📅 <%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %>
-                </span>
-              </div>
-              <i class="fas fa-share-alt share-button" data-articleID="<%=`${i}.${j}`%>"></i>
-              <div class="article-card-share hidden" data-articleID="<%=`${i}.${j}`%>">
+            <div class="article-card-footer" data-articleID="<%=`${i}.${j}`%>">
+              <!-- Article Info. Div -->
+              <div class="article-card-info-div flex-style-1" data-articleID="<%=`${i}.${j}`%>">
+                <div class="website-name-div" data-articleID="<%=`${i}.${j}`%>">
+                  <span class="website-name">
+                    <a href="<%= siteInfo(articles[i]._id).URL %>" target="_blank">
+                      <img class="website-favicon"
+                        src="https://s2.googleusercontent.com/s2/favicons?domain=<%= siteInfo(articles[i]._id).URL %>" alt="">
+                      <%= siteInfo(articles[i]._id).name %>
+                    </a>
+                  </span>
+                </div>
+                <div class="article-date-div" data-articleID="<%=`${i}.${j}`%>">
+                  <span class="article-date">
+                  📅 <%= dateStandardiser(articles[i].data[j].date, articles[i]._id) %>
+                  </span>
+                </div>
+                <i class="fas fa-share-alt share-button" data-articleID="<%=`${i}.${j}`%>"></i>
+              </div>        
+                <!-- Share Div -->
+              <div class="article-share-div hidden flex-style-1" data-articleID="<%=`${i}.${j}`%>">
+                Share:
                 <!-- WhatsApp Share Link -->
                 <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
                   <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
@@ -126,6 +130,7 @@
                 <a href="https://www.facebook.com/sharer/sharer.php?u=<%= articles[i].data[j].link %>" class="facebook-icon">
                   <i class="fab fa-facebook" style="color:#3B5998"></i>
                 </a>
+                <i class="fas fa-times hide-share-button" data-articleID="<%=`${i}.${j}`%>"></i>
               </div>
             </div>
           </div>
