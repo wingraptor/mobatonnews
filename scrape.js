@@ -640,7 +640,8 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
           // to only select text of summary and not text in <noscript> element - https://stackoverflow.com/questions/3442394/using-text-to-retrieve-only-text-not-nested-in-child-tags
           summary: $(this).find(".article-summary").clone().children().remove().end(".article-summary").text().replace(/^\s+|\s+$/g, ''),
           siteID: siteID(siteName),
-          imgURL: $(this).find("img").attr("data-lazy-src"),
+          // Image scraped is just a generic Stop, this image is hotlinked image
+          // imgURL: $(this).find("img").attr("data-lazy-src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
@@ -701,20 +702,20 @@ new CronJob(`0 26 ${scrapeHours} * * *`, function () {
       });
   });
   // Get Fx rates
-  request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
-    if (error) {
-      console.log(`Error getting currency data: ${error}`);
-    } else {
-      Data.findOneAndUpdate({}, {
-        gbp: JSON.parse(body).GBP_BBD,
-        cad: JSON.parse(body).CAD_BBD
-      }, function (err, data) {
-        if (err) {
-          console.log(`Error adding currency data to page: ${err}`)
-        }
-      });
-    }
-  });
+  // request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
+  //   if (error) {
+  //     console.log(`Error getting currency data: ${error}`);
+  //   } else {
+  //     Data.findOneAndUpdate({}, {
+  //       gbp: JSON.parse(body).GBP_BBD,
+  //       cad: JSON.parse(body).CAD_BBD
+  //     }, function (err, data) {
+  //       if (err) {
+  //         console.log(`Error adding currency data to page: ${err}`)
+  //       }
+  //     });
+  //   }
+  // });
 }, null, "start", location);
 
 

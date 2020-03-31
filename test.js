@@ -1,11 +1,13 @@
 const weather = require("weather-js"),
+  weatherAPI = require("weather-js"),
   mongoose = require("mongoose"),
   moment = require("moment"),
   Archive = require("./models/archive.js"),
   Article = require("./models/scrapedData.js"),
   Weather = require("./models/weatherData"),
   request = require("request"),
-  cheerio = require("cheerio");
+  cheerio = require("cheerio"),
+  Data = require("./models/dataFeed.js");
 
 
 //Environment variable setup
@@ -14,7 +16,12 @@ const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrap
 
 //mongoose config
 mongoose.connect(databaseUrl,
-  { useNewUrlParser: true });
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: true
+  });
 
 // weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
 //   if (err) console.log(err);
@@ -238,7 +245,77 @@ function siteID(siteName) {
 }
 
 
+// request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
+//   if (error) {
+//     console.log(`Error getting currency data: ${error}`);
+//   } else {
+//     Data.findOneAndUpdate({}, {
+//       gbp: JSON.parse(body).GBP_BBD,
+//       cad: JSON.parse(body).CAD_BBD
+//     }, function(err, data){
+//       if (err){
+//         console.log(`Error adding currency data to page: ${err}`)
+//       }
+//     });
+//   }
+// });
 
+// const gasoptions = {
+//   method: "GET",
+//   url: "https://api.collectapi.com/gasPrice/otherCountriesGasoline",
+//   headers: {
+//     "content-type": "application/json",
+//     authorization: `apikey ${process.env.FUEL_API_KEY}`
+//   }
+// }
+
+// const dieseloptions = {
+//   method: "GET",
+//   url: "https://api.collectapi.com/gasPrice/otherCountriesDiesel",
+//   headers: {
+//     "content-type": "application/json",
+//     authorization: `apikey ${process.env.FUEL_API_KEY}`
+//   }
+// }
+
+// request.get(gasoptions, function (error, response, body) {
+//   if (error) {
+//     console.log(`Error getting currency data: ${error}`);
+//   } else {
+//     let arr = JSON.parse(body).results;
+//     arr.forEach(element => {
+//       if (element.country === "Barbados"){
+//         Data.findOneAndUpdate({}, {
+//           gasPrice: element.price
+//         }, function(err, data){
+//           if (err){
+//             console.log(`Error adding gas price to DB: ${err}`);
+//           }
+//         })
+//       }
+//     });
+//   }
+// });
+
+
+// request.get(dieseloptions, function (error, response, body) {
+//   if (error) {
+//     console.log(`Error getting currency data: ${error}`);
+//   } else {
+//     let arr = JSON.parse(body).results;
+//     arr.forEach(element => {
+//       if (element.country === "Barbados") {
+//         Data.findOneAndUpdate({}, {
+//           dieselPrice: element.price
+//         }, function (err, data) {
+//           if (err) {
+//             console.log(`Error adding diesel price to DB: ${err}`);
+//           }
+//         })
+//       }
+//     });
+//   }
+// });
 
 
 // Scrape GIS
