@@ -8,31 +8,25 @@ const bodyParser = require("body-parser"),
   Data = require("./models/dataFeed.js"),
   ejs = require("ejs");
 
-
 //Environment variable setup
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 const IP = process.env.IP || "";
-const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+const databaseUrl =
+  process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
 
 //mongoose config
-mongoose.connect(
-  databaseUrl,
-  { useNewUrlParser: true,
-    useCreateIndex: true
-  }
-);
-mongoose.set('useUnifiedTopology', true);
+mongoose.connect(databaseUrl, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.set("useUnifiedTopology", true);
 
 //EJS + Express config
 const app = express();
-// Set express to recognise all res.render files as .ejs 
+// Set express to recognise all res.render files as .ejs
 app.set("view engine", "ejs");
 // Make express aware of public folder; location of stylesheets, scripts and images
 app.use(express.static(__dirname + "/public"));
 // Body Parser Config
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 /************************************
 Helper Functions!!!
@@ -83,23 +77,23 @@ function siteInfo(siteID) {
       break;
     case 7:
       siteInfo.name = "Government Info Service";
-      siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/"
+      siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/";
       siteInfo.icon = "bell";
       break;
     case 8:
       siteInfo.name = "CBC News";
-      siteInfo.URL = "https://www.cbc.bb/index.php/news/barbados-news"
+      siteInfo.URL = "https://www.cbc.bb/index.php/news/barbados-news";
       siteInfo.icon = "newspaper";
       break;
     case 9:
       siteInfo.name = "Barbados Reporter";
       siteInfo.URL = "https://www.bajanreporter.com/category/new/";
-      siteInfo.icon = "newspaper"
+      siteInfo.icon = "newspaper";
       break;
     case 10:
       siteInfo.name = "The Broad Street Journal";
       siteInfo.URL = "https://www.broadstjournal.com/";
-      siteInfo.icon = "newspaper"
+      siteInfo.icon = "newspaper";
       break;
   }
   return siteInfo;
@@ -136,23 +130,34 @@ function momentDateFormat(siteID) {
 
 // Format dates to UTC format and be able to set either the end of date or start of day
 const dateStandardiser = {
-  endOfDay: function (date) {
-    return moment.utc(date).endOf("day").format();
+  endOfDay: function(date) {
+    return moment
+      .utc(date)
+      .endOf("day")
+      .format();
   },
-  startOfDay: function (date) {
-    return moment.utc(date).startOf("day").format();
+  startOfDay: function(date) {
+    return moment
+      .utc(date)
+      .startOf("day")
+      .format();
   },
-  utcDate: function (date, siteID) {
-    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+  utcDate: function(date, siteID) {
+    return moment
+      .utc(date, momentDateFormat(siteID))
+      .startOf("day")
+      .format();
   },
-  localFormat: function (date, siteID) {
-    if (date) {
+  localFormat: function(date, siteID) {
+    if (date && siteID) {
       return moment(date, momentDateFormat(siteID)).format("LL");
+    } else if (date) {
+      return moment(date).format("LL");
     } else {
       return "";
     }
   }
-}
+};
 
 // Counts number of articles queried from DB
 function articleCounter(queryResult) {
@@ -160,10 +165,10 @@ function articleCounter(queryResult) {
   // Iterate through artidcles query array
   queryResult.forEach(document => {
     // Iterate through articles in the data array
-    document.data.forEach(function () {
+    document.data.forEach(function() {
       // Increment count variable for each article in data array
       count++;
-    })
+    });
   });
   return count;
 }
@@ -173,188 +178,215 @@ ROUTES
 ************************************/
 
 // Home Page Route
-app.get("/", function (req, res) {
+app.get("/", function(req, res) {
   // Query Articles DB
-  Article.aggregate([
-    //Sort articles in each document (Sorts in ascending order )
-    { $sort: { articleCount: 1 } },
-    //group articles according to siteIDs
-    { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    //sort according siteID
-    { $sort: { _id: 1 } },
-    // { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    // { $sort: { _id: 1 } },
-    // { $sort: {"utcDate":-1} },
-    // {$project: {
-    //   "data": {
-    //     "$slice": ["$data", 15]
-    //   }
-    // }}
-  ], function (error, articles) {
-    if (error) {
-      console.log("Error quering articles DB on home page" + error);
-    }
-    else {
-      // Get Local Weather To Be Used in Widget
-      Data.find({}, function (error, data) {
-        // Render homepage template
-        res.render("home", {
-          articles: articles,
-          siteInfo: siteInfo,
-          data: data[0],
-          dateStandardiser: dateStandardiser.localFormat,
-          date: new Date()
+  Archive.aggregate(
+    [
+      //Sort articles in each document (Sorts in descendig order )
+      { $sort: { utcDate: -1 } },
+      { $limit: 50 },
+      //group articles according to utcDate
+      { $group: { _id: "$utcDate", data: { $push: "$$ROOT" } } },
+      //sort according utcDate
+      { $sort: { "data.utcDate": -1 } }
+      // { $sort: { _id: 1 } }
+      // { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
+      // { $sort: { _id: 1 } },
+      // { $sort: {"utcDate":-1} },
+      // {$project: {
+      //   "data": {
+      //     "$slice": ["$data", 15]
+      //   }
+      // }}
+    ],
+    function(error, articles) {
+      if (error) {
+        console.log("Error quering articles DB on home page" + error);
+      } else {
+        // Get Local Weather To Be Used in Widget
+        Data.find({}, function(error, data) {
+          // Render homepage template
+          res.render("home", {
+            articles: articles,
+            siteInfo: siteInfo,
+            data: data[0],
+            dateStandardiser: dateStandardiser,
+            date: new Date()
+          });
         });
-      })
+      }
     }
-  });
+  );
 });
 
-
 // "Filtered" Articles Route
-app.get("/filter/:filterValue", function (req, res) {
+app.get("/filter/:filterValue", function(req, res) {
   let filterValue = req.params.filterValue,
     queryFilter;
 
   if (filterValue === "daily") {
     queryFilter = {
-      $match:
-      {
-        "utcDate": {
-          "$gte": new Date(moment().utc().startOf("day").format()),
-          "$lte": new Date(moment().utc().endOf("day").format())
+      $match: {
+        utcDate: {
+          $gte: new Date(
+            moment()
+              .utc()
+              .startOf("day")
+              .format()
+          ),
+          $lte: new Date(
+            moment()
+              .utc()
+              .endOf("day")
+              .format()
+          )
         }
       }
-    }
+    };
   } else if (filterValue === "yesterday") {
     queryFilter = {
-      $match:
-      {
-        "utcDate": {
-          "$gte": new Date(moment().subtract(1, "day").utc().startOf("day").format()),
-          "$lte": new Date(moment().subtract(1, "day").utc().endOf("day").format())
+      $match: {
+        utcDate: {
+          $gte: new Date(
+            moment()
+              .subtract(1, "day")
+              .utc()
+              .startOf("day")
+              .format()
+          ),
+          $lte: new Date(
+            moment()
+              .subtract(1, "day")
+              .utc()
+              .endOf("day")
+              .format()
+          )
         }
       }
-    }
+    };
   } else if (filterValue === "tomorrow") {
     res.render("error");
     return;
-  } else if (filterValue === "corona"){
+  } else if (filterValue === "corona") {
     queryFilter = {
       $match: {
-        $text:{
-          $search:"corona covid"
+        $text: {
+          $search: "corona covid"
         }
       }
-    }
+    };
   }
 
   // Query Articles DB
-  Archive.aggregate([
-    // Filter articles according to page clicked
-    queryFilter,
-    //Sort articles in from newest to oldest, _id in this case refers to automatically assigned ID
-    { $sort: { _id: -1 } },
-    //group articles according to siteIDs
-    { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-    //sort according siteID: ID in this case refers to the siteID
-    { $sort: { _id: 1 } },
-  ], function (error, articles) {
-    if (error) {
-      console.log(error + "     Error quering articles DB on home page");
-    }
-    else {
-      // Get Data To Be Used in Widget
-      Data.find({}, function (error, data) {
-        // Render homepage template
-        res.render("home", {
-          articles: articles,
-          siteInfo: siteInfo,
-          data: data[0],
-          dateStandardiser: dateStandardiser.localFormat
+  Archive.aggregate(
+    [
+      // Filter articles according to page clicked
+      queryFilter,
+      { $sort: { utcDate: -1 } },
+      { $limit: 50 },
+      //group articles according to siteIDs
+      { $group: { _id: "$utcDate", data: { $push: "$$ROOT" } } },
+      //sort according utcDate
+      { $sort: { "data.utcDate": -1 } }
+    ],
+    function(error, articles) {
+      if (error) {
+        console.log(error + "     Error quering articles DB on home page");
+      } else {
+        // Get Data To Be Used in Widget
+        Data.find({}, function(error, data) {
+          // Render homepage template
+          res.render("home", {
+            articles: articles,
+            siteInfo: siteInfo,
+            data: data[0],
+            dateStandardiser: dateStandardiser
+          });
         });
+      }
+    }
+  );
+});
+
+// Archive Page Route
+app.get("/archive", function(req, res) {
+  // Query Articles DB and return a list of unique news sites (as the SiteIDs) currently in DB
+  Archive.distinct("siteID", function(error, articles) {
+    if (error) {
+      console.log("Error quering archives DB on archives page");
+    } else {
+      // Render archive template
+      res.render("archive", {
+        articles: articles,
+        siteInfo: siteInfo
       });
     }
   });
 });
 
-// Archive Page Route
-app.get("/archive", function (req, res) {
-  // Query Articles DB and return a list of unique news sites (as the SiteIDs) currently in DB
-  Archive.distinct(
-    "siteID"
-    , function (error, articles) {
-      if (error) {
-        console.log("Error quering archives DB on archives page");
-      }
-      else {
-        // Render archive template
-        res.render("archive", {
-          articles: articles,
-          siteInfo: siteInfo,
-        });
-      }
-    });
-});
-
 // Results Page Route
-app.get("/results", function (req, res) {
+app.get("/results", function(req, res) {
   let siteID = Number(req.query.siteID),
     startDate = req.query.startDate,
     // If endDate not given in form, then endDate is today's date
     endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
-
     filter = {
-      $match:
-      {
-        "siteID": siteID,
-        "utcDate": {
-          "$gte": new Date(dateStandardiser.startOfDay(startDate)),
-          "$lte": new Date(dateStandardiser.endOfDay(endDate))
+      $match: {
+        siteID: siteID,
+        utcDate: {
+          $gte: new Date(dateStandardiser.startOfDay(startDate)),
+          $lte: new Date(dateStandardiser.endOfDay(endDate))
         }
       }
     };
 
-  Archive.aggregate([
-    // Filter search results based on siteID,  start date and end date given by the user
-    filter,
-    // Sort articles according to created date/time, from newest to oldest
-    { $sort: { created_at: 1 } },
-    // Group articles according to created date; note that date has been formated to the YYYYMMDD format
-    { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$utcDate" } }, data: { $push: "$$ROOT" } } },
-    { $addFields: { articleCount: { $size: "$data" } } },
-    // Sort articles according to date in ascending order
-    { $sort: { _id: 1 } }
-  ], function (error, articles) {
-    if (error) {
-      console.log(error)
-    } else {
-      // Render results template
-      res.render("results", {
-        siteID: siteID,
-        siteInfo: siteInfo,
-        articles: articles,
-        articleCount: articleCounter(articles),
-        dates: {
-          startDate: startDate,
-          endDate: endDate
+  Archive.aggregate(
+    [
+      // Filter search results based on siteID,  start date and end date given by the user
+      filter,
+      // Sort articles according to created date/time, from newest to oldest
+      { $sort: { created_at: 1 } },
+      // Group articles according to created date; note that date has been formated to the YYYYMMDD format
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$utcDate" } },
+          data: { $push: "$$ROOT" }
         }
-      });
+      },
+      { $addFields: { articleCount: { $size: "$data" } } },
+      // Sort articles according to date in ascending order
+      { $sort: { _id: 1 } }
+    ],
+    function(error, articles) {
+      if (error) {
+        console.log(error);
+      } else {
+        // Render results template
+        res.render("results", {
+          siteID: siteID,
+          siteInfo: siteInfo,
+          articles: articles,
+          articleCount: articleCounter(articles),
+          dates: {
+            startDate: startDate,
+            endDate: endDate
+          }
+        });
+      }
     }
-  }
   );
 });
 
-app.get("*", function (req, res) {
+app.get("*", function(req, res) {
   // Get Local Weather To Be Used in Widget
-  Weather.find({}, function (error, data) {
+  Weather.find({}, function(error, data) {
     // Render results template
     res.render("error");
   });
-})
+});
 
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
-app.listen(port, IP, function () {
+app.listen(port, IP, function() {
   console.log("Server started");
 });
