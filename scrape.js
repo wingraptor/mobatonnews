@@ -701,20 +701,20 @@ new CronJob(`0 26 ${scrapeHours} * * *`, function () {
       });
   });
   // Get Fx rates
-  request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
-    if (error) {
-      console.log(`Error getting currency data: ${error}`);
-    } else {
-      Data.findOneAndUpdate({}, {
-        gbp: JSON.parse(body).GBP_BBD,
-        cad: JSON.parse(body).CAD_BBD
-      }, function (err, data) {
-        if (err) {
-          console.log(`Error adding currency data to page: ${err}`)
-        }
-      });
-    }
-  });
+  // request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
+  //   if (error) {
+  //     console.log(`Error getting currency data: ${error}`);
+  //   } else {
+  //     Data.findOneAndUpdate({}, {
+  //       gbp: JSON.parse(body).GBP_BBD,
+  //       cad: JSON.parse(body).CAD_BBD
+  //     }, function (err, data) {
+  //       if (err) {
+  //         console.log(`Error adding currency data to page: ${err}`)
+  //       }
+  //     });
+  //   }
+  // });
 }, null, "start", location);
 
 
