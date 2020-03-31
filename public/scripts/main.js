@@ -23,14 +23,36 @@ if (pageIdentifier === "") {
   filter.style.borderColor = "var(--alt-highlight-color)";
 }
 
-/****************
-Night Mode Toggle
-******************/
+/*********************************************************
+Dark Mode Toggle -- https://flaviocopes.com/dark-mode/
+***********************************************************/
 
-let nightModeButton = document.querySelector("#night-mode-button");
+let darkModeButton = document.querySelector("#dark-mode-button");
 
-nightModeButton.addEventListener("click", function() {
-  document.body.classList.toggle("daymode");
+darkModeButton.addEventListener("click", function() {
+  localStorage.setItem(
+    "mode",
+    (localStorage.getItem("mode") || "dark-mode") === "dark-mode"
+      ? "light-mode"
+      : "dark-mode"
+  );
+  if (localStorage.getItem("mode") === "dark-mode") {
+    document.querySelector("body").classList.remove("light-mode");
+    document.querySelector("body").classList.add("dark-mode");
+  } else {
+    document.querySelector("body").classList.remove("dark-mode");
+    document.querySelector("body").classList.add("light-mode");
+  }
+});
+
+document.addEventListener("DOMContentLoaded", event => {
+  if (localStorage.getItem("mode") === "dark-mode") {
+    document.querySelector("body").classList.remove("light-mode");
+    document.querySelector("body").classList.add("dark-mode");
+  } else {
+    document.querySelector("body").classList.remove("dark-mode");
+    document.querySelector("body").classList.add("light-mode");
+  }
 });
 
 /**************************************** 
