@@ -640,7 +640,8 @@ new CronJob(`0 22 ${scrapeHours} * * *`, function () {
           // to only select text of summary and not text in <noscript> element - https://stackoverflow.com/questions/3442394/using-text-to-retrieve-only-text-not-nested-in-child-tags
           summary: $(this).find(".article-summary").clone().children().remove().end(".article-summary").text().replace(/^\s+|\s+$/g, ''),
           siteID: siteID(siteName),
-          imgURL: $(this).find("img").attr("data-lazy-src"),
+          // Image scraped is just a generic Stop, this image is hotlinked image
+          // imgURL: $(this).find("img").attr("data-lazy-src"),
           articleCount: articleCount
         }
         addSiteData(siteData, siteName);
