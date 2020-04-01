@@ -684,39 +684,39 @@ new CronJob(`0 24 ${scrapeHours} * * *`, function () {
   });
 }, null, "start", location);
 
-// Get Weather Data and FX Data and reset article count
-new CronJob(`0 26 ${scrapeHours} * * *`, function () {
-  // Reset article count to 0 after all sites have been scraped
-  articleCount = 0;
-  weatherAPI.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
-    if (err) console.log(`Error getting weather data: ${err}`);
-    Data.findOneAndUpdate({}, {
-      temperature: result[0].current.temperature,
-      skytext: result[0].current.skytext,
-      imageUrl: result[0].current.imageUrl
-    },
-      { upsert: true }, function (err, data) {
-        if (err) {
-          console.log(`Error adding weather to DB: ${err}`);
-        }
-      });
-  });
-  // Get Fx rates
-  // request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
-  //   if (error) {
-  //     console.log(`Error getting currency data: ${error}`);
-  //   } else {
-  //     Data.findOneAndUpdate({}, {
-  //       gbp: JSON.parse(body).GBP_BBD,
-  //       cad: JSON.parse(body).CAD_BBD
-  //     }, function (err, data) {
-  //       if (err) {
-  //         console.log(`Error adding currency data to page: ${err}`)
-  //       }
-  //     });
-  //   }
-  // });
-}, null, "start", location);
+// // Get Weather Data and FX Data and reset article count
+// new CronJob(`0 26 ${scrapeHours} * * *`, function () {
+//   // Reset article count to 0 after all sites have been scraped
+//   articleCount = 0;
+//   weatherAPI.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
+//     if (err) console.log(`Error getting weather data: ${err}`);
+//     Data.findOneAndUpdate({}, {
+//       temperature: result[0].current.temperature,
+//       skytext: result[0].current.skytext,
+//       imageUrl: result[0].current.imageUrl
+//     },
+//       { upsert: true }, function (err, data) {
+//         if (err) {
+//           console.log(`Error adding weather to DB: ${err}`);
+//         }
+//       });
+//   });
+//   Get Fx rates
+//   request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
+//     if (error) {
+//       console.log(`Error getting currency data: ${error}`);
+//     } else {
+//       Data.findOneAndUpdate({}, {
+//         gbp: JSON.parse(body).GBP_BBD,
+//         cad: JSON.parse(body).CAD_BBD
+//       }, function (err, data) {
+//         if (err) {
+//           console.log(`Error adding currency data to page: ${err}`)
+//         }
+//       });
+//     }
+//   });
+// }, null, "start", location);
 
 
 // Get Fuel Price Data - once a day
