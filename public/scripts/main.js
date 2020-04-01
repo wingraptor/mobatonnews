@@ -55,6 +55,110 @@ document.addEventListener("DOMContentLoaded", event => {
   }
 });
 
+/*********************************
+Handle articles that user has read - Indexed DB - https://dev.to/andyhaskell/build-a-basic-web-app-with-indexeddb-38ef?signin=true
+********************************/
+
+// Collect article IDs (this is the id record value from Archives collection) {added to a data attribute to the article card in the ejs template}
+let articleCards = document.querySelectorAll(".article-card");
+// Array.from property used to iterate over nodeList
+let articleIdsFromPage = Array.from(articleCards, function(articleCard) {
+  return articleCard.getAttribute("data-articleID");
+});
+
+// CREATE AND OPEN DB
+let db;
+// Open Database with the name myDatabase (version 1)
+let dbReq = indexedDB.open("myDatabase", 1);
+
+// Listen for the event when the database has been created
+dbReq.onupgradeneeded = function(event) {
+  // Set created DB to the db variable
+  db = event.target.result;
+
+  // Create an object store
+  let articleIdsFromDb = db.createObjectStore("articleIdsFromDb", { keyPath: "id" });
+};
+
+// If DB was alread created, listen for success opening of DB and store to the db variable
+dbReq.onsuccess = function(event){
+  db = event.target.result;
+  // Read DB for list of stored articleIDs
+  collectArticleIdsFromDb(db, articleIdsFromPage);
+}
+
+// Listen for error response from dbReq function
+dbReq.onerror = function(event) {
+  alert("error opening database" + event.target.errorCode);
+}
+
+// Read DB for list of stored articleIDs
+function collectArticleIdsFromDb(db, articleIdsFromPage) {
+  // Create a transaction
+  let tx = db.transaction(["articleIdsFromDb"], "readonly");
+  let store = tx.objectStore("articleIdsFromDb");
+
+  let req = store.openCursor();
+  let matchedArticleIds = [];
+
+  // Listen for completion of event (opening tx, acccessing store and opening cursor) and execute corresponding function
+  req.onsuccess = function(event) {
+    // IDBCursor containing the key (index in this case) from the DB as well as the value articleIdFromDb as it's value
+    let cursor = event.target.result;
+    // console.log(cursor.value.text);
+    if (cursor != null) {
+      // Compare  articleIdsFromPage to articleIdsFromDb and push to array
+      articleIdsFromPage.forEach(function(articleID) {
+        if (articleID === cursor.value.id) {
+          matchedArticleIds.push(cursor.value.id);
+        }
+      });
+      // Proceed to next articleIdFromDB key-value pair  
+      cursor.continue();
+    } else {
+      // Fade articles from page whose ID match the articleIdsFromDb
+      fadeArticleCard(matchedArticleIds);
+    }
+  };
+
+  req.onerror = function(event) {
+    alert("error in cursor request " + event.target.errorCode);
+  };
+}
+
+// Take array of articleIDs that are in the DB and hide them from the page
+function fadeArticleCard(articleCardIds) {
+  articleCardIds.forEach(function(id) {
+    let articleCard = document.querySelector(
+      `.article-card[data-articleID="${id}"]`
+    );
+    displayToggle(articleCard);
+  });
+}
+
+// On click of link to article, add the article card ID to the DB
+function submitArticleId(element) {
+  // Get data-articleID value from the article-card ancestor of the clicked anchor element
+  let articleIdFromPage = element.closest(".article-card").getAttribute("data-articleID");
+  addArticleId(db, articleIdFromPage);
+}
+
+function addArticleId(db, articleIdFromPage){
+  let tx = db.transaction(["articleIdsFromDb"], "readwrite");
+  let store = tx.objectStore("articleIdsFromDb");
+
+  let articleId = {id: articleIdFromPage, timestamp: Date.now()};
+
+  // Check whtether the articleIdFromPage is already in the DB
+  if (store.get(articleIdFromPage)) store.add(articleId);
+
+  tx.oncomplete = function(){
+   // On addition of article card ID to DB, fade out the article card
+    // --> converted to array to utilise the fadeArticle function
+    fadeArticleCard(articleIdFromPage.split(" "));
+  }
+}
+
 /**************************************** 
 Handle Toggler To Show/Hide More Articles  
 ****************************************/
@@ -95,8 +199,8 @@ Handle Toggler To Share Articles
 **************************************************/
 
 // Select all article info togglers on page
-let shareButton = document.querySelectorAll(".share-button");
-let hideShareDivButton = document.querySelectorAll(".hide-share-button");
+let shareDivButton = document.querySelectorAll(".share-div-button");
+// let hideShareDivButton = document.querySelectorAll(".hide-share-button");
 
 function displayToggle(element, time) {
   if (element.classList.contains("hidden")) {
@@ -123,9 +227,9 @@ function displayToggle(element, time) {
 }
 
 // Check to make sure button is on page
-if (shareButton.length > 0) {
+if (shareDivButton.length > 0) {
   // Add event listener to all article info. toggler
-  shareButton.forEach(function(shareButton) {
+  shareDivButton.forEach(function(shareButton) {
     shareButton.addEventListener("click", function() {
       // Get articleID of corresponding article
       let articleID = this.getAttribute("data-articleID"),
@@ -136,41 +240,33 @@ if (shareButton.length > 0) {
         footerDiv = document.querySelector(
           `.article-card-info-div[data-articleID="${articleID}"]`
         );
-      // // Hide button
-      // displayToggle(this, 1);
-      // Hide Footer Div
-      displayToggle(footerDiv, 1);
-      // // Hide Website Name
-      // displayToggle(websiteNameDiv, 1);
-      // Display Share Div
+      displayToggle(footerDiv, 300);
       displayToggle(shareDiv, 300);
-      // // Display button to hide share div
-      // displayToggle(hideShareDivButton, 50);
     });
   }, false);
 }
 
-// Check to make sure button is on page
-if (hideShareDivButton.length > 0) {
-  // Add event listener to all article info. toggler
-  hideShareDivButton.forEach(function(hideShareDivButton) {
-    hideShareDivButton.addEventListener("click", function() {
-      // Get articleID of corresponding article
-      let articleID = this.getAttribute("data-articleID"),
-        // Select corresponding div containing links to share article
-        shareDiv = document.querySelector(
-          `.article-share-div[data-articleID="${articleID}"]`
-        ),
-        footerDiv = document.querySelector(
-          `.article-card-info-div[data-articleID="${articleID}"]`
-        );
-      // Hide Share Div
-      displayToggle(shareDiv, 1);
-      // Display Footer Div
-      displayToggle(footerDiv, 300);
-    });
-  }, false);
-}
+// // Check to make sure button is on page
+// if (hideShareDivButton.length > 0) {
+//   // Add event listener to all article info. toggler
+//   hideShareDivButton.forEach(function(hideShareDivButton) {
+//     hideShareDivButton.addEventListener("click", function() {
+//       // Get articleID of corresponding article
+//       let articleID = this.getAttribute("data-articleID"),
+//         // Select corresponding div containing links to share article
+//         shareDiv = document.querySelector(
+//           `.article-share-div[data-articleID="${articleID}"]`
+//         ),
+//         footerDiv = document.querySelector(
+//           `.article-card-info-div[data-articleID="${articleID}"]`
+//         );
+//       // Hide Share Div
+//       displayToggle(shareDiv, 1);
+//       // Display Footer Div
+//       displayToggle(footerDiv, 300);
+//     });
+//   }, false);
+// }
 
 /***********************************
 Strike through clicked article links; cannot use a:visited pseudo-class :- http://bit.ly/2D3B6K9 

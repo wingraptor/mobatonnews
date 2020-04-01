@@ -85,7 +85,7 @@ button {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .visuallyHidden {
@@ -274,6 +274,7 @@ ul {
     "headline headline headline"
     "summary summary summary"
     "footer footer footer";
+  transition: var(--transition-values);
 }
 
 .article-thumbnail-div {
@@ -530,7 +531,7 @@ input#startDate:focus {
   }
 }
 
-@media all and (max-width: 681px) {
+@media all and (max-width: 713px) {
   .filter-div {
     flex-direction: column;
     align-items: center;

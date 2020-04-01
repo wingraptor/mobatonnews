@@ -214,7 +214,6 @@ app.get("/", function(req, res) {
             date: new Date()
           });
         });
-
       }
     }
   );

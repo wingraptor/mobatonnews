@@ -42,10 +42,10 @@
   <!-- Filter Div -->
   <div class="filter-div-container">
     <div class="filter-div element-style-1">
-      <p class="filter-text">
+      <h3 class="filter-text">
         <i class="fas fa-filter"></i>
         Filters:
-      </p>
+      </h3> 
       <p>
         <a href="/" class="filter" id="recent">Most Recent⏳</a>
       </p>
@@ -71,16 +71,16 @@
   <div class="main-content">
     <% for(var i = 0; i < articles.length; i++){ %>
         <% for(var j = 0; j < articles[i].data.length; j++){ %>
-          <div class="article-card element-style-1">
+          <div class="article-card element-style-1" data-articleID="<%=`${articles[i].data[j]._id}`%>">
             <!-- Article thumbnail -->
             <div class="article-thumbnail-div">
               <%# Show image if an image was scrapped  %>
               <% if (articles[i].data[j].imgURL && siteInfo(articles[i].data[j].siteID).name !== "Barbados Reporter"){ %>
-                <a href="<%= articles[i].data[j].link %>" target="_blank">
+                <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="submitArticleId(this)">
                   <img src="<%= articles[i].data[j].imgURL %>" alt="" class="article-thumbnail">
                 </a>       
               <% } else { %>
-                <a href="<%= articles[i].data[j].link %>" target="_blank">
+                <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="submitArticleId(this)">
                   <img src="https://cdn.pixabay.com/photo/2019/04/29/16/11/new-4166472_960_720.png" class="article-thumbnail">
                 </a>
               <% } %>
@@ -92,7 +92,7 @@
             </div>
             <!-- Article Summary Information -->
             <div class="article-summary-div">
-              <a href="<%= articles[i].data[j].link %>" target="_blank"">
+              <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="submitArticleId(this)">
                 <p>
                   <%# LIMIT CHARACTER COUNT TO 285, add line break to add space between elements if article summary not given %>
                   <%- articles[i].data[j].summary ? articles[i].data[j].summary.substring(0, 285) : "<br>" %>      
@@ -100,9 +100,9 @@
               </a>  
             </div>
             <!-- Article Card Footer Div -->
-            <div class="article-card-footer" data-articleID="<%=`${i}.${j}`%>">
+            <div class="article-card-footer" data-articleID="<%=`${articles[i].data[j]._id}`%>">
               <!-- Article Info. Div -->
-              <div class="article-card-info-div flex-style-1" data-articleID="<%=`${i}.${j}`%>">
+              <div class="article-card-info-div flex-style-1" data-articleID="<%=`${articles[i].data[j]._id}`%>">
                 <div class="website-name-div">
                   <span class="website-name">
                     <a href="<%= siteInfo(articles[i].data[j].siteID).URL %>" target="_blank">
@@ -121,11 +121,10 @@
                     <% }%>
                   </span>
                 </div>
-                <i class="fas fa-share-alt share-button" data-articleID="<%=`${i}.${j}`%>"></i>
+                <i class="fas fa-share-alt share-button share-div-button" data-articleID="<%=`${articles[i].data[j]._id}`%>"></i>
               </div>        
                 <!-- Share Div -->
-              <div class="article-share-div hidden flex-style-1" data-articleID="<%=`${i}.${j}`%>">
-                Share:
+              <div class="article-share-div hidden flex-style-1" data-articleID="<%=`${articles[i].data[j]._id}`%>">
                 <!-- WhatsApp Share Link -->
                 <a href="https://wa.me/?text=<%= articles[i].data[j].link %>" class="whatsApp-icon">
                   <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
@@ -134,7 +133,7 @@
                 <a href="https://www.facebook.com/sharer/sharer.php?u=<%= articles[i].data[j].link %>" class="facebook-icon">
                   <i class="fab fa-facebook" style="color:#3B5998"></i>
                 </a>
-                <i class="fas fa-times hide-share-button" data-articleID="<%=`${i}.${j}`%>"></i>
+                <i class="fas fa-times hide-share-button share-div-button" data-articleID="<%=`${articles[i].data[j]._id}`%>"></i>
               </div>
             </div>
           </div>
