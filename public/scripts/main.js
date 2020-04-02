@@ -132,7 +132,8 @@ function fadeArticleCard(articleCardIds) {
     let articleCard = document.querySelector(
       `.article-card[data-articleID="${id}"]`
     );
-    displayToggle(articleCard);
+    // displayToggle(articleCard); 
+    articleCard.style.filter = "grayscale(100%)";
   });
 }
 
