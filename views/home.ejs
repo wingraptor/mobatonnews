@@ -39,33 +39,35 @@
     <p>Browse the latest news from several local news sites updated hourly⏰</p>
   </div>
 
-  <!-- Filter Div -->
-  <div class="filter-div-container">
-    <div class="filter-div element-style-1">
-      <h3 class="filter-text">
-        <i class="fas fa-filter"></i>
-        Filters:
-      </h3> 
-      <p>
-        <a href="/" class="filter" id="recent">Most Recent⏳</a>
-      </p>
-      <p>
-        <a href="/filter/corona" class="filter" id="corona">COVID-19🦠</a>
-      </p>
-      <p>
-        <a href="/filter/daily" class="filter" id="daily">Today⌚</a>
-      </p>
-      <p>
-        <a href="/filter/yesterday" class="filter" id="yesterday">Yesterday⌛</a>
-      </p>
-      <p>
-        <a href="/filter/tomorrow" class="filter">Tomorrow🔮</a>
-      </p>
-    </div>
-  </div>
+
 
   <div style="text-align: center;" id="page-name">
     
+  </div>
+
+    <!-- Filter Div -->
+  <div class="filter-div-container">
+    <div class="filter-div element-style-1">
+      <h3 class="filter-text" onclick="showFilters(this)">
+        <i class="fas fa-filter"></i>
+        Filters
+      </h3> 
+      <p class="filter hidden">
+        <a href="/" class="filter-link" id="recent">Most Recent⏳</a>
+      </p>
+      <p class="filter hidden">
+        <a href="/filter/corona" class="filter-link" id="corona">COVID-19🦠</a>
+      </p>
+      <p class="filter hidden">
+        <a href="/filter/daily" class="filter-link" id="daily">Today⌚</a>
+      </p>
+      <p class="filter hidden">
+        <a href="/filter/yesterday" class="filter-link" id="yesterday">Yesterday⌛</a>
+      </p>
+      <!-- <p class="filter hidden">
+        <a href="/filter/tomorrow" class="filter-link">Tomorrow🔮</a>
+      </p> -->
+    </div>
   </div>
 
   <div class="main-content">

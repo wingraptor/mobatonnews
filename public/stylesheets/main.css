@@ -167,21 +167,32 @@ html[data-scroll="3"] .logo {
   text-align: center;
 }
 
-.filter-div {
-  padding: 20px;
-  display: inline-flex;
-  justify-content: space-between;
+.filter {
+  transition: var(--transition-values);
+  cursor: pointer;
 }
 
-.filter {
+.filter-text {
+  cursor: pointer;
+}
+
+.filter-div {
+  padding: 5px;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-link {
   border: var(--border-style);
   border-radius: 5px;
   font-weight: bold;
   margin: 5px;
   padding: 5px;
+  transition: var(--transition-values);
 }
 
-.filter:hover {
+.filter-link:hover {
   border-color: var(--alt-text-color);
 }
 

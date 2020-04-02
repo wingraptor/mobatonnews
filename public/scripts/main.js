@@ -407,6 +407,13 @@ function dateInfo() {
   alert("Date search results may be inaccurate for this site");
 }
 
+function showFilters(element){
+  let filters = document.querySelectorAll(".filter");
+  filters.forEach(function(filter){
+    displayToggle(filter);
+  });
+}
+
 /**************************************
 Load Tippy tool tips with custom option
 ****************************************/
