@@ -86,7 +86,7 @@
               <% } %>
             </div>
             <div class="article-headline-div">
-              <a href="<%= articles[i].data[j].link %>" target="_blank"<%#prevent event bubbling from anchor element to parent list element%> onclick="event.stopPropagation()" class="article-headline">
+              <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="submitArticleId(this)" class="article-headline">
                 <%= articles[i].data[j].headline %>
               </a>
             </div>
