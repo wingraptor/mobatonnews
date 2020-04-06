@@ -37,13 +37,13 @@ darkModeButton.addEventListener("click", function() {
       : "light-mode"
   );
   if (localStorage.getItem("mode") === "dark-mode") {
-    document.querySelector("#dark-mode-button").classList.remove("fa-sun");
-    document.querySelector("#dark-mode-button").classList.add("fa-moon");
+    document.querySelector("#dark-mode-button").classList.remove("fa-moon");
+    document.querySelector("#dark-mode-button").classList.add("fa-sun");
     document.querySelector("body").classList.remove("light-mode");
     document.querySelector("body").classList.add("dark-mode");
   } else {
-    document.querySelector("#dark-mode-button").classList.remove("fa-moon");
-    document.querySelector("#dark-mode-button").classList.add("fa-sun");
+    document.querySelector("#dark-mode-button").classList.remove("fa-sun");
+    document.querySelector("#dark-mode-button").classList.add("fa-moon");
     document.querySelector("body").classList.remove("dark-mode");
     document.querySelector("body").classList.add("light-mode");
   }
@@ -52,13 +52,13 @@ darkModeButton.addEventListener("click", function() {
 // Check users preferred them and apply on DOM loading
 document.addEventListener("DOMContentLoaded", event => {
   if (localStorage.getItem("mode") === "dark-mode") {
-    document.querySelector("#dark-mode-button").classList.remove("fa-sun");
-    document.querySelector("#dark-mode-button").classList.add("fa-moon");
+    document.querySelector("#dark-mode-button").classList.remove("fa-moon");
+    document.querySelector("#dark-mode-button").classList.add("fa-sun");
     document.querySelector("body").classList.remove("light-mode");
     document.querySelector("body").classList.add("dark-mode");
   } else {
-    document.querySelector("#dark-mode-button").classList.remove("fa-moon");
-    document.querySelector("#dark-mode-button").classList.add("fa-sun");
+    document.querySelector("#dark-mode-button").classList.remove("fa-sun");
+    document.querySelector("#dark-mode-button").classList.add("fa-moon");
     document.querySelector("body").classList.remove("dark-mode");
     document.querySelector("body").classList.add("light-mode");
   }
