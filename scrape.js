@@ -256,7 +256,7 @@ new CronJob(
         //Generate siteData object from scraped data
         //Iterate through each local news element on page
         $(".post").each(function(index, element) {
-          let siteData;
+          let siteData = {};
           // First element on page has different structure to other elements
           if (index !== 0) {
             //Add scraped data to articles document
