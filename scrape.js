@@ -137,7 +137,7 @@ const dateStandardiser = {
 
 // Adds Scraped Data to Database
 function addSiteData(siteData, siteName) {
-  Article.create(siteData, function (error) {
+  Article.insert(siteData, function (error) {
     if (error) {
       console.log(`Error adding ${siteName} data to articles database: ${error}`);
     }
@@ -172,7 +172,7 @@ function archiver(siteData, siteName) {
             siteData.utcDate = dateStandardiser.utcDate(siteData.date, siteData.siteID, false)
           }
           // Convert date value to utcDate object
-          Archive.create(siteData, function (error) {
+          Archive.insert(siteData, function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);
             }
@@ -188,7 +188,7 @@ function archiver(siteData, siteName) {
             // Convert date value to utcDate object
             siteData.utcDate = new Date();
           }
-          Archive.create(siteData, function (error) {
+          Archive.insert(siteData, function (error) {
             if (error) {
               console.log(`Error adding ${siteName} data to archive`);
             }
@@ -223,15 +223,7 @@ new CronJob(`0 0 ${scrapeHours} * * *`, function () {
         let siteData;
         // First element on page has different structure to other elements
         if (index === 0) {
-          //Add scraped data to articles document
-          siteData = {
-            link: $(this).find(".post-thumbnail a").attr("href"),
-            headline: $(this).find(".post-header .post-title a").text(),
-            siteID: siteID(siteName),
-            // img is lazy loaded, and src attribute is undefined when page is scraped. I accessed the srcset atr in order to access the URL for the image
-            imgURL: $(this).find(".post-thumbnail a img").attr("src"),
-            articleCount: articleCount
-          }
+              return { };
         } else {
           //Add scraped data to articles document
           siteData = {
