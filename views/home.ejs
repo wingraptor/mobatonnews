@@ -97,7 +97,7 @@
               <a href="<%= articles[i].data[j].link %>" target="_blank" onclick="submitArticleId(this)">
                 <p>
                   <%# LIMIT CHARACTER COUNT TO 285, add line break to add space between elements if article summary not given %>
-                  <%- articles[i].data[j].summary ? articles[i].data[j].summary.substring(0, 285) : "<br>" %>      
+                  <%- articles[i].data[j].summary ? articles[i].data[j].summary.substring(0, 100) + "..." : "No summary available for this article. Please click here to read the full article <br>"%>      
                 </p>
               </a>  
             </div>
