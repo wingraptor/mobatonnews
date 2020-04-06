@@ -294,9 +294,9 @@ new CronJob(
                 .attr("srcset")
                 .split(" ")[0];
             }
+            addSiteData(siteData, siteName);
+            articleCount++;
           }
-          addSiteData(siteData, siteName);
-          articleCount++;
         });
       }
     });
