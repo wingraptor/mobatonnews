@@ -147,7 +147,7 @@ const dateStandardiser = {
 
 // Adds Scraped Data to Database
 function addSiteData(siteData, siteName) {
-  Article.insert(siteData, function(error) {
+  Article.create(siteData, function(error) {
     if (error) {
       console.log(
         `Error adding ${siteName} data to articles database: ${error}`
@@ -202,7 +202,7 @@ function archiver(siteData, siteName) {
               );
             }
             // Convert date value to utcDate object
-            Archive.insert(siteData, function(error) {
+            Archive.create(siteData, function(error) {
               if (error) {
                 console.log(`Error adding ${siteName} data to archive`);
               }
@@ -218,7 +218,7 @@ function archiver(siteData, siteName) {
               // Convert date value to utcDate object
               siteData.utcDate = new Date();
             }
-            Archive.insert(siteData, function(error) {
+            Archive.create(siteData, function(error) {
               if (error) {
                 console.log(`Error adding ${siteName} data to archive`);
               }
