@@ -45,6 +45,7 @@ darkModeButton.addEventListener("click", function() {
   }
 });
 
+// Check users preferred them and apply on DOM loading
 document.addEventListener("DOMContentLoaded", event => {
   if (localStorage.getItem("mode") === "dark-mode") {
     document.querySelector("body").classList.remove("light-mode");

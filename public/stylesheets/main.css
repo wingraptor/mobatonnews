@@ -21,7 +21,7 @@
   --main-text-color: #292b2c;
   --alt-text-color: #292b2c;
   --border-style: 1px rgb(200, 200, 200) solid;
-  --alt-highlight-color: mediumpurple;
+  --alt-highlight-color: #0d78e7;
 }
 
 .dark-mode {
@@ -30,7 +30,7 @@
   --main-text-color: #d2d6da;
   --alt-text-color: #fff;
   --border-style: 1px rgb(70, 70, 83) solid;
-  --alt-highlight-color: #578039;
+  --alt-highlight-color: rgba(80, 200, 120, 0.5);
 }
 
 /* Setting Related to Body Element */
@@ -173,6 +173,7 @@ html[data-scroll="3"] .logo {
 
 .filter-text {
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .filter-div {
