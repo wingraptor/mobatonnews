@@ -9,19 +9,18 @@ const weather = require("weather-js"),
   cheerio = require("cheerio"),
   Data = require("./models/dataFeed.js");
 
-
 //Environment variable setup
 require("dotenv").config();
-const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+const databaseUrl =
+  process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
 
 //mongoose config
-mongoose.connect(databaseUrl,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: true
-  });
+mongoose.connect(databaseUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: true
+});
 
 // weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
 //   if (err) console.log(err);
@@ -60,7 +59,6 @@ mongoose.connect(databaseUrl,
 
 // // Nation News
 
-
 /*****************************************************************************
 Functions associated with datastring, date object and associated DB queries
 ******************************************************************************/
@@ -94,31 +92,38 @@ function momentDateFormat(siteID) {
   return dateFormat;
 }
 
-// Convert datestring to UTC format 
+// Convert datestring to UTC format
 const dateStandardiser = {
-  endOfDay: function (date) {
-    return moment.utc(date).endOf("day").format();
+  endOfDay: function(date) {
+    return moment
+      .utc(date)
+      .endOf("day")
+      .format();
   },
-  startOfDay: function (date) {
-    return moment.utc(date).startOf("day").format();
+  startOfDay: function(date) {
+    return moment
+      .utc(date)
+      .startOf("day")
+      .format();
   },
-  utcDate: function (date, siteID) {
-    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
+  utcDate: function(date, siteID) {
+    return moment
+      .utc(date, momentDateFormat(siteID))
+      .startOf("day")
+      .format();
   },
-  localFormat: function (date, siteID) {
+  localFormat: function(date, siteID) {
     if (date) {
       return moment(date, momentDateFormat(siteID)).format("LL");
     } else {
       return "";
     }
   }
-}
-
+};
 
 // console.log(dateStandardiser.utcDate("Sun, 03/08/2020 - 7:47am", 3))
 
-
-// Create a new field (utcDate) using the date field value 
+// Create a new field (utcDate) using the date field value
 // Archive.find({siteID: 10, utcDate:{"$exists": false}, date:{"$exists": true}}, function(err, data){
 //   // Iterate through each document
 //   for (var i = 0; i < data.length; i++) {
@@ -134,7 +139,6 @@ const dateStandardiser = {
 // });
 
 // --------------------------------------------------------------------------------------------------------------------------
-
 
 // Archive.aggregate([
 //   {
@@ -155,9 +159,6 @@ const dateStandardiser = {
 //   console.log(data);
 // });
 
-
-
-
 // console.log(momentDateFormat(0));
 // Converts date to UTC format
 // function dateStandardiser(date,siteID) {
@@ -167,8 +168,6 @@ const dateStandardiser = {
 // console.log(dateStandardiser("February 16, 2019 10:32 pm", 0));
 
 // dateStandardiser("February 16, 2019 10:32 pm",0);
-
-
 
 // Archive.updateMany({ siteID: 5 }, { $set: { date: }})
 
@@ -201,7 +200,6 @@ let articleCount = 0,
   location = "America/Barbados",
   scrapeHours = "5-21",
   scrapeMins = 0;
-
 
 // Convert siteName to a siteID - reverse function is found in main.js
 function siteID(siteName) {
@@ -243,7 +241,6 @@ function siteID(siteName) {
   }
   return siteID;
 }
-
 
 // request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
 //   if (error) {
@@ -297,7 +294,6 @@ function siteID(siteName) {
 //   }
 // });
 
-
 // request.get(dieseloptions, function (error, response, body) {
 //   if (error) {
 //     console.log(`Error getting currency data: ${error}`);
@@ -316,7 +312,6 @@ function siteID(siteName) {
 //     });
 //   }
 // });
-
 
 // Scrape GIS
 // request.get("https://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
@@ -367,7 +362,6 @@ function siteID(siteName) {
 //   }
 // }
 
-
 // Archive.aggregate([
 
 //   // Filter search results based on  start date and end date given by the user
@@ -412,8 +406,62 @@ function siteID(siteName) {
 // }
 // )
 
+// Scrape Barbados Today
+request.get("https://barbadostoday.bb/category/local-news/", function(
+  error,
+  response,
+  body
+) {
+  let siteName = "Barbados Today";
+  if (error) {
+    console.log(`Error scraping ${siteName}: ${error}`);
+  } else {
+    let $ = cheerio.load(body);
 
-
+    //Generate siteData object from scraped data
+    //Iterate through each local news element on page
+    $(".post").each(function(index, element) {
+      let siteData = {};
+      // First element on page has different structure to other elements
+      if (index !== 0) {
+        //Add scraped data to articles document
+        siteData = {
+          link: $(this)
+            .find(".post-thumbnail a")
+            .attr("href"),
+          headline: $(this)
+            .find(".title_caption_wrap .post-header .post-title a")
+            .text(),
+          summary: $(this)
+            .find(".title_caption_wrap")
+            .contents()
+            .last()
+            .text(),
+        };
+        // imgURLs are not consistent on page, below checks to see how image is stored on page and records appropriate src
+        if (
+          $(this)
+            .find(".post-thumbnail a img")
+            .attr("src")
+        ) {
+          siteData.imgURL = $(this)
+            .find(".post-thumbnail a img")
+            .attr("src");
+        } else if (
+          $(this)
+            .find(".post-thumbnail a img")
+            .attr("srcset")
+        ) {
+          siteData.imgURL = $(this)
+            .find(".post-thumbnail a img")
+            .attr("srcset")
+            .split(" ")[0];
+        }
+      }
+      console.log(siteData)
+    });
+  }
+});
 
 // Archive.aggregate([
 
