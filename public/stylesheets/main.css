@@ -78,10 +78,6 @@ button {
   background-color: var(--alt-bg-color);
 }
 
-.element-style-1:hover{
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-}
-
 .flex-style-1 {
   display: flex;
   justify-content: space-between;
@@ -185,6 +181,14 @@ html[data-scroll="3"] .logo {
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
+  transition: box-shadow ease-out 0.3s;
+}
+
+.filter-div:hover{
+  box-shadow: rgba(45, 45, 45, 0.05) 0px 2px 2px,
+  rgba(49, 49, 49, 0.05) 0px 4px 4px, rgba(42, 42, 42, 0.05) 0px 8px 8px,
+  rgba(32, 32, 32, 0.05) 0px 16px 16px, rgba(49, 49, 49, 0.05) 0px 32px 32px,
+  rgba(35, 35, 35, 0.05) 0px 64px 64px;
 }
 
 .filter-link {
@@ -234,11 +238,11 @@ html[data-scroll="3"] #footer-link {
 .main-content {
   /* Arrange lists of articles in a flexible grid */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 0.85fr));
   grid-column-gap: 40px;
   grid-row-gap: 40px;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 65px;
+  padding-right: 65px;
   padding-top: 2rem;
 }
 
@@ -290,22 +294,27 @@ ul {
     "summary summary summary"
     "footer footer footer";
   transition: var(--transition-values);
+  transition-delay: 0.1s;
   position: relative;
   top: 0px;
-  transition: top ease 0.5s;
+  transition: top ease-out 0.3s, box-shadow ease-out 0.3s;
+  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.05);
 }
 
-.article-card:hover{
+.article-card:hover {
   top: -4px;
+  box-shadow: rgba(45, 45, 45, 0.05) 0px 2px 2px,
+    rgba(49, 49, 49, 0.05) 0px 4px 4px, rgba(42, 42, 42, 0.05) 0px 8px 8px,
+    rgba(32, 32, 32, 0.05) 0px 16px 16px, rgba(49, 49, 49, 0.05) 0px 32px 32px,
+    rgba(35, 35, 35, 0.05) 0px 64px 64px;
 }
-
 
 .article-thumbnail-div {
   grid-area: image;
 }
 
-.article-thumbnail-div img{
-    border-radius: 5px;
+.article-thumbnail-div img {
+  border-radius: 5px;
 }
 
 .article-headline-div {
@@ -321,13 +330,15 @@ ul {
   grid-area: summary;
   padding-right: 10px;
   padding-left: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--main-bg-color);
 }
 
 .article-card-footer {
   grid-area: footer;
   font-weight: 700;
   min-height: 2.1em;
-  padding: 0 15px 5px 15px;
+  padding: 15px 15px 5px 15px;
 
   transition: var(--transition-values);
 }
@@ -569,6 +580,8 @@ input#startDate:focus {
 @media all and (max-width: 500px) {
   .main-content {
     grid-template-columns: repeat(auto-fill, 100%);
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   .filter-div {
     flex-direction: column;
