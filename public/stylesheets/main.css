@@ -76,7 +76,10 @@ button {
 .element-style-1 {
   border-radius: 5px;
   background-color: var(--alt-bg-color);
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.element-style-1:hover{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .flex-style-1 {
