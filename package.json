@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "start": "nodemon main.js"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,8 @@
     "twilio": "^3.30.3",
     "twitter": "^1.7.1",
     "weather-js": "^2.0.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
   }
 }

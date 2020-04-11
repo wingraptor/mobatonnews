@@ -1,12 +1,18 @@
 const bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
-  Article = require("./models/scrapedData.js"),
-  Archive = require("./models/archive.js"),
-  Weather = require("./models/weatherData"),
   express = require("express"),
-  moment = require("moment"),
-  Data = require("./models/dataFeed.js"),
+  morgan = require("morgan"),
   ejs = require("ejs");
+
+
+// Import Helper Functions
+const siteInfo = require("./helpers/siteInfo");
+const dateStandardiser = require("./helpers/dateStandardiser");
+
+// Import Routes
+const homeRouter = require("./routes/home");
+const filterRouter = require("./routes/filter");
+const searchRouter = require("./routes/search");
 
 //Environment variable setup
 require("dotenv").config();
@@ -27,363 +33,23 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 // Body Parser Config
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 
-/************************************
-Helper Functions!!!
-************************************/
-// Use siteID to get siteName and URL - reverse function is found in scrape.js
-function siteInfo(siteID) {
-  let siteInfo = {
-    name: "",
-    URL: "",
-    icon: "",
-    count: 10 //UPDATE WHENEVER ADDING A NEW SITE
-  };
-  switch (siteID) {
-    case 0:
-      siteInfo.name = "Barbados Today";
-      siteInfo.URL = "https://barbadostoday.bb/";
-      siteInfo.icon = "newspaper";
-      break;
-    case 1:
-      siteInfo.name = "Nation News";
-      siteInfo.URL = "http://www.nationnews.com/";
-      siteInfo.icon = "newspaper";
-      break;
-    case 2:
-      siteInfo.name = "Loop News";
-      siteInfo.URL = "http://www.loopnewsbarbados.com/";
-      siteInfo.icon = "newspaper";
-      break;
-    case 3:
-      siteInfo.name = "Barbados Advocate";
-      siteInfo.URL = "https://www.barbadosadvocate.com/";
-      siteInfo.icon = "newspaper";
-      break;
-    case 4:
-      siteInfo.name = "Barbados Intl Business Assoc";
-      siteInfo.URL = "http://biba.bb/";
-      siteInfo.icon = "briefcase";
-      break;
-    case 5:
-      siteInfo.name = "Barbados ICT";
-      siteInfo.URL = "http://barbadosict.org/";
-      siteInfo.icon = "laptop";
-      break;
-    case 6:
-      siteInfo.name = "Business Barbados";
-      siteInfo.URL = "http://businessbarbados.com/";
-      siteInfo.icon = "briefcase";
-      break;
-    case 7:
-      siteInfo.name = "Government Info Service";
-      siteInfo.URL = "http://gisbarbados.gov.bb/gis-news/";
-      siteInfo.icon = "bell";
-      break;
-    case 8:
-      siteInfo.name = "CBC News";
-      siteInfo.URL = "https://www.cbc.bb/index.php/news/barbados-news";
-      siteInfo.icon = "newspaper";
-      break;
-    case 9:
-      siteInfo.name = "Barbados Reporter";
-      siteInfo.URL = "https://www.bajanreporter.com/category/new/";
-      siteInfo.icon = "newspaper";
-      break;
-    case 10:
-      siteInfo.name = "The Broad Street Journal";
-      siteInfo.URL = "https://www.broadstjournal.com/";
-      siteInfo.icon = "newspaper";
-      break;
-  }
-  return siteInfo;
-}
 
-// Gives the moment JS format code for the specific date format used by each site
-function momentDateFormat(siteID) {
-  let dateFormat = "";
+// Set Helper Functions as properties of the locals object --> makes these functions available to all routes
+app.locals.siteInfo = siteInfo;
+app.locals.dateStandardiser = dateStandardiser;
 
-  switch (siteID) {
-    case 0:
-      dateFormat = "LLL";
-      break;
-    case 1:
-      dateFormat = "D MMMM YYYY";
-      break;
-    case 2:
-    case 4:
-    case 5:
-    case 7:
-    case 8:
-    case 10:
-      dateFormat = "LL";
-      break;
-    case 3:
-      dateFormat = "ddd, MM/DD/YYYY - H:mma";
-      break;
-    case 9:
-      dateFormat = "MMMM Do, YYYY";
-      break;
-  }
-  return dateFormat;
-}
+// App Routes
+app.use("/", homeRouter);
+app.use("/filter", filterRouter);
+app.use("/search", searchRouter);
 
-// Format dates to UTC format and be able to set either the end of date or start of day
-const dateStandardiser = {
-  endOfDay: function(date) {
-    return moment
-      .utc(date)
-      .endOf("day")
-      .format();
-  },
-  startOfDay: function(date) {
-    return moment
-      .utc(date)
-      .startOf("day")
-      .format();
-  },
-  utcDate: function(date, siteID) {
-    return moment
-      .utc(date, momentDateFormat(siteID))
-      .startOf("day")
-      .format();
-  },
-  localFormat: function(date, siteID) {
-    if (date && siteID) {
-      return moment(date, momentDateFormat(siteID)).format("LL");
-    } else if (date) {
-      return moment(date).format("LL");
-    } else {
-      return "";
-    }
-  }
-};
-
-// Counts number of articles queried from DB
-function articleCounter(queryResult) {
-  let count = 0;
-  // Iterate through artidcles query array
-  queryResult.forEach(document => {
-    // Iterate through articles in the data array
-    document.data.forEach(function() {
-      // Increment count variable for each article in data array
-      count++;
-    });
-  });
-  return count;
-}
-
-/*********************************
-ROUTES
-************************************/
-
-// Home Page Route
-app.get("/", function(req, res) {
-  // Query Articles DB
-  Archive.aggregate(
-    [
-      //Sort articles in each document (Sorts in descendig order )
-      { $sort: { utcDate: -1 } },
-      { $limit: 50 },
-      //group articles according to utcDate
-      { $group: { _id: "$utcDate", data: { $push: "$$ROOT" } } },
-      //sort according utcDate
-      { $sort: { "data.utcDate": -1 } }
-      // { $sort: { _id: 1 } }
-      // { $group: { _id: "$siteID", data: { $push: "$$ROOT" } } },
-      // { $sort: { _id: 1 } },
-      // { $sort: {"utcDate":-1} },
-      // {$project: {
-      //   "data": {
-      //     "$slice": ["$data", 15]
-      //   }
-      // }}
-    ],
-    function(error, articles) {
-      if (error) {
-        console.log("Error quering articles DB on home page" + error);
-      } else {
-        // Get Local Weather To Be Used in Widget
-        Data.find({}, function(error, data) {
-          // Render homepage template
-          res.render("home", {
-            articles: articles,
-            siteInfo: siteInfo,
-            data: data[0],
-            dateStandardiser: dateStandardiser,
-            date: new Date()
-          });
-        });
-      }
-    }
-  );
+//Handle 404 errors
+app.use(function(req,res){
+  res.status(404).render("404");
 });
 
-// "Filtered" Articles Route
-app.get("/filter/:filterValue", function(req, res) {
-  let filterValue = req.params.filterValue,
-    queryFilter;
-
-  if (filterValue === "daily") {
-    queryFilter = {
-      $match: {
-        utcDate: {
-          $gte: new Date(
-            moment()
-              .utc()
-              .startOf("day")
-              .format()
-          ),
-          $lte: new Date(
-            moment()
-              .utc()
-              .endOf("day")
-              .format()
-          )
-        }
-      }
-    };
-  } else if (filterValue === "yesterday") {
-    queryFilter = {
-      $match: {
-        utcDate: {
-          $gte: new Date(
-            moment()
-              .subtract(1, "day")
-              .utc()
-              .startOf("day")
-              .format()
-          ),
-          $lte: new Date(
-            moment()
-              .subtract(1, "day")
-              .utc()
-              .endOf("day")
-              .format()
-          )
-        }
-      }
-    };
-  } else if (filterValue === "tomorrow") {
-    res.render("error");
-    return;
-  } else if (filterValue === "corona") {
-    queryFilter = {
-      $match: {
-        $text: {
-          $search: "corona covid"
-        }
-      }
-    };
-  }
-
-  // Query Articles DB
-  Archive.aggregate(
-    [
-      // Filter articles according to page clicked
-      queryFilter,
-      { $sort: { utcDate: -1 } },
-      { $limit: 50 },
-      //group articles according to siteIDs
-      { $group: { _id: "$utcDate", data: { $push: "$$ROOT" } } },
-      //sort according utcDate
-      { $sort: { "data.utcDate": -1 } }
-    ],
-    function(error, articles) {
-      if (error) {
-        console.log(error + "     Error quering articles DB on home page");
-      } else {
-        // Get Data To Be Used in Widget
-        Data.find({}, function(error, data) {
-          // Render homepage template
-          res.render("home", {
-            articles: articles,
-            siteInfo: siteInfo,
-            data: data[0],
-            dateStandardiser: dateStandardiser
-          });
-        });
-      }
-    }
-  );
-});
-
-// Archive Page Route
-app.get("/archive", function(req, res) {
-  // Query Articles DB and return a list of unique news sites (as the SiteIDs) currently in DB
-  Archive.distinct("siteID", function(error, articles) {
-    if (error) {
-      console.log("Error quering archives DB on archives page");
-    } else {
-      // Render archive template
-      res.render("archive", {
-        articles: articles,
-        siteInfo: siteInfo
-      });
-    }
-  });
-});
-
-// Results Page Route
-app.get("/results", function(req, res) {
-  let siteID = Number(req.query.siteID),
-    startDate = req.query.startDate,
-    // If endDate not given in form, then endDate is today's date
-    endDate = req.query.endDate || new Date().toISOString().slice(0, 10),
-    filter = {
-      $match: {
-        siteID: siteID,
-        utcDate: {
-          $gte: new Date(dateStandardiser.startOfDay(startDate)),
-          $lte: new Date(dateStandardiser.endOfDay(endDate))
-        }
-      }
-    };
-
-  Archive.aggregate(
-    [
-      // Filter search results based on siteID,  start date and end date given by the user
-      filter,
-      // Sort articles according to created date/time, from newest to oldest
-      { $sort: { created_at: 1 } },
-      // Group articles according to created date; note that date has been formated to the YYYYMMDD format
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$utcDate" } },
-          data: { $push: "$$ROOT" }
-        }
-      },
-      { $addFields: { articleCount: { $size: "$data" } } },
-      // Sort articles according to date in ascending order
-      { $sort: { _id: 1 } }
-    ],
-    function(error, articles) {
-      if (error) {
-        console.log(error);
-      } else {
-        // Render results template
-        res.render("results", {
-          siteID: siteID,
-          siteInfo: siteInfo,
-          articles: articles,
-          articleCount: articleCounter(articles),
-          dates: {
-            startDate: startDate,
-            endDate: endDate
-          }
-        });
-      }
-    }
-  );
-});
-
-app.get("*", function(req, res) {
-  // Get Local Weather To Be Used in Widget
-  Weather.find({}, function(error, data) {
-    // Render results template
-    res.render("error");
-  });
-});
 
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
