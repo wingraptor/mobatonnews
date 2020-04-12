@@ -7,11 +7,19 @@ module.exports = {
   startOfDay: function (date) {
     return moment.utc(date).startOf("day").format();
   },
-  utcDate: function (date, siteID) {
-    return moment
-      .utc(date, this.momentDateFormat(siteID))
-      .startOf("day")
-      .format();
+  utcDate: function (date, siteID, offset) {
+    if (offset) {
+      return moment
+        .utc(date, momentDateFormat(siteID))
+        .startOf("day")
+        .utcOffset(-5)
+        .format();
+    } else {
+      return moment
+        .utc(date, this.momentDateFormat(siteID))
+        .startOf("day")
+        .format();
+    }
   },
   localFormat: function (date, siteID) {
     if (date && siteID) {

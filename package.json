@@ -27,11 +27,13 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.5",
     "request": "^2.88.0",
+    "request-promise": "^4.2.5",
     "twilio": "^3.30.3",
     "twitter": "^1.7.1",
     "weather-js": "^2.0.0"
   },
   "devDependencies": {
+    "chalk": "^4.0.0",
     "morgan": "^1.10.0"
   }
 }

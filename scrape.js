@@ -1,14 +1,18 @@
 const mongoose = require("mongoose"),
   weatherAPI = require("weather-js"),
-  Article = require("./models/scrapedData.js"),
   request = require("request"),
   cheerio = require("cheerio"),
   CronJob = require("cron").CronJob,
-  Archive = require("./models/archive.js"),
   Twitter = require("twitter"),
-  Weather = require("./models/weatherData"),
   moment = require("moment"),
-  Data = require("./models/dataFeed.js");
+  chalk = require("chalk"),
+  rp = require("request-promise");
+
+// Import Mongoose Models
+const Article = require("./models/scrapedData.js");
+const Archive = require("./models/archive.js");
+const Weather = require("./models/weatherData");
+const Data = require("./models/dataFeed.js");
 
 //Environment variable setup
 require("dotenv").config();
@@ -21,6 +25,9 @@ mongoose.connect(databaseUrl, {
   useUnifiedTopology: true,
   useCreateIndex: true
 });
+
+// Import Helper Functions
+const dateStandardiser = require("./helpers/dateStandardiser");
 
 //  Twitter Config
 // let client = new Twitter({
@@ -80,71 +87,6 @@ function siteID(siteName) {
   return siteID;
 }
 
-// Gives the moment JS format code for the specific date format used by each site
-function momentDateFormat(siteID) {
-  let dateFormat = "";
-
-  switch (siteID) {
-    case 0:
-      dateFormat = "LLL";
-      break;
-    case 1:
-      dateFormat = "D MMMM YYYY";
-      break;
-    case 2:
-    case 4:
-    case 5:
-    case 7:
-    case 8:
-      dateFormat = "LL";
-      break;
-    case 3:
-      dateFormat = "ddd, MM/DD/YYYY - H:mma";
-      break;
-    case 9:
-      dateFormat = "MMMM Do, YYYY";
-      break;
-  }
-  return dateFormat;
-}
-
-// Convert datestring to UTC format
-const dateStandardiser = {
-  endOfDay: function(date) {
-    return moment
-      .utc(date)
-      .endOf("day")
-      .format();
-  },
-  startOfDay: function(date) {
-    return moment
-      .utc(date)
-      .startOf("day")
-      .format();
-  },
-  utcDate: function(date, siteID, offset) {
-    if (offset) {
-      return moment
-        .utc(date, momentDateFormat(siteID))
-        .startOf("day")
-        .utcOffset(-5)
-        .format();
-    } else {
-      return moment
-        .utc(date, momentDateFormat(siteID))
-        .startOf("day")
-        .format();
-    }
-  },
-  localFormat: function(date, siteID) {
-    if (date) {
-      return moment(date, momentDateFormat(siteID)).format("LL");
-    } else {
-      return "";
-    }
-  }
-};
-
 // Adds Scraped Data to Database
 function addSiteData(siteData, siteName) {
   Article.create(siteData, function(error) {
@@ -156,6 +98,18 @@ function addSiteData(siteData, siteName) {
     // Add site data to the archive DB
     archiver(siteData, siteName);
   });
+}
+
+
+let options = {
+  uri: "",
+  transform: function(body) {
+    return cheerio.load(body)
+  }
+};
+
+const scrapedData = async (options) => {
+
 }
 
 //Adds data to archive collection
@@ -794,62 +748,62 @@ new CronJob(
 );
 
 // Schedule CBC News to be scrapped every hour on minute 20, second 0 between 5am and 8pm inclusive
-new CronJob(
-  `0 20 ${scrapeHours} * * *`,
-  function() {
-    // Scrape CBC
-    request.get(
-      "https://www.cbc.bb/index.php/news/barbados-news?start=6",
-      function(error, response, body) {
-        let siteName = "CBC News";
-        if (error) {
-          console.log(`Error scraping ${siteName}: ${error}`);
-        } else {
-          let $ = cheerio.load(body);
-          // Do not clear Article collection because it contains info about for page 1 of CBC news
-          // Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
-          //   if (error) {
-          //     console.log(`Error deleting ${siteName} data`);
-          //   }
-          // });
-          //Generate siteData object from scraped data
-          $(".catItemView").each(function(index, element) {
-            //Limit news articles to first 16 only
-            let siteData = {
-              link:
-                "https://www.cbc.bb" +
-                $(this)
-                  .find(".catItemHeader a")
-                  .attr("href"),
-              headline: $(this)
-                .find(".catItemHeader a")
-                .text()
-                .replace(/^\s+|\s+$/g, ""),
-              date: $(this)
-                .find(".itemDate  span")
-                .text(),
-              summary: $(this)
-                .find(".catItemIntroText")
-                .text()
-                .replace(/^\s+|\s+$/g, "")
-                .replace("Twitter", ""),
-              imgURL:
-                "https://www.cbc.bb/" +
-                $(this)
-                  .find("img")
-                  .attr("src"),
-              siteID: siteID(siteName)
-            };
-            addSiteData(siteData, siteName);
-          });
-        }
-      }
-    );
-  },
-  null,
-  "start",
-  location
-);
+// new CronJob(
+//   `0 20 ${scrapeHours} * * *`,
+//   function() {
+//     // Scrape CBC
+//     request.get(
+//       "https://www.cbc.bb/index.php/news/barbados-news?start=6",
+//       function(error, response, body) {
+//         let siteName = "CBC News";
+//         if (error) {
+//           console.log(`Error scraping ${siteName}: ${error}`);
+//         } else {
+//           let $ = cheerio.load(body);
+//           // Do not clear Article collection because it contains info about for page 1 of CBC news
+//           // Article.deleteMany({ siteID: siteID(siteName) }, function (error) {
+//           //   if (error) {
+//           //     console.log(`Error deleting ${siteName} data`);
+//           //   }
+//           // });
+//           //Generate siteData object from scraped data
+//           $(".catItemView").each(function(index, element) {
+//             //Limit news articles to first 16 only
+//             let siteData = {
+//               link:
+//                 "https://www.cbc.bb" +
+//                 $(this)
+//                   .find(".catItemHeader a")
+//                   .attr("href"),
+//               headline: $(this)
+//                 .find(".catItemHeader a")
+//                 .text()
+//                 .replace(/^\s+|\s+$/g, ""),
+//               date: $(this)
+//                 .find(".itemDate  span")
+//                 .text(),
+//               summary: $(this)
+//                 .find(".catItemIntroText")
+//                 .text()
+//                 .replace(/^\s+|\s+$/g, "")
+//                 .replace("Twitter", ""),
+//               imgURL:
+//                 "https://www.cbc.bb/" +
+//                 $(this)
+//                   .find("img")
+//                   .attr("src"),
+//               siteID: siteID(siteName)
+//             };
+//             addSiteData(siteData, siteName);
+//           });
+//         }
+//       }
+//     );
+//   },
+//   null,
+//   "start",
+//   location
+// );
 
 // Schedule Barbados Reporter to be scrapped every hour on minute 18
 new CronJob(

@@ -1,207 +1,51 @@
-const weather = require("weather-js"),
+const mongoose = require("mongoose"),
   weatherAPI = require("weather-js"),
-  mongoose = require("mongoose"),
-  moment = require("moment"),
-  Archive = require("./models/archive.js"),
-  Article = require("./models/scrapedData.js"),
-  Weather = require("./models/weatherData"),
   request = require("request"),
   cheerio = require("cheerio"),
-  Data = require("./models/dataFeed.js");
+  CronJob = require("cron").CronJob,
+  Twitter = require("twitter"),
+  moment = require("moment"),
+  chalk = require("chalk"),
+  rp = require("request-promise");
 
+// Import Mongoose Models
+const Article = require("./models/scrapedData.js");
+const Archive = require("./models/archive.js");
+const Weather = require("./models/weatherData");
+const Data = require("./models/dataFeed.js");
 
 //Environment variable setup
 require("dotenv").config();
-const databaseUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+const databaseUrl =
+  process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
 
 //mongoose config
-mongoose.connect(databaseUrl,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: true
-  });
+mongoose.connect(databaseUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 
-// weather.find({ search: 'Bridgetown, Barbados', degreeType: 'C' }, function (err, result) {
-//   if (err) console.log(err);
-//   // Weather.replaceOne({}, {
-//   //   temperature: result[0].current.temperature,
-//   //   skytext: result[0].current.skytext,
-//   //   imageUrl: result[0].current.imageUrl,
-//   //   windspeed: result[0].current.windspeed
-//   // },
-//     // { upsert: true });
+// Import Helper Functions
+const dateStandardiser = require("./helpers/dateStandardiser");
+const scrapeInfo = require("./helpers/scrapeInfo");
 
-//   console.log(result[0].current);
+//  Twitter Config
+// let client = new Twitter({
+//   consumer_key: process.env.TWITTER_CONSUMER_KEY,
+//   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+//   access_token_key : process.env.TWITTER_ACCESS_TOKEN,
+//   access_token_secret: process.env.TWITTER_ACCESS_SECRET
 // });
 
-// Weather.find({ }, function(error, data){
-//   console.log(data);
-// })
-
-// // BBTODAY
-// console.log(moment("February 16, 2019 10:32 pm", "LLL").format("LL"));
-
-// //Nation
-// console.log(moment("17 February 2019", "D MMMM YYYY").format("LL"));
-
-// // Loop News and BB Intl Business Assoc and BB ICT and GIS, CBC and Broadstreet journal
-// console.log(moment("February 15, 2019", "LL").format("LL"));
-
-// //Advocate
-// console.log(moment("Sun, 02/17/2019 - 1:47am", "ddd, MM/DD/YYYY - H:mma").format("LL"));
-
-// //BB reporter
-// console.log(moment("February 15th, 2019", "MMMM Do, YYYY").format("LL"));
-
-// // Broad Street Journal
-// console.log(moment("Jan 16, 2020", ""))
-
-// // Nation News
-
-
-/*****************************************************************************
-Functions associated with datastring, date object and associated DB queries
-******************************************************************************/
-
-// Gives the moment JS format code for the specific date format used by each site
-function momentDateFormat(siteID) {
-  let dateFormat = "";
-
-  switch (siteID) {
-    case 0:
-      dateFormat = "LLL";
-      break;
-    case 1:
-      dateFormat = "D MMMM YYYY";
-      break;
-    case 2:
-    case 4:
-    case 5:
-    case 7:
-    case 8:
-    case 10:
-      dateFormat = "LL";
-      break;
-    case 3:
-      dateFormat = "ddd, MM/DD/YYYY - H:mma";
-      break;
-    case 9:
-      dateFormat = "MMMM Do, YYYY";
-      break;
-  }
-  return dateFormat;
-}
-
-// Convert datestring to UTC format 
-const dateStandardiser = {
-  endOfDay: function (date) {
-    return moment.utc(date).endOf("day").format();
-  },
-  startOfDay: function (date) {
-    return moment.utc(date).startOf("day").format();
-  },
-  utcDate: function (date, siteID) {
-    return moment.utc(date, momentDateFormat(siteID)).startOf("day").format();
-  },
-  localFormat: function (date, siteID) {
-    if (date) {
-      return moment(date, momentDateFormat(siteID)).format("LL");
-    } else {
-      return "";
-    }
-  }
-}
-
-
-// console.log(dateStandardiser.utcDate("Sun, 03/08/2020 - 7:47am", 3))
-
-
-// Create a new field (utcDate) using the date field value 
-// Archive.find({siteID: 10, utcDate:{"$exists": false}, date:{"$exists": true}}, function(err, data){
-//   // Iterate through each document
-//   for (var i = 0; i < data.length; i++) {
-//     // Update the UTCdate field to the UTC formatted date taken from the datestring from the date field
-//     Archive.updateOne({ _id: data[i]._id }, { $set: { utcDate: dateStandardiser.utcDate(data[i].date, data[i].siteID) } }, function (err, result) {
-//       // console.log(result);
-//     })
-//     console.log("Done");
-//   }
-//   // console.log(data[data.length-1]);
-//   // console.log(data);
-//   // console.log(data.length);
-// });
-
-// --------------------------------------------------------------------------------------------------------------------------
-
-
-// Archive.aggregate([
-//   {
-//     $match:{
-//       "headline":"Annual professional registration fees due"
-//     }
-//   },
-//   // {
-//   //   $project:{
-//   //     UTCDate:{
-//   //       $dateFromString:{
-//   //         dateString:"$date"
-//   //       }
-//   //     }
-//   //   }
-//   // }
-// ], function(error, data){
-//   console.log(data);
-// });
-
-
-
-
-// console.log(momentDateFormat(0));
-// Converts date to UTC format
-// function dateStandardiser(date,siteID) {
-//   return moment(date, momentDateFormat(siteID)).format();
-// }
-
-// console.log(dateStandardiser("February 16, 2019 10:32 pm", 0));
-
-// dateStandardiser("February 16, 2019 10:32 pm",0);
-
-
-
-// Archive.updateMany({ siteID: 5 }, { $set: { date: }})
-
-// request.get("https://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
-//   let siteName = "Government Info Service";
-//   if (error) {
-//     console.log(`Error scraping ${siteName}: ${error}`);
-//   } else {
-//     let $ = cheerio.load(body);
-//     //Generate siteData object from scraped data
-//     $(".et_pb_post").each(function (index, element) {
-//       console.log(index);
-//       // //Limit news articles to first 12 only
-//       if (index > 11) {
-//         return;
-//       }
-//       let siteData = {
-//         link: $(this).find(".entry-title a").attr("href")
-//         // headline: $(this).find(".entry-title").text(),
-//         // date: $(this).find(".post-meta .published").text(),
-//         // summary: $(this).find(".post-content p").text(),
-//         // imgURL: $(this).find("img").attr("src"),
-//       }
-//       console.log(siteData);
-//     });
-//   }
-// });
-
+/************************
+Declare Global Variables
+*************************/
+// Count articles as data is scraped from website
 let articleCount = 0,
   location = "America/Barbados",
-  scrapeHours = "5-21",
+  scrapeHours = "*",
   scrapeMins = 0;
-
 
 // Convert siteName to a siteID - reverse function is found in main.js
 function siteID(siteName) {
@@ -244,6 +88,143 @@ function siteID(siteName) {
   return siteID;
 }
 
+// rp("https://barbadostoday.bb/category/local-news/")
+// .then(htmlString =>{
+//   console.log(htmlString);
+// })
+// .catch(err => console.log(err));
+
+
+async function scrapeFunction(scrapeInfo) {
+  let promises = [];
+  let siteID = []
+  // Iterate through scrapeInfo array to access info. needed for scraping
+  for (let i = 0; i <= scrapeInfo.length - 1; i++) {
+    // Allows for parsing of html document returned by request promise using cheerio
+    // scrapeInfo[i].requestOptions.transform = function (body) {
+    //   return cheerio.load(body);
+    // };
+    // Check that site is to be scraped
+    if (scrapeInfo[i].toBeScraped) {
+      try {
+        const $ = await rp(scrapeInfo[i].requestOptions);
+        promises.push($);
+        siteID.push(i);
+      } catch (error) {
+        // Add ability to email error to myself
+        console.log(chalk.bold.red(`Error code: ${error.statusCode} from ${error.options.uri}`));
+      }
+    }
+  }
+  // console.log(chalk.blue.bold(promises.length));
+  // console.log(chalk.green.bold(siteID));
+  // parseFunction(promises, siteID);
+}
+
+async function parseFunction(promises, siteID){
+  for (let i = 0; i <= promises.length - 1; i++){
+    // let $ = cheerio.load(promises[0]);
+    //   $(".post").each(function (index, element) {
+    //     console.log($(this).find(".post-thumbnail a").attr("href"));
+    //   });
+    // console.log(siteID[i]);
+  }
+}
+
+scrapeFunction(scrapeInfo);
+
+// let options = {
+//   uri: "https://barbadostoday.bb/category/local-news/",
+// transform: function (body) {
+//   return cheerio.load(body);
+// },
+// };
+
+// const scrapeFunction = async (options) => {
+//   try {
+//     const $ = await rp(options);
+    // $(".post").each(function (index, element) {
+    //   console.log($(this).find(".post-thumbnail a").attr("href"));
+    // });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// scrapeFunction(options);
+
+// Create a new field (utcDate) using the date field value
+// Archive.find({siteID: 10, utcDate:{"$exists": false}, date:{"$exists": true}}, function(err, data){
+//   // Iterate through each document
+//   for (var i = 0; i < data.length; i++) {
+//     // Update the UTCdate field to the UTC formatted date taken from the datestring from the date field
+//     Archive.updateOne({ _id: data[i]._id }, { $set: { utcDate: dateStandardiser.utcDate(data[i].date, data[i].siteID) } }, function (err, result) {
+//       // console.log(result);
+//     })
+//     console.log("Done");
+//   }
+//   // console.log(data[data.length-1]);
+//   // console.log(data);
+//   // console.log(data.length);
+// });
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+// Archive.aggregate([
+//   {
+//     $match:{
+//       "headline":"Annual professional registration fees due"
+//     }
+//   },
+//   // {
+//   //   $project:{
+//   //     UTCDate:{
+//   //       $dateFromString:{
+//   //         dateString:"$date"
+//   //       }
+//   //     }
+//   //   }
+//   // }
+// ], function(error, data){
+//   console.log(data);
+// });
+
+// console.log(momentDateFormat(0));
+// Converts date to UTC format
+// function dateStandardiser(date,siteID) {
+//   return moment(date, momentDateFormat(siteID)).format();
+// }
+
+// console.log(dateStandardiser("February 16, 2019 10:32 pm", 0));
+
+// dateStandardiser("February 16, 2019 10:32 pm",0);
+
+// Archive.updateMany({ siteID: 5 }, { $set: { date: }})
+
+// request.get("https://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
+//   let siteName = "Government Info Service";
+//   if (error) {
+//     console.log(`Error scraping ${siteName}: ${error}`);
+//   } else {
+//     let $ = cheerio.load(body);
+//     //Generate siteData object from scraped data
+//     $(".et_pb_post").each(function (index, element) {
+//       console.log(index);
+//       // //Limit news articles to first 12 only
+//       if (index > 11) {
+//         return;
+//       }
+//       let siteData = {
+//         link: $(this).find(".entry-title a").attr("href")
+//         // headline: $(this).find(".entry-title").text(),
+//         // date: $(this).find(".post-meta .published").text(),
+//         // summary: $(this).find(".post-content p").text(),
+//         // imgURL: $(this).find("img").attr("src"),
+//       }
+//       console.log(siteData);
+//     });
+//   }
+// });
 
 // request.get(`https://free.currconv.com/api/v7/convert?q=GBP_BBD,CAD_BBD&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`, function (error, response, body) {
 //   if (error) {
@@ -297,7 +278,6 @@ function siteID(siteName) {
 //   }
 // });
 
-
 // request.get(dieseloptions, function (error, response, body) {
 //   if (error) {
 //     console.log(`Error getting currency data: ${error}`);
@@ -316,7 +296,6 @@ function siteID(siteName) {
 //     });
 //   }
 // });
-
 
 // Scrape GIS
 // request.get("https://gisbarbados.gov.bb/top-stories/", function (error, response, body) {
@@ -367,7 +346,6 @@ function siteID(siteName) {
 //   }
 // }
 
-
 // Archive.aggregate([
 
 //   // Filter search results based on  start date and end date given by the user
@@ -411,9 +389,6 @@ function siteID(siteName) {
 //   }
 // }
 // )
-
-
-
 
 // Archive.aggregate([
 
