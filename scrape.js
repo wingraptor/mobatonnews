@@ -169,76 +169,76 @@ async function saveToDb(parsedData) {
 // }, null, "start", location);
 
 // Get Fuel Price Data - once a day
-new CronJob(
-  `0 0 12 * * *`,
-  function () {
-    const gasoptions = {
-      method: "GET",
-      url: "https://api.collectapi.com/gasPrice/otherCountriesGasoline",
-      headers: {
-        "content-type": "application/json",
-        authorization: `apikey ${process.env.FUEL_API_KEY}`,
-      },
-    };
+// new CronJob(
+//   `0 0 12 * * *`,
+//   function () {
+//     const gasoptions = {
+//       method: "GET",
+//       url: "https://api.collectapi.com/gasPrice/otherCountriesGasoline",
+//       headers: {
+//         "content-type": "application/json",
+//         authorization: `apikey ${process.env.FUEL_API_KEY}`,
+//       },
+//     };
 
-    const dieseloptions = {
-      method: "GET",
-      url: "https://api.collectapi.com/gasPrice/otherCountriesDiesel",
-      headers: {
-        "content-type": "application/json",
-        authorization: `apikey ${process.env.FUEL_API_KEY}`,
-      },
-    };
+//     const dieseloptions = {
+//       method: "GET",
+//       url: "https://api.collectapi.com/gasPrice/otherCountriesDiesel",
+//       headers: {
+//         "content-type": "application/json",
+//         authorization: `apikey ${process.env.FUEL_API_KEY}`,
+//       },
+//     };
 
-    // Get Gasoline Prices
-    request.get(gasoptions, function (error, response, body) {
-      if (error) {
-        console.log(`Error getting currency data: ${error}`);
-      } else {
-        let arr = JSON.parse(body).results;
-        arr.forEach((element) => {
-          if (element.country === "Barbados") {
-            Data.findOneAndUpdate(
-              {},
-              {
-                gasPrice: element.price,
-              },
-              function (err, data) {
-                if (err) {
-                  console.log(`Error adding gas price to DB: ${err}`);
-                }
-              }
-            );
-          }
-        });
-      }
-    });
+//     // Get Gasoline Prices
+//     request.get(gasoptions, function (error, response, body) {
+//       if (error) {
+//         console.log(`Error getting currency data: ${error}`);
+//       } else {
+//         let arr = JSON.parse(body).results;
+//         arr.forEach((element) => {
+//           if (element.country === "Barbados") {
+//             Data.findOneAndUpdate(
+//               {},
+//               {
+//                 gasPrice: element.price,
+//               },
+//               function (err, data) {
+//                 if (err) {
+//                   console.log(`Error adding gas price to DB: ${err}`);
+//                 }
+//               }
+//             );
+//           }
+//         });
+//       }
+//     });
 
-    // Get Diesel Prices
-    request.get(dieseloptions, function (error, response, body) {
-      if (error) {
-        console.log(`Error getting currency data: ${error}`);
-      } else {
-        let arr = JSON.parse(body).results;
-        arr.forEach((element) => {
-          if (element.country === "Barbados") {
-            Data.findOneAndUpdate(
-              {},
-              {
-                dieselPrice: element.price,
-              },
-              function (err, data) {
-                if (err) {
-                  console.log(`Error adding diesel price to DB: ${err}`);
-                }
-              }
-            );
-          }
-        });
-      }
-    });
-  },
-  null,
-  "start",
-  location
-);
+//     // Get Diesel Prices
+//     request.get(dieseloptions, function (error, response, body) {
+//       if (error) {
+//         console.log(`Error getting currency data: ${error}`);
+//       } else {
+//         let arr = JSON.parse(body).results;
+//         arr.forEach((element) => {
+//           if (element.country === "Barbados") {
+//             Data.findOneAndUpdate(
+//               {},
+//               {
+//                 dieselPrice: element.price,
+//               },
+//               function (err, data) {
+//                 if (err) {
+//                   console.log(`Error adding diesel price to DB: ${err}`);
+//                 }
+//               }
+//             );
+//           }
+//         });
+//       }
+//     });
+//   },
+//   null,
+//   "start",
+//   location
+// );
