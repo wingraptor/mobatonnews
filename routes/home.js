@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
     // Render homepage template
     res.status(200).render("home", {
       // Object property shorthand for articles:articles
-      articles,
+      articles:articles,
       data: widgetData[0],
     });
   } catch (error) {

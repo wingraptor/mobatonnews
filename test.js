@@ -88,22 +88,20 @@ function siteID(siteName) {
   return siteID;
 }
 
-// rp("https://barbadostoday.bb/category/local-news/")
-// .then(htmlString =>{
-//   console.log(htmlString);
-// })
-// .catch(err => console.log(err));
 
+/****************************************
+Article Scrape, Parse and Save Functions
+******************************************/
 
 async function scrapeFunction(scrapeInfo) {
   let promises = [];
-  let siteID = []
+  let siteID = [];
   // Iterate through scrapeInfo array to access info. needed for scraping
   for (let i = 0; i <= scrapeInfo.length - 1; i++) {
     // Allows for parsing of html document returned by request promise using cheerio
-    // scrapeInfo[i].requestOptions.transform = function (body) {
-    //   return cheerio.load(body);
-    // };
+    scrapeInfo[i].requestOptions.transform = function (body) {
+      return cheerio.load(body);
+    };
     // Check that site is to be scraped
     if (scrapeInfo[i].toBeScraped) {
       try {
@@ -112,26 +110,124 @@ async function scrapeFunction(scrapeInfo) {
         siteID.push(i);
       } catch (error) {
         // Add ability to email error to myself
-        console.log(chalk.bold.red(`Error code: ${error.statusCode} from ${error.options.uri}`));
+        console.log(
+          chalk.bold.yellow(
+            `Error code: ${error.statusCode} from ${error.options.uri}`
+          )
+        );
       }
     }
   }
-  // console.log(chalk.blue.bold(promises.length));
-  // console.log(chalk.green.bold(siteID));
-  // parseFunction(promises, siteID);
+  parseFunction(promises, siteID);
 }
 
-async function parseFunction(promises, siteID){
-  for (let i = 0; i <= promises.length - 1; i++){
-    // let $ = cheerio.load(promises[0]);
-    //   $(".post").each(function (index, element) {
-    //     console.log($(this).find(".post-thumbnail a").attr("href"));
-    //   });
-    // console.log(siteID[i]);
+// Parse website for news article Data
+async function parseFunction(promises, siteID) {
+  for (let i = 0; i <= promises.length - 1; i++) {
+    try {
+      const parsedData = scrapeInfo[siteID[i]].parse(promises[i]);
+      saveToDb(parsedData);
+    } catch {
+      console.log(chalk.bold.red(error));
+    }
   }
 }
 
-scrapeFunction(scrapeInfo);
+// Save Parsed Data to DB
+async function saveToDb(parsedData) {
+  for (var i = 0; i <= parsedData.length - 1; i++) {
+    try {
+      let currentDate = new Date();
+      let date = parsedData[i].date
+        ? parsedData[i].date
+        : currentDate.toISOString();
+      let utcDate = dateStandardiser.utcDate(date, parsedData[i].siteID);
+      const articleData = new Archive({
+        link: parsedData[i].link,
+        headline: parsedData[i].headline,
+        summary: parsedData[i].summary,
+        imgURL: parsedData[i].imgURL,
+        date: date,
+        siteID: parsedData[i].siteID,
+        utcDate: utcDate,
+      });
+      const savedArticleData = await articleData.save();
+    } catch (error) {
+      console.log(chalk.bold.magenta(error));
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+
+/****************************************
+DB Modifying Functions
+******************************************/
+
+// scrapeFunction(scrapeInfo);
+// Remove Whitespace from articles in archive collection
+async function trimFields() {
+  const articles = await Archive.find({ siteID: 9 });
+
+  console.log(chalk.blue(articles.length));
+
+  for (let i = 0; i <= articles.length - 1; i++) {
+    // trimmedSummary = article.summary.trim();
+    // console.log(chalk.magenta(i));
+    try {
+      const trimmedArticles = await Archive.update(
+        { _id: articles[i]._id },
+        {
+          $set: {
+            // summary: articles[i].summary.trim(),
+            headline: articles[i].headline.trim(),
+            date: articles[i].date.trim(),
+          },
+        }
+      );
+    } catch (error) {
+      console.log(chalk.redBright(error));
+    }
+  }
+  console.log(chalk.yellow.bold("DONE"));
+}
+
+// Extract article date from its URL from Barbados Today
+async function addDateToBBToday() {
+  const articles = await Archive.find({ siteID: 0 });
+  for (let i = 0; i <= articles.length - 1; i++) {
+    // trimmedSummary = article.summary.trim();
+    // console.log(chalk.magenta(i));
+    try {
+      const trimmedArticles = await Archive.updateOne(
+        { _id: articles[i]._id },
+        {
+          $set: {
+            date: articles[i].link.substring(25, 35)
+          },
+        }
+      );
+    } catch (error) {
+      console.log(chalk.redBright(error));
+    }
+  }
+  console.log(chalk.yellow.bold("DONE"));
+}
+// -----------------------------------------------------------------------------
+
+// Archive.aggregate([
+//   { "$sort": { _id: 1 } },
+//   {
+//     "$group": {
+//       "_id": "$headline",
+//       "doc": { "$first": "$$ROOT" },
+//     },
+//   },
+//   { "$replaceRoot": { "newRoot": "$doc" } },
+//   { "$out": "archives" },
+// ], function(error, articles){
+//   console.log(articles);
+// });
 
 // let options = {
 //   uri: "https://barbadostoday.bb/category/local-news/",
@@ -143,9 +239,9 @@ scrapeFunction(scrapeInfo);
 // const scrapeFunction = async (options) => {
 //   try {
 //     const $ = await rp(options);
-    // $(".post").each(function (index, element) {
-    //   console.log($(this).find(".post-thumbnail a").attr("href"));
-    // });
+// $(".post").each(function (index, element) {
+//   console.log($(this).find(".post-thumbnail a").attr("href"));
+// });
 //   } catch (error) {
 //     console.log(error);
 //   }

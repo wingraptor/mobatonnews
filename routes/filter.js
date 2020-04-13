@@ -30,9 +30,6 @@ router.get("/:filterValue", async (req, res) => {
         },
       },
     };
-  } else if (filterValue === "tomorrow") {
-    res.render("error");
-    return;
   } else if (filterValue === "corona") {
     queryFilter = {
       $match: {
@@ -59,11 +56,12 @@ router.get("/:filterValue", async (req, res) => {
     // Render homepage template
     res.status(200).render("home", {
       // Object property shorthand for articles:articles
-      articles,
+      articles:articles,
       data: widgetData[0],
     });
   } catch (error) {
     console.log(error);
+    res.status(404).render("404");
   }
 });
 

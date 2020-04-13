@@ -10,7 +10,7 @@ module.exports = {
   utcDate: function (date, siteID, offset) {
     if (offset) {
       return moment
-        .utc(date, momentDateFormat(siteID))
+        .utc(date, this.momentDateFormat(siteID))
         .startOf("day")
         .utcOffset(-5)
         .format();
@@ -22,19 +22,19 @@ module.exports = {
     }
   },
   localFormat: function (date, siteID) {
-    if (date && siteID) {
+    if (date && siteID >= 0) {
       return moment(date, this.momentDateFormat(siteID)).format("LL");
     } else if (date) {
       return moment(date).format("LL");
     } else {
-      return "";
+      throw "Error converting date to local format";
     }
   },
   momentDateFormat: function momentDateFormat(siteID) {
     let dateFormat = "";
     switch (siteID) {
       case 0:
-        dateFormat = "LLL";
+        dateFormat = "YYYY-MM-DD";
         break;
       case 1:
         dateFormat = "D MMMM YYYY";
@@ -52,6 +52,12 @@ module.exports = {
         break;
       case 9:
         dateFormat = "MMMM Do, YYYY";
+        break;
+      case 6:
+        dateFormat = "YYYY-MM-DD";
+        break;
+      default: 
+        throw `No date format found for the specified website - siteID: ${siteID}`;
         break;
     }
     return dateFormat;
