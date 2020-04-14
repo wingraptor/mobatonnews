@@ -49,7 +49,7 @@ let articleCount = 0,
 
 // Scrape at minute 0 and minute 30 every hour
 new CronJob(
-  `0 0,15 ${scrapeHours} * * *`,
+  `0 0,30 ${scrapeHours} * * *`,
   (_) => {
     console.log("Cron job started");
     scrapeFunction(scrapeInfo);
