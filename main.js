@@ -34,7 +34,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 // Body Parser Config
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 
 // Set Helper Functions as properties of the locals object --> makes these functions available to all routes
