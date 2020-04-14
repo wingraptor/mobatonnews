@@ -12,8 +12,8 @@ router.get("/:filterValue", async (req, res) => {
     queryFilter = {
       $match: {
         utcDate: {
-          $gte: new Date(moment().utc().startOf("day").format()),
-          $lte: new Date(moment().utc().endOf("day").format()),
+          $gte: new Date(moment().utc().subtract(4, "hours").startOf("day").format()),
+          $lte: new Date(moment().utc().subtract(4, "hours").endOf("day").format()),
         },
       },
     };
@@ -22,10 +22,10 @@ router.get("/:filterValue", async (req, res) => {
       $match: {
         utcDate: {
           $gte: new Date(
-            moment().subtract(1, "day").utc().startOf("day").format()
+            moment().utc().subtract(4, "hours").subtract(1, "day").startOf("day").format()
           ),
           $lte: new Date(
-            moment().subtract(1, "day").utc().endOf("day").format()
+            moment().utc().subtract(4, "hours").subtract(1, "day").endOf("day").format()
           ),
         },
       },
