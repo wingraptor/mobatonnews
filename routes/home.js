@@ -11,12 +11,12 @@ router.get("/", async (req, res) => {
     // Query DB for articles data
     const articles = await Archive.aggregate([
       //Sort articles in each document (Sorts in descending order )
-      { $sort: { utcDate: -1 } },
+      { $sort: { created_at: -1 } },
       { $limit: 50 },
-      //group articles according to utcDate
-      { $group: { _id: "$utcDate", data: { $push: "$$ROOT" } } },
-      //sort according utcDate
-      { $sort: { "data.utcDate": -1 } },
+      //group articles according to created_at
+      { $group: { _id: "$created_at", data: { $push: "$$ROOT" } } },
+      //sort according created_at
+      { $sort: { "data.created_at": -1 } },
     ]);
 
     // Render homepage template
