@@ -27,6 +27,7 @@
     "express": "^4.16.4",
     "moment": "^2.24.0",
     "mongoose": "^5.7.5",
+    "nodemailer": "^6.4.6",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "twilio": "^3.30.3",

@@ -1,12 +1,13 @@
 const mongoose = require("mongoose"),
-  weatherAPI = require("weather-js"),
-  request = require("request"),
-  cheerio = require("cheerio"),
-  CronJob = require("cron").CronJob,
-  Twitter = require("twitter"),
-  moment = require("moment"),
-  chalk = require("chalk"),
-  rp = require("request-promise");
+      nodemailer = require("nodemailer"),
+      weatherAPI = require("weather-js"),
+      request = require("request"),
+      cheerio = require("cheerio"),
+      CronJob = require("cron").CronJob,
+      Twitter = require("twitter"),
+      moment = require("moment"),
+      chalk = require("chalk"),
+      rp = require("request-promise");
 
 // Import Mongoose Models
 const Article = require("./models/scrapedData.js");
@@ -18,6 +19,7 @@ const Data = require("./models/dataFeed.js");
 require("dotenv").config();
 const databaseUrl =
   process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+const emailPassword = process.env.EMAIL_PASSWORD;
 
 //mongoose config
 mongoose.connect(databaseUrl, {
@@ -41,15 +43,15 @@ const scrapeInfo = require("./helpers/scrapeInfo");
 /************************
 Declare Global Variables
 *************************/
-// Count articles as data is scraped from website
-let articleCount = 0,
-  location = "America/Barbados",
-  scrapeHours = "*",
-  scrapeMins = 0;
+  const location = "America/Barbados",
+    scrapeHours = "*",
+    scrapeMins = "0,30";
+
+let newlyAddedArticles = [];
 
 // Scrape at minute 0 and minute 30 every hour
 new CronJob(
-  `0 0,30 ${scrapeHours} * * *`,
+  `0 ${scrapeMins} ${scrapeHours} * * *`,
   (_) => {
     console.log("Cron job started");
     scrapeFunction(scrapeInfo);
@@ -91,46 +93,102 @@ async function scrapeFunction(scrapeInfo) {
   parseFunction(promises, siteID);
 }
 
-// Parse website for Article Data
+// Parse website for news article Data
 async function parseFunction(promises, siteID) {
+  let parsedData = [];
   for (let i = 0; i <= promises.length - 1; i++) {
     try {
-      const parsedData = scrapeInfo[siteID[i]].parse(promises[i]);
-      // Save to DB
-      saveToDb(parsedData);
+      parsedData.push(scrapeInfo[siteID[i]].parse(promises[i]));
     } catch {
       console.log(chalk.bold.red(error));
     }
   }
+  saveToDb(parsedData);
 }
 
-// Save Parsed Article Data to DB
+// Save Parsed Data to DB
 async function saveToDb(parsedData) {
-  for (var i = 0; i <= parsedData.length - 1; i++) {
-    try {
-      let currentDate = new Date();
-      let date = parsedData[i].date
-        ? parsedData[i].date
-        : currentDate.toISOString();
-      let utcDate = dateStandardiser.utcDate(date, parsedData[i].siteID);
+  for (let i = 0; i <= parsedData.length - 1; i++) {
+    for (let j = 0; j <= parsedData[i].length - 1; j++) {
+      try {
+        let currentDate = new Date();
+        let date = parsedData[i][j].date
+          ? parsedData[i][j].date
+          : currentDate.toISOString();
+        let utcDate = dateStandardiser.utcDate(date, parsedData[i][j].siteID);
 
-      const articleData = new Archive({
-        link: parsedData[i].link,
-        headline: parsedData[i].headline,
-        summary: parsedData[i].summary,
-        imgURL: parsedData[i].imgURL,
-        date: date,
-        siteID: parsedData[i].siteID,
-        utcDate: utcDate,
-      });
+        const articleData = new Archive({
+          link: parsedData[i][j].link,
+          headline: parsedData[i][j].headline,
+          summary: parsedData[i][j].summary,
+          imgURL: parsedData[i][j].imgURL,
+          date: date,
+          siteID: parsedData[i][j].siteID,
+          utcDate: utcDate,
+        });
 
-      const savedArticleData = await articleData.save();
-      console.log(chalk.red.bold(savedArticleData));
-    } catch (error) {
-      if (error && error.code !== 11000) {
-        console.log(chalk.bold.magenta(error));
+        const savedArticleData = await articleData.save();
+        newlyAddedArticles.push(savedArticleData);
+      } catch (error) {
+        if (error && error.code !== 11000) {
+          console.log(chalk.bold.magenta(error));
+        }
       }
     }
+  }
+  emailNewArticles(newlyAddedArticles);
+}
+
+/****************************************
+Emailer Functions
+******************************************/
+
+function emailNewArticles(articles) {
+  const myEmailAddress = "mobatonanews@gmail.com";
+  const currentDateTime = moment().format("llll");
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: myEmailAddress,
+      pass: emailPassword,
+    },
+  });
+
+  const mailOptions = {
+    from: myEmailAddress,
+    to: "akonobrathwaite@gmail.com",
+    subject: `Mobaton-A News: New Article Alert - ${currentDateTime}!`,
+  };
+
+  // Ensure email only sent when articles have been added to DB
+  if (articles.length !== 0) {
+    let emailHeading = `<h3><strong>There are a total of <span style="color:rgba(80, 200, 120, 1);"> ${articles.length} </span> new articles:<strong></h3>`;
+    let emailBody = "<ul>";
+    for (let i = 0; i <= articles.length - 1; i++) {
+      let headline = articles[i].headline || "";
+      let summary = articles[i].summary || "No article summary available";
+      let imgSrc =
+        articles[i].imgURL ||
+        "https://cdn.pixabay.com/photo/2019/04/29/16/11/new-4166472_960_720.png";
+      let link = articles[i].link || "#";
+      emailBody += `<li><h3><a href="${link}">${headline}</a></h3><p>${summary}</p></li>`;
+    }
+
+    // Reset newlyAddedArticles variable
+    newlyAddedArticles = [];
+
+    // Add article html to options for node mailer
+    mailOptions.html = emailHeading + emailBody + "</ul>";
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
   }
 }
 

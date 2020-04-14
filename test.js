@@ -1,4 +1,5 @@
 const mongoose = require("mongoose"),
+  nodemailer = require("nodemailer"),
   weatherAPI = require("weather-js"),
   request = require("request"),
   cheerio = require("cheerio"),
@@ -18,6 +19,7 @@ const Data = require("./models/dataFeed.js");
 require("dotenv").config();
 const databaseUrl =
   process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
+const emailPassword = process.env.EMAIL_PASSWORD;
 
 //mongoose config
 mongoose.connect(databaseUrl, {
@@ -41,11 +43,11 @@ const scrapeInfo = require("./helpers/scrapeInfo");
 /************************
 Declare Global Variables
 *************************/
-// Count articles as data is scraped from website
-let articleCount = 0,
-  location = "America/Barbados",
+const location = "America/Barbados",
   scrapeHours = "*",
   scrapeMins = 0;
+
+let newlyAddedArticles = [];
 
 // Convert siteName to a siteID - reverse function is found in main.js
 function siteID(siteName) {
@@ -88,10 +90,10 @@ function siteID(siteName) {
   return siteID;
 }
 
-
 /****************************************
 Article Scrape, Parse and Save Functions
 ******************************************/
+// scrapeFunction(scrapeInfo);
 
 async function scrapeFunction(scrapeInfo) {
   let promises = [];
@@ -123,41 +125,166 @@ async function scrapeFunction(scrapeInfo) {
 
 // Parse website for news article Data
 async function parseFunction(promises, siteID) {
+  let parsedData = [];
   for (let i = 0; i <= promises.length - 1; i++) {
     try {
-      const parsedData = scrapeInfo[siteID[i]].parse(promises[i]);
-      saveToDb(parsedData);
+      parsedData.push(scrapeInfo[siteID[i]].parse(promises[i]));
     } catch {
       console.log(chalk.bold.red(error));
     }
   }
+  saveToDb(parsedData);
 }
 
 // Save Parsed Data to DB
 async function saveToDb(parsedData) {
-  for (var i = 0; i <= parsedData.length - 1; i++) {
-    try {
-      let currentDate = new Date();
-      let date = parsedData[i].date
-        ? parsedData[i].date
-        : currentDate.toISOString();
-      let utcDate = dateStandardiser.utcDate(date, parsedData[i].siteID);
-      const articleData = new Archive({
-        link: parsedData[i].link,
-        headline: parsedData[i].headline,
-        summary: parsedData[i].summary,
-        imgURL: parsedData[i].imgURL,
-        date: date,
-        siteID: parsedData[i].siteID,
-        utcDate: utcDate,
-      });
-      const savedArticleData = await articleData.save();
-    } catch (error) {
-      console.log(chalk.bold.magenta(error));
+  for (let i = 0; i <= parsedData.length - 1; i++) {
+    for (let j = 0; j <= parsedData[i].length - 1; j++) {
+      try {
+        let currentDate = new Date();
+        let date = parsedData[i][j].date
+          ? parsedData[i][j].date
+          : currentDate.toISOString();
+        let utcDate = dateStandardiser.utcDate(date, parsedData[i][j].siteID);
+
+        const articleData = new Archive({
+          link: parsedData[i][j].link,
+          headline: parsedData[i][j].headline,
+          summary: parsedData[i][j].summary,
+          imgURL: parsedData[i][j].imgURL,
+          date: date,
+          siteID: parsedData[i][j].siteID,
+          utcDate: utcDate,
+        });
+        
+        const savedArticleData = await articleData.save();
+        newlyAddedArticles.push(savedArticleData);
+      } catch (error) {
+        if (error && error.code !== 11000) {
+          console.log(chalk.bold.magenta(error));
+        }
+      }
     }
   }
+  emailNewArticles(newlyAddedArticles);
 }
 
+/****************************************
+Emailer Functions
+******************************************/
+
+let testData = [
+  {
+    _id: "5e94cdc38ddf1a142ce38006",
+    link:
+      "https://barbadostoday.bb/2019/01/19/atherley-names-team-to-speak-for-opposition-on-national-issues/",
+    headline: "COVID-19 fight far from over, says Czar",
+    summary:
+      "Barbados is not yet in control of its fight against COVID-19. That...",
+    imgURL:
+      "https://barbadostoday.bb/wp-content/uploads/2020/04/Screen-Shot-2020-04-13-at-3.22.33-PM-330x206.png",
+    date: "2019/01/19",
+    siteID: 0,
+    utcDate: "2020-04-13T00:00:00.000Z",
+    created_at: "2020-04-13T20:38:28.042Z",
+    updatedAt: "2020-04-13T21:57:57.792Z",
+    __v: 0,
+  },
+  {
+    _id: "5e94cdc38ddf1a142ce38007",
+    link:
+      "http://www.nationnews.com/nationnews/news/244980/workers-job-spain-remains-lockdown",
+    headline: "Some workers back on the job, but Spain remains on lockdown",
+    summary:
+      "MADRID – Spain let some businesses get back to work on Monday, but one of the strictest lockdowns in Europe remained in place despite a slowing in the country’s coronavirus death rate.",
+    imgURL:
+      "https://www.nationnews.com/IMG/904/91904/spain-nurse-dies4405-200x196.jpg",
+    date: "13 April 2020",
+    siteID: 1,
+    utcDate: "2020-04-13T00:00:00.000Z",
+    created_at: "2020-04-13T20:38:28.043Z",
+    updatedAt: "2020-04-13T20:38:28.043Z",
+    __v: 0,
+  },
+  {
+    _id: "5e94cdc38ddf1a142ce38008",
+    link:
+      "http://www.loopnewsbarbados.com/content/covid-19-barbados-buys-additional-20000-test-kits",
+    headline: "COVID-19: Barbados buys an additional 20,000 test kits",
+    summary:
+      "The Government of Barbados has purchased20,000 COVID-19 test kits from the Cayman Islands to increase its stock of the medical suppliesneeded to help combat the pandemic.  Prime Minister Mia Mott...",
+    imgURL:
+      "https://loopnewslive.blob.core.windows.net/liveimage/sites/default/files/2020-04/O6Wvz0sSPE.jpg",
+    date: "April 12, 2020",
+    siteID: 2,
+    utcDate: "2020-04-12T00:00:00.000Z",
+    created_at: "2020-04-13T20:38:28.043Z",
+    updatedAt: "2020-04-13T20:38:28.043Z",
+    __v: 0,
+  },
+  {
+    _id: "5e94cdc38ddf1a142ce38009",
+    link:
+      "https://www.barbadosadvocate.com/news/government-committed-consultation-education",
+    headline: "Government committed to consultation for education",
+    summary:
+      "HIGH level talks will be necessary before government can chart a way forward for education as the COVID-19 pandemic continues to be felt by countries across the world. ...",
+    date: "Mon, 04/13/2020 - 7:06am",
+    siteID: 3,
+    utcDate: "2020-04-13T00:00:00.000Z",
+    created_at: "2020-04-13T20:38:28.043Z",
+    updatedAt: "2020-04-13T20:38:28.043Z",
+    __v: 0,
+  },
+];
+
+function emailNewArticles(articles) {
+  const myEmailAddress = "mobatonanews@gmail.com";
+  const currentDateTime = moment().format("llll");
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: myEmailAddress,
+      pass: emailPassword,
+    },
+  });
+
+  const mailOptions = {
+    from: myEmailAddress,
+    to: "akonobrathwaite@gmail.com",
+    subject: `Mobaton-A News: New Article Alert - ${currentDateTime}!`,
+  };
+
+
+  // Ensure email only sent when articles have been added to DB
+  if (articles.length !== 0) {
+    let emailHeading = `<h3><strong>There are a total of <span style="color:rgba(80, 200, 120, 1);"> ${articles.length} </span> new articles:<strong></h3>`
+    let emailBody = "<ul>";
+    for (let i = 0; i <= articles.length - 1; i++) {
+      let headline = articles[i].headline || "";
+      let summary = articles[i].summary || "No article summary available";
+      let imgSrc = articles[i].imgURL || "https://cdn.pixabay.com/photo/2019/04/29/16/11/new-4166472_960_720.png";
+      let link = articles[i].link || "#";
+      emailBody += `<li><h3><a href="${link}">${headline}</a></h3><p>${summary}</p></li>`;
+    }
+
+    // Reset newlyAddedArticles variable
+    newlyAddedArticles = [];
+
+    // Add article html to options for node mailer
+    mailOptions.html = emailHeading + emailBody + "</ul>";
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  }
+}
 // -------------------------------------------------------------------------
 
 /****************************************
@@ -203,7 +330,7 @@ async function addDateToBBToday() {
         { _id: articles[i]._id },
         {
           $set: {
-            date: articles[i].link.substring(25, 35)
+            date: articles[i].link.substring(25, 35),
           },
         }
       );
