@@ -1,7 +1,7 @@
 const bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   express = require("express"),
-  morgan = require("morgan"),
+  // morgan = require("morgan"),
   chalk = require("chalk"),
   ejs = require("ejs");
 
