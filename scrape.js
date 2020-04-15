@@ -146,6 +146,7 @@ Emailer Functions
 function emailNewArticles(articles) {
   const myEmailAddress = "mobatonanews@gmail.com";
   const currentDateTime = moment().format("llll");
+  const newArticleCount = articles.length; 
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -162,8 +163,9 @@ function emailNewArticles(articles) {
   };
 
   // Ensure email only sent when articles have been added to DB
-  if (articles.length !== 0) {
-    let emailHeading = `<h3><strong>There are a total of <span style="color:rgba(80, 200, 120, 1);"> ${articles.length} </span> new articles:<strong></h3>`;
+  if (newArticleCount !== 0) {
+    let emailHeading = `<h3><strong>There ${newArticleCount > 1 ? "are a total of" : "is" } <span style="color:rgba(80, 200, 120, 1);"> 
+    ${newArticleCount} </span> new ${newArticleCount > 1 ? "articles": "article"}:<strong></h3>`;
     let emailBody = "<ul>";
     for (let i = 0; i <= articles.length - 1; i++) {
       let headline = articles[i].headline || "";
