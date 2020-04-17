@@ -28,8 +28,9 @@ Dark Mode Toggle -- https://flaviocopes.com/dark-mode/
 ***********************************************************/
 
 let darkModeButton = document.querySelector("#dark-mode-button");
+let body = document.querySelector("body");
 
-darkModeButton.addEventListener("click", function() {
+darkModeButton.addEventListener("click", function () {
   localStorage.setItem(
     "mode",
     (localStorage.getItem("mode") || "light-mode") === "light-mode"
@@ -37,30 +38,30 @@ darkModeButton.addEventListener("click", function() {
       : "light-mode"
   );
   if (localStorage.getItem("mode") === "dark-mode") {
-    document.querySelector("#dark-mode-button").classList.remove("fa-sun");
-    document.querySelector("#dark-mode-button").classList.add("fa-moon");
-    document.querySelector("body").classList.remove("light-mode");
-    document.querySelector("body").classList.add("dark-mode");
+    darkModeButton.classList.remove("fa-moon");
+    darkModeButton.classList.add("fa-sun");
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
   } else {
-    document.querySelector("#dark-mode-button").classList.remove("fa-moon");
-    document.querySelector("#dark-mode-button").classList.add("fa-sun");
-    document.querySelector("body").classList.remove("dark-mode");
-    document.querySelector("body").classList.add("light-mode");
+    darkModeButton.classList.remove("fa-sun");
+    darkModeButton.classList.add("fa-moon");
+    body.classList.remove("dark-mode");
+    body.classList.add("light-mode");
   }
 });
 
 // Check users preferred them and apply on DOM loading
-document.addEventListener("DOMContentLoaded", event => {
+document.addEventListener("DOMContentLoaded", (event) => {
   if (localStorage.getItem("mode") === "dark-mode") {
-    document.querySelector("#dark-mode-button").classList.remove("fa-sun");
-    document.querySelector("#dark-mode-button").classList.add("fa-moon");
-    document.querySelector("body").classList.remove("light-mode");
-    document.querySelector("body").classList.add("dark-mode");
+    darkModeButton.classList.add("fa-sun");
+    darkModeButton.classList.remove("fa-moon");
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
   } else {
-    document.querySelector("#dark-mode-button").classList.remove("fa-moon");
-    document.querySelector("#dark-mode-button").classList.add("fa-sun");
-    document.querySelector("body").classList.remove("dark-mode");
-    document.querySelector("body").classList.add("light-mode");
+    darkModeButton.classList.add("fa-moon");
+    darkModeButton.classList.remove("fa-sun");
+    body.classList.remove("dark-mode");
+    body.classList.add("light-mode");
   }
 });
 
@@ -71,38 +72,43 @@ Handle articles that user has read - Indexed DB - https://dev.to/andyhaskell/bui
 // Collect article IDs (this is the id record value from Archives collection) {added to a data attribute to the article card in the ejs template}
 let articleCards = document.querySelectorAll(".article-card");
 // Array.from property used to iterate over nodeList
-let articleIdsFromPage = Array.from(articleCards, function(articleCard) {
+let articleIdsFromPage = Array.from(articleCards, (articleCard) => {
   return articleCard.getAttribute("data-articleID");
 });
 
 // CREATE AND OPEN DB
 let db;
-// Open Database with the name myDatabase (version 1)
-let dbReq = indexedDB.open("myDatabase", 1);
+// Open Database with the name myDatabase (version 2)
+let dbReq = indexedDB.open("myDatabase", 2);
 
 // Listen for the event when the database has been created
-dbReq.onupgradeneeded = function(event) {
+dbReq.onupgradeneeded = (event) => {
   // Set created DB to the db variable
   db = event.target.result;
 
   // Create an object store
-  let articleIdsFromDb = db.createObjectStore("articleIdsFromDb", { keyPath: "id" });
+  let articleIdsFromDb = db.createObjectStore("articleIdsFromDb", {
+    keyPath: "id",
+  });
+  let favoriteArticles = db.createObjectStore("favoriteArticles", {
+    keyPath: "id",
+  });
 };
 
 // If DB was alread created, listen for success opening of DB and store to the db variable
-dbReq.onsuccess = function(event){
+dbReq.onsuccess = (event) => {
   db = event.target.result;
   // Read DB for list of stored articleIDs
-  collectArticleIdsFromDb(db, articleIdsFromPage);
-}
+  readViewedArticlesFromDb(db, articleIdsFromPage);
+  readFavoriteArticlesFromDb(db, articleIdsFromPage);
+};
 
 // Listen for error response from dbReq function
-dbReq.onerror = function(event) {
+dbReq.onerror = (event) =>
   alert("error opening database" + event.target.errorCode);
-}
 
 // Read DB for list of stored articleIDs
-function collectArticleIdsFromDb(db, articleIdsFromPage) {
+function readViewedArticlesFromDb(db, articleIdsFromPage) {
   // Create a transaction
   let tx = db.transaction(["articleIdsFromDb"], "readonly");
   let store = tx.objectStore("articleIdsFromDb");
@@ -111,18 +117,18 @@ function collectArticleIdsFromDb(db, articleIdsFromPage) {
   let matchedArticleIds = [];
 
   // Listen for completion of event (opening tx, acccessing store and opening cursor) and execute corresponding function
-  req.onsuccess = function(event) {
+  req.onsuccess = function (event) {
     // IDBCursor containing the key (index in this case) from the DB as well as the value articleIdFromDb as it's value
     let cursor = event.target.result;
     // console.log(cursor.value.text);
     if (cursor != null) {
       // Compare  articleIdsFromPage to articleIdsFromDb and push to array
-      articleIdsFromPage.forEach(function(articleID) {
+      articleIdsFromPage.forEach((articleID) => {
         if (articleID === cursor.value.id) {
           matchedArticleIds.push(cursor.value.id);
         }
       });
-      // Proceed to next articleIdFromDB key-value pair  
+      // Proceed to next articleIdFromDB key-value pair
       cursor.continue();
     } else {
       // Fade articles from page whose ID match the articleIdsFromDb
@@ -130,45 +136,167 @@ function collectArticleIdsFromDb(db, articleIdsFromPage) {
     }
   };
 
-  req.onerror = function(event) {
+  req.onerror = (event) =>
     alert("error in cursor request " + event.target.errorCode);
-  };
 }
 
 // Take array of articleIDs that are in the DB and hide them from the page
 function fadeArticleCard(articleCardIds) {
-  articleCardIds.forEach(function(id) {
+  articleCardIds.forEach(function (id) {
     let articleCard = document.querySelector(
       `.article-card[data-articleID="${id}"]`
     );
-    // displayToggle(articleCard); 
+    // displayToggle(articleCard);
     articleCard.style.filter = "grayscale(100%)";
   });
 }
 
-// On click of link to article, add the article card ID to the DB
+// **Called from HTML itself** On click of link to article, add the article card ID to the DB
 function submitArticleId(element) {
   // Get data-articleID value from the article-card ancestor of the clicked anchor element
-  let articleIdFromPage = element.closest(".article-card").getAttribute("data-articleID");
-  addArticleId(db, articleIdFromPage);
+  let articleIdFromPage = element
+    .closest(".article-card")
+    .getAttribute("data-articleID");
+  addArticleId(articleIdFromPage);
 }
 
-function addArticleId(db, articleIdFromPage){
+function addArticleId(articleIdFromPage) {
   let tx = db.transaction(["articleIdsFromDb"], "readwrite");
   let store = tx.objectStore("articleIdsFromDb");
 
-  let articleId = {id: articleIdFromPage, timestamp: Date.now()};
+  let articleId = { id: articleIdFromPage, timestamp: Date.now() };
 
-  // Check whtether the articleIdFromPage is already in the DB
-  if (store.get(articleIdFromPage)) store.add(articleId);
+  let req = store.get(articleIdFromPage);
 
-  tx.oncomplete = function(){
-   // On addition of article card ID to DB, fade out the article card
+  req.onsuccess = (event) => {
+    let articleIdObject = event.target.result;
+
+    if (!articleIdObject) {
+      store.add(articleId);
+    } else {
+      return;
+    }
+  };
+
+  // Handle errors getting articles from the database
+  req.onerror = (event) => {
+    alert(
+      "Error adding or removing viewed article from DB" + event.target.errorCode
+    );
+  };
+
+  tx.oncomplete = function () {
+    // On addition of article card ID to DB, fade out the article card
     // --> converted to array to utilise the fadeArticle function
     fadeArticleCard(articleIdFromPage.split(" "));
-  }
+  };
 }
 
+/********************************
+Handle Favorites Article Toggler
+*********************************/
+
+let favoritesButtons = document.querySelectorAll(".favorite-button");
+
+favoritesButtons.forEach((button) => {
+  button.addEventListener("click", (event) => {
+    // Select parent element of the button with the class .article-card-footer
+    let article = button.closest(".article-card-footer");
+    // Grab ID of article from the selected parent element
+    let articleId = article.getAttribute("data-articleid");
+    addArticleToFavorites(articleId, button);
+  });
+});
+
+function addArticleToFavorites(favoriteArticleIdFromPage, button) {
+  let tx = db.transaction(["favoriteArticles"], "readwrite");
+  let store = tx.objectStore("favoriteArticles");
+
+  // Generate favorite article object
+  let favoriteArticleId = {
+    id: favoriteArticleIdFromPage,
+    timestamp: Date.now(),
+  };
+  // Get favorite Article object from DB
+  let req = store.get(favoriteArticleIdFromPage);
+
+  // handle successful query of DB
+  req.onsuccess = (event) => {
+    let articleIdObject = event.target.result;
+    // Check whether article is already in the database
+    if (!articleIdObject) {
+      store.add(favoriteArticleId);
+    } else {
+      store.delete(favoriteArticleIdFromPage);
+    }
+  };
+
+  // Handle errors getting articles from the database
+  req.onerror = (event) => {
+    alert(
+      "Error adding or removing favorite article from DB" +
+        event.target.errorCode
+    );
+  };
+
+  tx.oncomplete = function (event) {
+    // On addition or deletion of favorite article  ID from  DB, change the star button
+    toggleStarButton(button, "sendAlert");
+  };
+}
+
+// Read DB for list of stored articleIDs
+function readFavoriteArticlesFromDb(db, articleIdsFromPage) {
+  // Create a transaction
+  let tx = db.transaction(["favoriteArticles"], "readonly");
+  let store = tx.objectStore("favoriteArticles");
+
+  let req = store.openCursor();
+  let matchedArticleIds = [];
+
+  // Listen for completion of event (opening tx, acccessing store and opening cursor) and execute corresponding function
+  req.onsuccess = function (event) {
+    // IDBCursor containing the key (index in this case) from the DB as well as the value articleIdFromDb as it's value
+    let cursor = event.target.result;
+    // console.log(cursor.value.text);
+    if (cursor != null) {
+      // Compare  articleIdsFromPage to articleIdsFromFavoritesStore and push to array
+      articleIdsFromPage.forEach((articleID) => {
+        if (articleID === cursor.value.id) {
+          let button = document.querySelector(
+            `.article-card-footer[data-articleid="${cursor.value.id}"] .favorite-button`
+          );
+          toggleStarButton(button);
+        }
+      });
+      // Proceed to next articleIdFromDB key-value pair
+      cursor.continue();
+    } else {
+      return;
+    }
+  };
+
+  req.onerror = (event) =>
+    alert("error in cursor request " + event.target.errorCode);
+}
+
+// Toggle between filled star and outline star (saved and not saved article)
+function toggleStarButton(button, sendAlert) {
+  let buttonClasses = button.classList;
+  if (buttonClasses.contains("fas")) {
+    if (sendAlert) {
+      alert("Removed from favorites");
+    }
+    buttonClasses.remove("fas");
+    buttonClasses.add("far");
+  } else {
+    if (sendAlert) {
+      alert("Added to favorites");
+    }
+    buttonClasses.remove("far");
+    buttonClasses.add("fas");
+  }
+}
 /**************************************** 
 Handle Toggler To Show/Hide More Articles  
 ****************************************/
@@ -214,23 +342,23 @@ let shareDivButton = document.querySelectorAll(".share-div-button");
 
 function displayToggle(element, time) {
   if (element.classList.contains("hidden")) {
-    setTimeout(function() {
+    setTimeout(function () {
       element.classList.remove("hidden");
     }, time);
-    setTimeout(function() {
+    setTimeout(function () {
       element.classList.remove("visuallyHidden");
     }, time);
   } else {
     element.classList.add("visuallyHidden");
     element.addEventListener(
       "transitionend",
-      function(e) {
+      function (e) {
         element.classList.add("hidden");
       },
       {
         capture: false,
         once: true,
-        passive: false
+        passive: false,
       }
     );
   }
@@ -239,8 +367,8 @@ function displayToggle(element, time) {
 // Check to make sure button is on page
 if (shareDivButton.length > 0) {
   // Add event listener to all article info. toggler
-  shareDivButton.forEach(function(shareButton) {
-    shareButton.addEventListener("click", function() {
+  shareDivButton.forEach(function (shareButton) {
+    shareButton.addEventListener("click", function () {
       // Get articleID of corresponding article
       let articleID = this.getAttribute("data-articleID"),
         // Select corresponding div containing links to share article
@@ -295,7 +423,7 @@ Change color of Selected Elements On Page Scroll - https://pqina.nl/blog/applyin
 ***********************************************/
 
 // The debounce function receives our function as a parameter
-const debounce = fn => {
+const debounce = (fn) => {
   // This holds the requestAnimationFrame reference, so we can cancel it if we wish
   let frame;
 
@@ -362,7 +490,7 @@ if (endDate) {
   endDate.setAttribute("max", today);
 
   // Ensures that endDate does not come before startDate
-  document.querySelector("#startDate").addEventListener("input", function() {
+  document.querySelector("#startDate").addEventListener("input", function () {
     endDate.setAttribute("min", this.value);
   });
 }
@@ -374,15 +502,17 @@ Forms
 // Date Input styling --> https://codepen.io/alvaromontoro/pen/YzXNjwm
 let dateInputs = document.querySelectorAll("input[type='date']");
 
-dateInputs.forEach(function(input) {
-  input.addEventListener("input", function() {
+dateInputs.forEach(function (input) {
+  input.addEventListener("input", function () {
     if (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.exec(this.value)) {
       const day = parseInt(this.value.substring(8, 12));
       const top = Math.floor((day - 1) / 7) * 5 + 10;
       const left = ((day - 1) % 7) * 5 + 3;
-      this.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23e9a' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/><path d='M${left},${top} ${left +
-        5},${top} ${left + 5},${top + 5} ${left},${top +
-        5}Z' fill='%23d00' /></g></svg>")`;
+      this.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23e9a' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/><path d='M${left},${top} ${
+        left + 5
+      },${top} ${left + 5},${top + 5} ${left},${
+        top + 5
+      }Z' fill='%23d00' /></g></svg>")`;
     } else {
       this.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23aaa' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/></g></svg>")`;
     }
@@ -391,14 +521,16 @@ dateInputs.forEach(function(input) {
 
 // Add coloration to calendar icon in date form when the dates already have a value (On results page)
 if (dateInputs) {
-  dateInputs.forEach(function(input) {
+  dateInputs.forEach(function (input) {
     if (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.exec(input.value)) {
       const day = parseInt(input.value.substring(8, 12));
       const top = Math.floor((day - 1) / 7) * 5 + 10;
       const left = ((day - 1) % 7) * 5 + 3;
-      input.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23e9a' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/><path d='M${left},${top} ${left +
-        5},${top} ${left + 5},${top + 5} ${left},${top +
-        5}Z' fill='%23d00' /></g></svg>")`;
+      input.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23e9a' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/><path d='M${left},${top} ${
+        left + 5
+      },${top} ${left + 5},${top + 5} ${left},${
+        top + 5
+      }Z' fill='%23d00' /></g></svg>")`;
     } else {
       input.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23aaa' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/></g></svg>")`;
     }
@@ -416,9 +548,9 @@ function dateInfo() {
   alert("Date search results may be inaccurate for this site");
 }
 
-function showFilters(element){
+function showFilters(element) {
   let filters = document.querySelectorAll(".filter");
-  filters.forEach(function(filter){
+  filters.forEach(function (filter) {
     displayToggle(filter);
   });
 }

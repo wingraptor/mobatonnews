@@ -1,9 +1,9 @@
 const bodyParser = require("body-parser"),
-  mongoose = require("mongoose"),
-  express = require("express"),
-  // morgan = require("morgan"),
-  chalk = require("chalk"),
-  ejs = require("ejs");
+      mongoose = require("mongoose"),
+      express = require("express"),
+      // morgan = require("morgan"),
+      chalk = require("chalk"),
+      ejs = require("ejs");
 
 
 // Import Helper Functions
@@ -14,6 +14,7 @@ const dateStandardiser = require("./helpers/dateStandardiser");
 const homeRouter = require("./routes/home");
 const filterRouter = require("./routes/filter");
 const searchRouter = require("./routes/search");
+const favoritesRouter = require("./routes/favorites");
 
 //Environment variable setup
 require("dotenv").config();
@@ -33,7 +34,7 @@ app.set("view engine", "ejs");
 // Make express aware of public folder; location of stylesheets, scripts and images
 app.use(express.static(__dirname + "/public"));
 // Body Parser Config
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // app.use(morgan("dev"));
 
 
@@ -45,6 +46,7 @@ app.locals.dateStandardiser = dateStandardiser;
 app.use("/", homeRouter);
 app.use("/filter", filterRouter);
 app.use("/search", searchRouter);
+app.use("/favorites", favoritesRouter);
 
 //Handle 404 errors
 app.use(function(req,res){

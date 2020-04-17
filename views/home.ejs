@@ -1,5 +1,6 @@
+<% include partials/head %>
+<script src="/scripts/main.js" defer></script>
 <% include partials/header %>
-
 
 <main class="home-page-content">
   <section class="widgets-section">
@@ -116,15 +117,11 @@
                 </div>
                 <div class="article-date-div">
                   <span class="article-date">
-                    <%# if (siteInfo(articles[i].data[j].siteID).name === "Barbados Today"){ %>
                     <%# dateStandardiser is a helper function attached to app.locals object%>
-                    <%# dateStandardiser.localFormat(articles[i].data[j].utcDate) %>
-                    <%# } else { %>
                   📅 <%= dateStandardiser.localFormat(articles[i].data[j].date, articles[i].data[j].siteID) %>
-                    <%# }%>
                   </span>
                 </div>
-                <!-- <i class="fas fa-star favorite-button"></i> -->
+                <i class="far fa-star favorite-button"></i>
                 <i class="fas fa-share-alt share-button share-div-button" data-articleID="<%=`${articles[i].data[j]._id}`%>"></i>
               </div>        
                 <!-- Share Div -->

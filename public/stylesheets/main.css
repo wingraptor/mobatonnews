@@ -184,11 +184,11 @@ html[data-scroll="3"] .logo {
   transition: box-shadow ease-out 0.3s;
 }
 
-.filter-div:hover{
+.filter-div:hover {
   box-shadow: rgba(45, 45, 45, 0.05) 0px 2px 2px,
-  rgba(49, 49, 49, 0.05) 0px 4px 4px, rgba(42, 42, 42, 0.05) 0px 8px 8px,
-  rgba(32, 32, 32, 0.05) 0px 16px 16px, rgba(49, 49, 49, 0.05) 0px 32px 32px,
-  rgba(35, 35, 35, 0.05) 0px 64px 64px;
+    rgba(49, 49, 49, 0.05) 0px 4px 4px, rgba(42, 42, 42, 0.05) 0px 8px 8px,
+    rgba(32, 32, 32, 0.05) 0px 16px 16px, rgba(49, 49, 49, 0.05) 0px 32px 32px,
+    rgba(35, 35, 35, 0.05) 0px 64px 64px;
 }
 
 .filter-link {
@@ -245,11 +245,6 @@ html[data-scroll="3"] #footer-link {
   padding-right: 65px;
   padding-top: 2rem;
 }
-
-/*  */
-/* .links-header{
-  font-weight: normal;
-} */
 
 /* Styles header for each list of links --> Nation News */
 .links-header,
@@ -339,13 +334,11 @@ ul {
   font-weight: 700;
   min-height: 2.1em;
   padding: 15px 15px 5px 15px;
-
   transition: var(--transition-values);
 }
 
 .share-button,
-.hide-share-button {
-  /* padding-right: 10px; */
+.hide-share-button, .favorite-button  {
   cursor: pointer;
 }
 .share-button {
@@ -395,7 +388,7 @@ ul {
 }
 
 /* Style Icons */
-.fas {
+.fas, .far {
   color: var(--alt-highlight-color);
   transition: var(--transition-values);
 }
@@ -405,14 +398,16 @@ ul {
 }
 
 /* Changes Color of Icons (fas) on page depending on scroll position */
-html[data-scroll="1"] .fas {
+html[data-scroll="1"] .fas, html[data-scroll="1"] .far {
   color: var(--scroll-color-one);
 }
 html[data-scroll="2"] .fas,
+html[data-scroll="2"] .far,
 html[data-scroll="2"] .logo {
   color: var(--scroll-color-two);
 }
 html[data-scroll="3"] .fas,
+html[data-scroll="3"] .far,
 html[data-scroll="3"] .logo {
   color: var(--scroll-color-three);
 }
