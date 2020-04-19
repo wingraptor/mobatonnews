@@ -78,8 +78,8 @@ let articleIdsFromPage = Array.from(articleCards, (articleCard) => {
 
 // CREATE AND OPEN DB
 let db;
-// Open Database with the name myDatabase (version 2)
-let dbReq = indexedDB.open("myDatabase", 2);
+// Open Database with the name myDatabase (version 1)
+let dbReq = indexedDB.open("myDatabase", 1);
 
 // Listen for the event when the database has been created
 dbReq.onupgradeneeded = (event) => {
@@ -90,9 +90,6 @@ dbReq.onupgradeneeded = (event) => {
   let articleIdsFromDb = db.createObjectStore("articleIdsFromDb", {
     keyPath: "id",
   });
-  let favoriteArticles = db.createObjectStore("favoriteArticles", {
-    keyPath: "id",
-  });
 };
 
 // If DB was alread created, listen for success opening of DB and store to the db variable
@@ -100,7 +97,6 @@ dbReq.onsuccess = (event) => {
   db = event.target.result;
   // Read DB for list of stored articleIDs
   readViewedArticlesFromDb(db, articleIdsFromPage);
-  readFavoriteArticlesFromDb(db, articleIdsFromPage);
 };
 
 // Listen for error response from dbReq function
@@ -193,145 +189,68 @@ function addArticleId(articleIdFromPage) {
 }
 
 /********************************
-Handle Favorites Article Toggler
+Handle Favorites Article
 *********************************/
 
 let favoritesButtons = document.querySelectorAll(".favorite-button");
 
 favoritesButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
+    let obj = {};
     // Select parent element of the button with the class .article-card-footer
     let article = button.closest(".article-card-footer");
     // Grab ID of article from the selected parent element
     let articleId = article.getAttribute("data-articleid");
-    addArticleToFavorites(articleId, button);
+    let fetchMethod;
+
+    // Set Method for fetch request depending on button: fas = saved; far = not saved
+    if (button.classList.contains("fas")){
+      fetchMethod = "DELETE";
+    } else {
+      fetchMethod = "POST";
+    }
+
+    // Send data to backend in the form {articleId: "articleId"}
+    obj.articleId = articleId;
+
+    postFavoriteArticleToDb(obj, fetchMethod)
+      .then((data) => {
+        toggleStarButton(button, data.message);
+    })
+      .catch(error => {
+        console.log(error);
+      });
   });
 });
 
-function addArticleToFavorites(favoriteArticleIdFromPage, button) {
-  let tx = db.transaction(["favoriteArticles"], "readwrite");
-  let store = tx.objectStore("favoriteArticles");
-
-  // Generate favorite article object
-  let favoriteArticleId = {
-    id: favoriteArticleIdFromPage,
-    timestamp: Date.now(),
-  };
-  // Get favorite Article object from DB
-  let req = store.get(favoriteArticleIdFromPage);
-
-  // handle successful query of DB
-  req.onsuccess = (event) => {
-    let articleIdObject = event.target.result;
-    // Check whether article is already in the database
-    if (!articleIdObject) {
-      store.add(favoriteArticleId);
-    } else {
-      store.delete(favoriteArticleIdFromPage);
-    }
-  };
-
-  // Handle errors getting articles from the database
-  req.onerror = (event) => {
-    alert(
-      "Error adding or removing favorite article from DB" +
-        event.target.errorCode
-    );
-  };
-
-  tx.oncomplete = function (event) {
-    // On addition or deletion of favorite article  ID from  DB, change the star button
-    toggleStarButton(button, "sendAlert");
-  };
-}
-
-// Read DB for list of stored articleIDs
-function readFavoriteArticlesFromDb(db, articleIdsFromPage) {
-  // Create a transaction
-  let tx = db.transaction(["favoriteArticles"], "readonly");
-  let store = tx.objectStore("favoriteArticles");
-
-  let req = store.openCursor();
-  let matchedArticleIds = [];
-
-  // Listen for completion of event (opening tx, acccessing store and opening cursor) and execute corresponding function
-  req.onsuccess = function (event) {
-    // IDBCursor containing the key (index in this case) from the DB as well as the value articleIdFromDb as it's value
-    let cursor = event.target.result;
-    // console.log(cursor.value.text);
-    if (cursor != null) {
-      // Compare  articleIdsFromPage to articleIdsFromFavoritesStore and push to array
-      articleIdsFromPage.forEach((articleID) => {
-        if (articleID === cursor.value.id) {
-          let button = document.querySelector(
-            `.article-card-footer[data-articleid="${cursor.value.id}"] .favorite-button`
-          );
-          toggleStarButton(button);
-        }
-      });
-      // Proceed to next articleIdFromDB key-value pair
-      cursor.continue();
-    } else {
-      return;
-    }
-  };
-
-  req.onerror = (event) =>
-    alert("error in cursor request " + event.target.errorCode);
+async function postFavoriteArticleToDb(articleId, fetchMethod) {
+  const response = await fetch("/favorites", {
+    method: fetchMethod,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(articleId),
+  });
+  return response.json();
 }
 
 // Toggle between filled star and outline star (saved and not saved article)
-function toggleStarButton(button, sendAlert) {
+function toggleStarButton(button, alertMessage) {
   let buttonClasses = button.classList;
   if (buttonClasses.contains("fas")) {
-    if (sendAlert) {
-      alert("Removed from favorites");
+    if (alertMessage) {
+      alert(alertMessage);
     }
     buttonClasses.remove("fas");
     buttonClasses.add("far");
   } else {
-    if (sendAlert) {
-      alert("Added to favorites");
+    if (alertMessage) {
+      alert(alertMessage);
     }
     buttonClasses.remove("far");
     buttonClasses.add("fas");
   }
 }
-/**************************************** 
-Handle Toggler To Show/Hide More Articles  
-****************************************/
-
-// //Select all togglers on page
-// let togglers = document.querySelectorAll(".articles-toggler");
-
-// togglers.forEach(function(toggler) {
-//   //Add click event listener to all togglers
-//   toggler.addEventListener("click", function() {
-//     //Select all hidden article items for the specifically clicked toggler
-//     let hiddenItems = document.querySelectorAll(
-//       `.list-hidden--${this.getAttribute("data-website")}`
-//     );
-//     //Make changes for all selected hidden article items
-//     hiddenItems.forEach(function(hiddenItem) {
-//       if (hiddenItem.style.display === "none") {
-//         // Make hidden article item visible
-//         hiddenItem.style.display = "flex";
-//         // Change text of p element (first child of toggler element) to 'less'
-//         toggler.firstChild.textContent = "Less";
-//         //Change down arrow of arrow in toggler element to up
-//         toggler.firstChild.nextSibling.classList = "fas fa-arrow-up";
-//       } else {
-//         // Remove article item from page
-//         hiddenItem.style.display = "none";
-//         // Change text of p element (first child of toggler element) to 'more'
-//         toggler.firstChild.textContent = "More";
-//         //Change down arrow of arrow in toggler element to down
-//         toggler.firstChild.nextSibling.classList = "fas fa-arrow-down";
-//       }
-//     });
-//   });
-// });
-
 /**************************************************
 Handle Toggler To Share Articles
 **************************************************/
@@ -383,38 +302,6 @@ if (shareDivButton.length > 0) {
     });
   }, false);
 }
-
-// // Check to make sure button is on page
-// if (hideShareDivButton.length > 0) {
-//   // Add event listener to all article info. toggler
-//   hideShareDivButton.forEach(function(hideShareDivButton) {
-//     hideShareDivButton.addEventListener("click", function() {
-//       // Get articleID of corresponding article
-//       let articleID = this.getAttribute("data-articleID"),
-//         // Select corresponding div containing links to share article
-//         shareDiv = document.querySelector(
-//           `.article-share-div[data-articleID="${articleID}"]`
-//         ),
-//         footerDiv = document.querySelector(
-//           `.article-card-info-div[data-articleID="${articleID}"]`
-//         );
-//       // Hide Share Div
-//       displayToggle(shareDiv, 1);
-//       // Display Footer Div
-//       displayToggle(footerDiv, 300);
-//     });
-//   }, false);
-// }
-
-/***********************************
-Strike through clicked article links; cannot use a:visited pseudo-class :- http://bit.ly/2D3B6K9 
-************************************/
-// let links = document.querySelectorAll(".headline");
-// links.forEach(function(link) {
-//   link.addEventListener("click", function() {
-//     this.style.textDecoration = "line-through";
-//   });
-// });
 
 /************************************************
 
@@ -554,14 +441,3 @@ function showFilters(element) {
     displayToggle(filter);
   });
 }
-
-/**************************************
-Load Tippy tool tips with custom option
-****************************************/
-// tippy(".headline", {
-//   delay: [400, 200],
-//   duration: [400, 100],
-//   theme: "google",
-//   arrow: true,
-//   arrowType: "round"
-// });

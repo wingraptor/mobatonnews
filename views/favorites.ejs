@@ -4,6 +4,7 @@
 <% include partials/header %>
 
 <main class="home-page-content">
+
   <!-- Website Description -->
   <div class="welcome-text element-style-1">
     <h1 class="page-title">📰 Mobaton-a News</h1>
@@ -11,8 +12,82 @@
     <p>Browse the latest news from several local news sites updated hourly⏰</p>
   </div>
 
+
+
+  <div style="text-align: center;" id="page-name">
+    <h2>Favorite Articles</h2>
+  </div>
+
   <div class="main-content">
 
+        <% for(let i = 0; i < data.length; i++){ %>
+          <div class="article-card element-style-1" data-articleID="<%=`${data[i]._id}`%>">
+            <!-- Article thumbnail -->
+            <div class="article-thumbnail-div">
+              <%# Show image if an image was scrapped  %>
+              <% if (data[i].imgURL && siteInfo(data[i].siteID).name !== "Barbados Reporter"){ %>
+                <a href="<%= data[i].link %>" target="_blank" onclick="submitArticleId(this)">
+                  <img src="<%= data[i].imgURL %>" alt="" class="article-thumbnail">
+                </a>       
+              <% } else { %>
+                <a href="<%= data[i].link %>" target="_blank" onclick="submitArticleId(this)">
+                  <img src="https://cdn.pixabay.com/photo/2019/04/29/16/11/new-4166472_960_720.png" class="article-thumbnail">
+                </a>
+              <% } %>
+            </div>
+            <div class="article-headline-div">
+              <a href="<%= data[i].link %>" target="_blank" onclick="submitArticleId(this)" class="article-headline">
+                <%= data[i].headline %>
+              </a>
+            </div>
+            <!-- Article Summary Information -->
+            <div class="article-summary-div">
+              <a href="<%= data[i].link %>" target="_blank" onclick="submitArticleId(this)">
+                <p>
+                  <%# LIMIT CHARACTER COUNT TO 285, add line break to add space between elements if article summary not given %>
+                  <%- data[i].summary ? data[i].summary.substring(0, 100) + "..." : "No summary available for this article. Please click here to read the full article <br>"%>      
+                </p>
+              </a>  
+            </div>
+            <!-- Article Card Footer Div -->
+            <div class="article-card-footer" data-articleID="<%=`${data[i]._id}`%>">
+              <!-- Article Info. Div -->
+              <div class="article-card-info-div flex-style-1" data-articleID="<%=`${data[i]._id}`%>">
+                <div class="website-name-div">
+                  <span class="website-name">
+                    <a href="<%= siteInfo(data[i].siteID).URL %>" target="_blank">
+                      <img class="website-favicon"
+                        src="https://s2.googleusercontent.com/s2/favicons?domain=<%= siteInfo(data[i].siteID).URL %>" alt="">
+                      <%= siteInfo(data[i].siteID).name %>
+                    </a>
+                  </span>
+                </div>
+                <div class="article-date-div">
+                  <span class="article-date">
+                    <%# dateStandardiser is a helper function attached to app.locals object%>
+                  📅 <%= dateStandardiser.localFormat(data[i].date, data[i].siteID) %>
+                  </span>
+                </div>
+                <i class="fas fa-star favorite-button"></i>
+                <i class="fas fa-share-alt share-button share-div-button" data-articleID="<%=`${data[i]._id}`%>"></i>
+              </div>        
+                <!-- Share Div -->
+              <div class="article-share-div hidden flex-style-1" data-articleID="<%=`${data[i]._id}`%>">
+                <!-- WhatsApp Share Link -->
+                <a href="https://wa.me/?text=<%= data[i].link %>" class="whatsApp-icon">
+                  <i class="fab fa-whatsapp" style="color: #4FCE5D"></i>
+                </a>
+                <!--Facebook Share Link  -->
+                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= data[i].link %>" class="facebook-icon">
+                  <i class="fab fa-facebook" style="color:#3B5998"></i>
+                </a>
+                <i class="fas fa-times hide-share-button share-div-button" data-articleID="<%=`${data[i]._id}`%>"></i>
+              </div>
+            </div>
+          </div>
+      <% } %>
+
+  </div>
 </main>
 
 

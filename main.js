@@ -1,9 +1,11 @@
 const bodyParser = require("body-parser"),
-      mongoose = require("mongoose"),
-      express = require("express"),
-      // morgan = require("morgan"),
-      chalk = require("chalk"),
-      ejs = require("ejs");
+  session = require("express-session"),
+  MongoStore = require("connect-mongo")(session),
+  mongoose = require("mongoose"),
+  express = require("express"),
+  // morgan = require("morgan"),
+  chalk = require("chalk"),
+  ejs = require("ejs");
 
 
 // Import Helper Functions
@@ -37,6 +39,16 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 // app.use(morgan("dev"));
 
+
+// Set up express-session and connect-mongo
+app.use(
+  session({
+    secret: "Shaddam",
+    saveUninitialized: true,
+    resave: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  })
+);
 
 // Set Helper Functions as properties of the locals object --> makes these functions available to all routes
 app.locals.siteInfo = siteInfo;

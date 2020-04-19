@@ -1,5 +1,6 @@
 <% include partials/head %>
 <script src="/scripts/main.js" defer></script>
+<script src="/scripts/favorites.js" defer></script>
 <% include partials/header %>
 
 <main class="home-page-content">
@@ -121,7 +122,8 @@
                   📅 <%= dateStandardiser.localFormat(articles[i].data[j].date, articles[i].data[j].siteID) %>
                   </span>
                 </div>
-                <i class="far fa-star favorite-button"></i>
+                  <%# Checks to see whether user has any favorite articles and then gives appropriate icon:- also used in front end js file%>
+                <i class="<%- favoriteArticleIds.includes(articles[i].data[j]._id) ? "fas" : "far"  %> fa-star favorite-button"></i>
                 <i class="fas fa-share-alt share-button share-div-button" data-articleID="<%=`${articles[i].data[j]._id}`%>"></i>
               </div>        
                 <!-- Share Div -->
