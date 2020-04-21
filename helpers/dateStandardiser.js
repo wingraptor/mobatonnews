@@ -45,6 +45,7 @@ module.exports = {
       case 7:
       case 8:
       case 10:
+      case 100:
         dateFormat = "LL";
         break;
       case 3:
@@ -56,9 +57,8 @@ module.exports = {
       case 6:
         dateFormat = "YYYY-MM-DD";
         break;
-      default: 
+      default:
         throw `No date format found for the specified website - siteID: ${siteID}`;
-        break;
     }
     return dateFormat;
   },

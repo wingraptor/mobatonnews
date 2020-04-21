@@ -62,6 +62,11 @@ module.exports = function siteInfo(siteID) {
       siteInfo.URL = "https://www.broadstjournal.com/";
       siteInfo.icon = "newspaper";
       break;
+    case 100:
+      siteInfo.name = "Mobaton-a News";
+      siteInfo.URL = "https://tranquil-mountain-25146.herokuapp.com/";
+      siteInfo.icon = "newspaper";
+      break;
   }
   return siteInfo;
 };

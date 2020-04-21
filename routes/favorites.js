@@ -4,20 +4,23 @@ const Archive = require("../models/archive");
 const Data = require("../models/dataFeed");
 const User = require("../models/user");
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 // GET ROUTE
 router.get("/", async (req, res) => {
   const sessionId = req.session.id;
+  let articles;
+
   try {
-    const user = await User.findById(sessionId);
+    let user = await User.findById(sessionId);
 
-    if (user) {
-      const favoriteArticles = user.favoriteArticles;
-      const mongooseObjectIds = favoriteArticles.map((article) =>
-        mongoose.Types.ObjectId(article)
-      );
-
-      const articles = await User.aggregate([
+    if (!user) {
+      user = new User({
+        _id: sessionId,
+      });
+      await user.save();
+    } 
+      articles = await User.aggregate([
         { $match: { _id: sessionId } },
         // Join two collections and preserve indexed order of favoriteArticles array in Users collections -
         // https://stackoverflow.com/questions/55033804/aggregate-lookup-does-not-return-elements-original-array-order
@@ -46,11 +49,10 @@ router.get("/", async (req, res) => {
         },
         { $project: { data: 1, _id: 0 } },
       ]);
-      // Render homepage template
-      res.render("favorites", {
-        data: articles[0].data,
-      });
-    }
+    // Render homepage template
+    res.render("favorites", {
+      data: articles[0].data,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -132,7 +134,9 @@ router.delete("/", async (req, res) => {
       const favoriteArticleDeletedCount = deletedArticle.nModified;
       const statusCode = favoriteArticleDeletedCount === 0 ? 204 : 201;
       const message =
-        statusCode === 204 ? "Article Not in Database" : "Article Removed From Favorites";
+        statusCode === 204
+          ? "Article Not in Database"
+          : "Article Removed From Favorites";
 
       // Can send status code in header in the future --> status code 204 sends no information in the body
       res.json({
