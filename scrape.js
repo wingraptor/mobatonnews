@@ -1,19 +1,20 @@
 const mongoose = require("mongoose"),
-      nodemailer = require("nodemailer"),
-      weatherAPI = require("weather-js"),
-      request = require("request"),
-      cheerio = require("cheerio"),
-      CronJob = require("cron").CronJob,
-      Twitter = require("twitter"),
-      moment = require("moment"),
-      chalk = require("chalk"),
-      rp = require("request-promise");
+  nodemailer = require("nodemailer"),
+  weatherAPI = require("weather-js"),
+  request = require("request"),
+  cheerio = require("cheerio"),
+  CronJob = require("cron").CronJob,
+  Twitter = require("twitter"),
+  moment = require("moment"),
+  chalk = require("chalk"),
+  rp = require("request-promise");
 
 // Import Mongoose Models
 const Article = require("./models/scrapedData.js");
 const Archive = require("./models/archive.js");
 const Weather = require("./models/weatherData");
 const Data = require("./models/dataFeed.js");
+const User = require("./models/user");
 
 //Environment variable setup
 require("dotenv").config();
@@ -43,11 +44,9 @@ const scrapeInfo = require("./helpers/scrapeInfo");
 /************************
 Declare Global Variables
 *************************/
-  const location = "America/Barbados",
-    scrapeHours = "*",
-    scrapeMins = "0,30";
-
-let newlyAddedArticles = [];
+const location = "America/Barbados",
+  scrapeHours = "*",
+  scrapeMins = "0,30";
 
 // Scrape at minute 0 and minute 30 every hour
 new CronJob(
@@ -55,6 +54,40 @@ new CronJob(
   (_) => {
     console.log("Cron job started");
     scrapeFunction(scrapeInfo);
+  },
+  null,
+  "start",
+  location
+);
+
+// Send email every 30mins
+new CronJob(
+  `0 "0,30" * * * *`,
+  (_) => {
+    console.log("Email Function Started");
+    getArticles("30min");
+  },
+  null,
+  "start",
+  location
+);
+
+new CronJob(
+  `0 0 0-23 * * *`,
+  (_) => {
+    console.log("Email Function Started");
+    getArticles("1hr");
+  },
+  null,
+  "start",
+  location
+);
+
+new CronJob(
+  `0 0 7 * * *`,
+  (_) => {
+    console.log("Email Function Started");
+    getArticles("daily");
   },
   null,
   "start",
@@ -143,30 +176,65 @@ async function saveToDb(parsedData) {
 Emailer Functions
 ******************************************/
 
-function emailNewArticles(articles) {
-  const myEmailAddress = "mobatonanews@gmail.com";
-  const currentDateTime = moment().format("llll");
-  const newArticleCount = articles.length; 
+async function getArticles(frequency) {
+  if (frequency === "30min") {
+    queryFilter = {
+      $match: {
+        utcDate: {
+          $gte: new Date(moment().utc().subtract(30, "minutes").format()),
+          $lte: new Date(moment().utc().format()),
+        },
+      },
+    };
+  } else if (frequency === "1hr") {
+    queryFilter = {
+      $match: {
+        utcDate: {
+          $gte: new Date(moment().utc().subtract(1, "hours").format()),
+          $lte: new Date(moment().utc().format()),
+        },
+      },
+    };
+  } else if (frequency === "daily") {
+    queryFilter = {
+      $match: {
+        utcDate: {
+          $gte: new Date(
+            moment().utc().subtract(4, "hours").startOf("day").format()
+          ),
+          $lte: new Date(
+            moment().utc().subtract(4, "hours").endOf("day").format()
+          ),
+        },
+      },
+    };
+  }
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: myEmailAddress,
-      pass: emailPassword,
-    },
-  });
+  try {
+    const users = await User.find({ frequency });
+    const emailAddresses = users.map((user) => user.emailAddress);
+    const articles = await Archive.aggregate([queryFilter]);
 
-  const mailOptions = {
-    from: myEmailAddress,
-    to: "akonobrathwaite@gmail.com",
-    subject: `Mobaton-A News: New Article Alert - ${currentDateTime}!`,
-  };
+    generateEmail(articles, emailAddresses);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function generateEmail(articles, emailAddresses) {
+  let newArticleCount = articles.length;
 
   // Ensure email only sent when articles have been added to DB
   if (newArticleCount !== 0) {
-    let emailHeading = `<h3><strong>There ${newArticleCount > 1 ? "are a total of" : "is" } <span style="color:rgba(80, 200, 120, 1);"> 
-    ${newArticleCount} </span> new ${newArticleCount > 1 ? "articles": "article"}:<strong></h3>`;
+    let emailHeading = `<h3><strong>There ${
+      newArticleCount > 1 ? "are a total of" : "is"
+    } <span style="color:rgba(80, 200, 120, 1);"> 
+    ${newArticleCount} </span> new ${
+      newArticleCount > 1 ? "articles" : "article"
+    }:<strong></h3>`;
     let emailBody = "<ul>";
+
+    // Generate email body
     for (let i = 0; i <= articles.length - 1; i++) {
       let headline = articles[i].headline || "";
       let summary = articles[i].summary || "No article summary available";
@@ -174,23 +242,42 @@ function emailNewArticles(articles) {
         articles[i].imgURL ||
         "https://cdn.pixabay.com/photo/2019/04/29/16/11/new-4166472_960_720.png";
       let link = articles[i].link || "#";
+
       emailBody += `<li><h3><a href="${link}">${headline}</a></h3><p>${summary}</p></li>`;
     }
 
-    // Reset newlyAddedArticles variable
-    newlyAddedArticles = [];
+    // Send Email
+    emailNewArticles(emailBody, emailHeading);
+    function emailNewArticles(emailBody, emailHeading) {
+      const myEmailAddress = "mobatonanews@gmail.com";
+      const currentDateTime = moment().format("llll");
 
-    // Add article html to options for node mailer
-    mailOptions.html = emailHeading + emailBody + "</ul>";
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: myEmailAddress,
+          pass: emailPassword,
+        },
+      });
 
-    // Send email
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
+      const mailOptions = {
+        from: myEmailAddress,
+        to: emailAddresses,
+        subject: `Mobaton-A News: New Article Alert - ${currentDateTime}!`,
+      };
+
+      // Add article html to options for node mailer
+      mailOptions.html = emailHeading + emailBody + "</ul>";
+
+      // Send email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
+    }
   }
 }
 
