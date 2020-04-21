@@ -62,7 +62,7 @@ new CronJob(
 
 // Send email every 30mins
 new CronJob(
-  `0 "0,30" * * * *`,
+  `0 0,30 * * * *`,
   (_) => {
     console.log("Email Function Started");
     getArticles("30min");
