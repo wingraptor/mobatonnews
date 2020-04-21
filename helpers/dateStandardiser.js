@@ -23,9 +23,9 @@ module.exports = {
   },
   localFormat: function (date, siteID) {
     if (date && siteID >= 0) {
-      return moment(date, this.momentDateFormat(siteID)).format("LL");
+      return moment(date, this.momentDateFormat(siteID)).format("ll");
     } else if (date) {
-      return moment(date).format("LL");
+      return moment(date).format("ll");
     } else {
       throw "Error converting date to local format";
     }

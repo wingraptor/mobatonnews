@@ -21,7 +21,7 @@
   --main-text-color: #18191b;
   --alt-text-color: #292b2c;
   --border-style: 1px rgb(200, 200, 200) solid;
-  --alt-highlight-color: #0d78e7;
+  --alt-highlight-color: #00a2ed;
 }
 
 .dark-mode {
@@ -458,8 +458,7 @@ html[data-scroll="3"] .logo {
   color: var(--alt-text-color);
   padding-left: 10px;
   padding-right: 10px;
-  /* width: 100px; */
-  /* font-family: inherit; */
+  font-size: 1.1em;
 }
 
 .search-form {
