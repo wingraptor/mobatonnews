@@ -459,6 +459,7 @@ html[data-scroll="3"] .logo {
   padding-left: 10px;
   padding-right: 10px;
   /* width: 100px; */
+  /* font-family: inherit; */
 }
 
 .search-form {
