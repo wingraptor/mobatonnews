@@ -12,11 +12,21 @@ mongoose.connect(databaseUrl, { useNewUrlParser: true });
 
 const userSchema = new mongoose.Schema({
   _id: String,
-  favoriteArticles: [{
-    type: Schema.Types.ObjectId,
-    ref: "Archive",
-    index: true
-  }],
+  favoriteArticles: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Archive",
+      index: true,
+    },
+  ],
+  emailAddress: {
+    type: String,
+    unique: true,
+    index: true,
+    trim: true,
+    lowercase: true,
+  },
+  frequency: String
 });
 
 module.exports = mongoose.model("User", userSchema);

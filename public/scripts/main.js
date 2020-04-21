@@ -282,6 +282,37 @@ function displayToggle(element, time) {
     );
   }
 }
+/***********************
+Handle Subscribe Button
+************************/
+
+// Select subscribe button
+const button = document.querySelector("#subscribe-button");
+
+button.addEventListener("click", event => {
+  const emailAddress = document.querySelector("#email-field").value
+  const frequency = document.querySelector("#subscribe-frequency-field").value; 
+  const obj = {emailAddress, frequency};
+
+  subscribe(obj)
+  .then(response => alert(response.message))
+  .catch(error => alert(error));
+
+});
+
+async function subscribe(obj){
+  const response = await fetch("/subscribe", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  });
+
+
+  return response.json();
+
+}
 
 // Check to make sure button is on page
 if (shareDivButton.length > 0) {

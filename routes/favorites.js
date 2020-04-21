@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Archive = require("../models/archive");
 const Data = require("../models/dataFeed");
-const User = require("../models/User");
+const User = require("../models/user");
 const mongoose = require("mongoose");
 
 // GET ROUTE
@@ -95,8 +95,8 @@ router.post("/", async (req, res) => {
       const message = "Article Added to Favorites";
 
       res.status(statusCode).json({
-        message: message,
-        statusCode: statusCode,
+        message,
+        statusCode,
         dbResponse: savedUser,
         user: "New",
       });
@@ -106,8 +106,8 @@ router.post("/", async (req, res) => {
     const statusCode = 500;
 
     res.status(statusCode).json({
-      message: message,
-      statusCode: statusCode,
+      message,
+      statusCode,
       dbResponse: error,
       error: true,
     });
@@ -136,8 +136,8 @@ router.delete("/", async (req, res) => {
 
       // Can send status code in header in the future --> status code 204 sends no information in the body
       res.json({
-        message: message,
-        statusCode: statusCode,
+        message,
+        statusCode,
         dbResponse: deletedArticle,
       });
     } else if (!user) {
@@ -145,8 +145,8 @@ router.delete("/", async (req, res) => {
       const statusCode = 200;
 
       res.status(statusCode).json({
-        message: message,
-        statusCode: statusCode,
+        message,
+        statusCode,
         dbResponse: user,
         error: true,
       });
@@ -156,9 +156,9 @@ router.delete("/", async (req, res) => {
     const statusCode = 500;
 
     res.json({
-      message: message,
-      stausCode: statusCode,
-      dbResponse: error,
+      message,
+      statusCode,
+      error,
       error: true,
     });
   }

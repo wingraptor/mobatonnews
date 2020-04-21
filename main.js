@@ -7,7 +7,6 @@ const bodyParser = require("body-parser"),
   chalk = require("chalk"),
   ejs = require("ejs");
 
-
 // Import Helper Functions
 const siteInfo = require("./helpers/siteInfo");
 const dateStandardiser = require("./helpers/dateStandardiser");
@@ -17,6 +16,7 @@ const homeRouter = require("./routes/home");
 const filterRouter = require("./routes/filter");
 const searchRouter = require("./routes/search");
 const favoritesRouter = require("./routes/favorites");
+const subscribeRouter = require("./routes/subscribe");
 
 //Environment variable setup
 require("dotenv").config();
@@ -39,7 +39,6 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 // app.use(morgan("dev"));
 
-
 // Set up express-session and connect-mongo
 app.use(
   session({
@@ -59,15 +58,15 @@ app.use("/", homeRouter);
 app.use("/filter", filterRouter);
 app.use("/search", searchRouter);
 app.use("/favorites", favoritesRouter);
+app.use("/subscribe", subscribeRouter);
 
 //Handle 404 errors
-app.use(function(req,res){
+app.use(function (req, res) {
   res.status(404).render("404");
 });
 
-
 //Tell Express to listen for requests on port 3000 (starts local server)
 //Visit localhost:3000 to reach site being served by local server.
-app.listen(port, IP, function() {
+app.listen(port, IP, function () {
   console.log("Server started");
 });

@@ -87,7 +87,7 @@ function siteInfo(siteID) {
     icon: "",
     // Generates command strings from the given site in the form "/siteName"
     command: function () {
-      return `/${siteInfo.name.toLowerCase().split(" ").join("")}`;
+      return `/${this.name.toLowerCase().split(" ").join("")}`;
     }
   };
   switch (siteID) {

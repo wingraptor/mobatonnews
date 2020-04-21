@@ -71,6 +71,19 @@
       </p> -->
     </div>
   </div>
+  
+  <div class="subscribe-div">
+    <div id="subscribe-form" class="element-style-1">
+      <p>Subscribe to Get Email Alerts</p>
+      <input type="email" id="email-field" placeholder="johndoe@gmail.com" required>
+      <select name="frequency" id="subscribe-frequency-field">
+        <option value="30min">Every 30mins</option>
+        <option value="1hr">Hourly</option>
+        <option value="daily">Daily</option>
+      </select>
+      <button id="subscribe-button">Subscribe</button>
+    </div>
+  </div>
 
   <div class="main-content">
     <% for(var i = 0; i < articles.length; i++){ %>

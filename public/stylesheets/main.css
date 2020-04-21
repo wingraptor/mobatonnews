@@ -162,7 +162,7 @@ html[data-scroll="3"] .logo {
   color: var(--alt-highlight-color);
 }
 
-.filter-div-container {
+.filter-div-container,.subscribe-div {
   text-align: center;
 }
 
@@ -182,6 +182,7 @@ html[data-scroll="3"] .logo {
   justify-content: space-between;
   align-items: center;
   transition: box-shadow ease-out 0.3s;
+  margin-bottom: 10px;
 }
 
 .filter-div:hover {
@@ -202,6 +203,23 @@ html[data-scroll="3"] .logo {
 
 .filter-link:hover {
   border-color: var(--alt-text-color);
+}
+
+
+#subscribe-form{
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-content: center; */
+  padding: 10px 50px 20px 50px;
+}
+
+#subscribe-frequency-field{
+  margin-bottom: 15px; 
+}
+
+#email-field {
+  margin-bottom: 20px;
 }
 
 /* Styles For Main Footer */
@@ -432,16 +450,15 @@ html[data-scroll="3"] .logo {
   margin-bottom: 25px;
 }
 
-.search-form button {
-  box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
+.search-form button, #subscribe-form button {
+  box-shadow: 0 0 0 0.07em var(--alt-highlight-color);
   box-sizing: border-box;
   border-radius: 0.1235em;
-  font-size: 1.2em;
   background-color: var(--alt-highlight-color);
   color: var(--alt-text-color);
   padding-left: 10px;
   padding-right: 10px;
-  width: 100px;
+  /* width: 100px; */
 }
 
 .search-form {
@@ -467,11 +484,11 @@ html[data-scroll="3"] .logo {
 
 input,
 select {
-  box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
+  box-shadow: 0 0 0 0.07em var(--alt-highlight-color);
   box-sizing: border-box;
   padding-right: 0.5em;
   border-radius: 0.1235em;
-  font-size: 2em;
+  font-size: 1em;
   height: 50px;
 }
 
@@ -488,7 +505,7 @@ input[type="date"] {
 input:focus,
 select:focus {
   outline: 2px dashed var(--alt-highlight-color);
-  outline-offset: 0.25em;
+  outline-offset: 0.1em;
 }
 
 input#endDate {

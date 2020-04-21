@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Archive = require("../models/archive");
 const Data = require("../models/dataFeed");
-const User = require("../models/User");
+const User = require("../models/user");
 
 // Home Page Route
 router.get("/", async (req, res) => {
