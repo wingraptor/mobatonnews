@@ -48,7 +48,7 @@ const location = "America/Barbados",
   scrapeHours = "*",
   scrapeMins = "0,30";
 
-let newlyAddedArticles = [];
+// let newlyAddedArticles = [];
 
 // Scrape at minute 0 and minute 30 every hour
 new CronJob(
@@ -163,7 +163,7 @@ async function saveToDb(parsedData) {
         });
 
         const savedArticleData = await articleData.save();
-        newlyAddedArticles.push(savedArticleData);
+        // newlyAddedArticles.push(savedArticleData);
       } catch (error) {
         if (error && error.code !== 11000) {
           console.log(chalk.bold.magenta(error));
@@ -171,7 +171,7 @@ async function saveToDb(parsedData) {
       }
     }
   }
-  emailNewArticles(newlyAddedArticles);
+  // emailNewArticles(newlyAddedArticles);
 }
 
 /****************************************
