@@ -48,6 +48,8 @@ const location = "America/Barbados",
   scrapeHours = "*",
   scrapeMins = "0,30";
 
+let newlyAddedArticles = [];
+
 // Scrape at minute 0 and minute 30 every hour
 new CronJob(
   `0 ${scrapeMins} ${scrapeHours} * * *`,
@@ -60,9 +62,9 @@ new CronJob(
   location
 );
 
-// Send email every 30mins
+// Send email every 30mins from 7am t0 9pm
 new CronJob(
-  `0 0,30 * * * *`,
+  `0 0,30 7-21 * * *`,
   (_) => {
     console.log("Email Function Started");
     getArticles("30min");
