@@ -3,17 +3,31 @@ const router = express.Router();
 const Archive = require("../models/archive");
 const Data = require("../models/dataFeed");
 const moment = require("moment");
+const User = require("../models/user");
 
 router.get("/:filterValue", async (req, res) => {
-  let filterValue = req.params.filterValue,
-    queryFilter;
+  const sessionId = req.session.id;
+  let filterValue = req.params.filterValue;
+  let queryFilter;
+
+
+  let favoriteArticleIds = [];
+  const user = await User.findById(sessionId);
+  // If user visited website already
+  if (user) {
+    favoriteArticleIds = user.favoriteArticles;
+  }
 
   if (filterValue === "daily") {
     queryFilter = {
       $match: {
         utcDate: {
-          $gte: new Date(moment().utc().subtract(4, "hours").startOf("day").format()),
-          $lte: new Date(moment().utc().subtract(4, "hours").endOf("day").format()),
+          $gte: new Date(
+            moment().utc().subtract(4, "hours").startOf("day").format()
+          ),
+          $lte: new Date(
+            moment().utc().subtract(4, "hours").endOf("day").format()
+          ),
         },
       },
     };
@@ -22,10 +36,20 @@ router.get("/:filterValue", async (req, res) => {
       $match: {
         utcDate: {
           $gte: new Date(
-            moment().utc().subtract(4, "hours").subtract(1, "day").startOf("day").format()
+            moment()
+              .utc()
+              .subtract(4, "hours")
+              .subtract(1, "day")
+              .startOf("day")
+              .format()
           ),
           $lte: new Date(
-            moment().utc().subtract(4, "hours").subtract(1, "day").endOf("day").format()
+            moment()
+              .utc()
+              .subtract(4, "hours")
+              .subtract(1, "day")
+              .endOf("day")
+              .format()
           ),
         },
       },
@@ -56,8 +80,9 @@ router.get("/:filterValue", async (req, res) => {
     // Render homepage template
     res.status(200).render("home", {
       // Object property shorthand for articles:articles
-      articles:articles,
+      articles,
       data: widgetData[0],
+      favoriteArticleIds,
     });
   } catch (error) {
     console.log(error);
