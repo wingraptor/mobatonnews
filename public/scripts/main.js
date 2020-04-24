@@ -33,35 +33,35 @@ let body = document.querySelector("body");
 darkModeButton.addEventListener("click", function () {
   localStorage.setItem(
     "mode",
-    (localStorage.getItem("mode") || "light-mode") === "light-mode"
-      ? "dark-mode"
-      : "light-mode"
+    (localStorage.getItem("mode") || "dark-mode") === "dark-mode"
+      ? "light-mode"
+      : "dark-mode"
   );
-  if (localStorage.getItem("mode") === "dark-mode") {
-    darkModeButton.classList.remove("fa-moon");
-    darkModeButton.classList.add("fa-sun");
-    body.classList.remove("light-mode");
-    body.classList.add("dark-mode");
-  } else {
+  if (localStorage.getItem("mode") === "light-mode") {
     darkModeButton.classList.remove("fa-sun");
     darkModeButton.classList.add("fa-moon");
     body.classList.remove("dark-mode");
     body.classList.add("light-mode");
+  } else {
+    darkModeButton.classList.remove("fa-moon");
+    darkModeButton.classList.add("fa-sun");
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
   }
 });
 
 // Check users preferred them and apply on DOM loading
 document.addEventListener("DOMContentLoaded", (event) => {
-  if (localStorage.getItem("mode") === "dark-mode") {
-    darkModeButton.classList.add("fa-sun");
-    darkModeButton.classList.remove("fa-moon");
-    body.classList.remove("light-mode");
-    body.classList.add("dark-mode");
-  } else {
+  if (localStorage.getItem("mode") === "light-mode") {
     darkModeButton.classList.add("fa-moon");
     darkModeButton.classList.remove("fa-sun");
     body.classList.remove("dark-mode");
     body.classList.add("light-mode");
+  } else {
+    darkModeButton.classList.add("fa-sun");
+    darkModeButton.classList.remove("fa-moon");
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
   }
 });
 

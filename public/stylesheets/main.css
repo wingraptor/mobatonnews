@@ -1,9 +1,5 @@
 /* CSS Variables */
 :root {
-  --main-bg-color: #1a1c20;
-  --alt-bg-color: #111214;
-  --main-text-color: #d2d6da;
-  --alt-text-color: #fff;
   --main-highlight-color: rgba(80, 200, 120, 0.5);
   --alt-highlight-color: #578039;
   --scroll-color-one: #803957;
