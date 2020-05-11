@@ -6,19 +6,27 @@ const User = require("../models/user");
 const mongoose = require("mongoose");
 const moment = require("moment");
 
+const chalk = require("chalk");
+
 // GET ROUTE
 router.get("/", async (req, res) => {
-  const sessionId = req.session.id;
+  let sessionId = req.session.id;
+  // req.session.views = 0;
+
+  console.log(req.session.views);
   let articles;
+  console.log(chalk.red(sessionId));
 
   try {
     let user = await User.findById(sessionId);
-
+    console.log(chalk.blue(user));
+// zTEK2YHRdu0xUv5c6oVs-rKGkt1UI_2X session ID in DB
     if (!user) {
-      user = new User({
+      console.log("new user");
+      newUser = new User({
         _id: sessionId,
       });
-      await user.save();
+      await newUser.save();
     } 
       articles = await User.aggregate([
         { $match: { _id: sessionId } },
