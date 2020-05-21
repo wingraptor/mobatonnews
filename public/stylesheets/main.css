@@ -21,8 +21,8 @@
 }
 
 .dark-mode {
-  --main-bg-color: #222029;
-  --alt-bg-color: #2b2934;
+  --main-bg-color: #202b38;
+  --alt-bg-color: #161f27;
   --main-text-color: #a3a2ab;
   --alt-text-color: #fff;
   --border-style: 1px rgb(70, 70, 83) solid;
