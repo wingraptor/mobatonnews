@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", function (next) {
   if (this.favoriteArticles.length == 0)
     this.favoriteArticles.push("5e9f42aa82b17e58ca72ca08"); //Default article ID for live DB: 5e9f3edac028d0585a209ce2
-  this.next();
+  next();
 });
 
 module.exports = mongoose.model("User", userSchema);
