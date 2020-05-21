@@ -116,7 +116,7 @@ async function scrapeFunction(scrapeInfo) {
         promises.push($);
         siteID.push(i);
       } catch (error) {
-        // Add ability to email error to myself
+        //TODO: Add ability to email error to myself
         console.log(
           chalk.bold.yellow(
             `Error code: ${error.statusCode} from ${error.options.uri}`
@@ -182,7 +182,7 @@ async function getArticles(frequency) {
   if (frequency === "30min") {
     queryFilter = {
       $match: {
-        utcDate: {
+        created_at: {
           $gte: new Date(moment().utc().subtract(30, "minutes").format()),
           $lte: new Date(moment().utc().format()),
         },
@@ -191,7 +191,7 @@ async function getArticles(frequency) {
   } else if (frequency === "1hr") {
     queryFilter = {
       $match: {
-        utcDate: {
+        created_at: {
           $gte: new Date(moment().utc().subtract(1, "hours").format()),
           $lte: new Date(moment().utc().format()),
         },
@@ -200,7 +200,7 @@ async function getArticles(frequency) {
   } else if (frequency === "daily") {
     queryFilter = {
       $match: {
-        utcDate: {
+        created_at: {
           $gte: new Date(
             moment().utc().subtract(4, "hours").startOf("day").format()
           ),
@@ -214,9 +214,8 @@ async function getArticles(frequency) {
 
   try {
     const users = await User.find({ frequency });
-    const emailAddresses = users.map((user) => user.emailAddress);
-    const articles = await Archive.aggregate([queryFilter]);
-
+    const emailAddresses = users.map((user) => user.email);
+    const articles = await Archive.aggregate([queryFilter])
     generateEmail(articles, emailAddresses);
   } catch (error) {
     console.log(error);
