@@ -45,7 +45,6 @@ https://codeburst.io/es6-destructuring-the-complete-guide-7f842d08b98f
 const {
   PORT = 3000,
   IP = "",
-  // TODO: Change to production
   NODE_ENV = "development",
   DATABASE_URL = "mongodb://localhost:27017/scrapedData",
   SESS_NAME = "sid",
