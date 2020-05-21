@@ -213,7 +213,7 @@ async function getArticles(frequency) {
   }
 
   try {
-    const users = await User.find({ frequency });
+    const users = await User.find({ frequency, subscribed: true });
     const emailAddresses = users.map((user) => user.email);
     const articles = await Archive.aggregate([queryFilter])
     generateEmail(articles, emailAddresses);
