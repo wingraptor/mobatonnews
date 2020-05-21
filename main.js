@@ -126,6 +126,10 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1); // trust first proxy
+}
 /***************************************************************
 Set Helper Functions as properties of the locals object --> makes these functions available to all views
 ****************************************************************/
