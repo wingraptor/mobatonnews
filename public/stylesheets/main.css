@@ -473,7 +473,6 @@ Account Page Styling
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 60%;
 }
 
 .account-information-parent {
@@ -496,9 +495,7 @@ Account Page Styling
 }
 
 #logout-button-div{
-  position: relative;
-  left:45%;
-  right: 55%;
+  text-align: center;
 }
 
 form #submit {
