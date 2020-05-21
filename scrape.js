@@ -215,8 +215,11 @@ async function getArticles(frequency) {
   try {
     const users = await User.find({ frequency, subscribed: true });
     const emailAddresses = users.map((user) => user.email);
-    const articles = await Archive.aggregate([queryFilter])
-    generateEmail(articles, emailAddresses);
+    const articles = await Archive.aggregate([queryFilter]);
+
+    if (emailAddresses.length > 0) {
+      generateEmail(articles, emailAddresses);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -226,7 +229,7 @@ function generateEmail(articles, emailAddresses) {
   let newArticleCount = articles.length;
 
   // Ensure email only sent when articles have been added to DB
-  if (newArticleCount !== 0) {
+  if (newArticleCount > 0) {
     let emailHeading = `<h3><strong>There ${
       newArticleCount > 1 ? "are a total of" : "is"
     } <span style="color:rgba(80, 200, 120, 1);"> 
