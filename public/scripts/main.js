@@ -28,6 +28,7 @@ Dark Mode Toggle -- https://flaviocopes.com/dark-mode/
 ***********************************************************/
 
 let darkModeButton = document.querySelector("#dark-mode-button");
+let themeName = document.querySelector("#theme-mode-name");
 let body = document.querySelector("body");
 
 darkModeButton.addEventListener("click", function () {
@@ -42,11 +43,13 @@ darkModeButton.addEventListener("click", function () {
     darkModeButton.classList.add("fa-moon");
     body.classList.remove("dark-mode");
     body.classList.add("light-mode");
+    themeName.innerHTML = "Dark Mode"; 
   } else {
     darkModeButton.classList.remove("fa-moon");
     darkModeButton.classList.add("fa-sun");
     body.classList.remove("light-mode");
     body.classList.add("dark-mode");
+    themeName.innerHTML = "Light Mode"; 
   }
 });
 
@@ -57,11 +60,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     darkModeButton.classList.remove("fa-sun");
     body.classList.remove("dark-mode");
     body.classList.add("light-mode");
+    themeName.innerHTML = "Dark Mode"; 
   } else {
     darkModeButton.classList.add("fa-sun");
     darkModeButton.classList.remove("fa-moon");
     body.classList.remove("light-mode");
     body.classList.add("dark-mode");
+    themeName.innerHTML = "Light Mode"; 
   }
 });
 
@@ -136,7 +141,7 @@ function readViewedArticlesFromDb(db, articleIdsFromPage) {
     alert("error in cursor request " + event.target.errorCode);
 }
 
-// Take array of articleIDs that are in the DB and hide them from the page
+// Take array of articleIDs that are in the DB and fade them from the page (used to show that article has been read)
 function fadeArticleCard(articleCardIds) {
   articleCardIds.forEach(function (id) {
     let articleCard = document.querySelector(
@@ -204,7 +209,7 @@ favoritesButtons.forEach((button) => {
     let fetchMethod;
 
     // Set Method for fetch request depending on button: fas = saved; far = not saved
-    if (button.classList.contains("fas")){
+    if (button.classList.contains("fas")) {
       fetchMethod = "DELETE";
     } else {
       fetchMethod = "POST";
@@ -215,9 +220,13 @@ favoritesButtons.forEach((button) => {
 
     postFavoriteArticleToDb(obj, fetchMethod)
       .then((data) => {
-        toggleStarButton(button, data.message);
-    })
-      .catch(error => {
+        if (!data.error) {
+          toggleStarButton(button, data.message);
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
         console.log(error);
       });
   });
@@ -289,18 +298,17 @@ Handle Subscribe Button
 // Select subscribe button
 const button = document.querySelector("#subscribe-button");
 
-button.addEventListener("click", event => {
-  const emailAddress = document.querySelector("#email-field").value
-  const frequency = document.querySelector("#subscribe-frequency-field").value; 
-  const obj = {emailAddress, frequency};
+button.addEventListener("click", (event) => {
+  const emailAddress = document.querySelector("#email-field").value;
+  const frequency = document.querySelector("#subscribe-frequency-field").value;
+  const obj = { emailAddress, frequency };
 
   subscribe(obj)
-  .then(response => alert(response.message))
-  .catch(error => alert(error));
-
+    .then((response) => alert(response.message))
+    .catch((error) => alert(error));
 });
 
-async function subscribe(obj){
+async function subscribe(obj) {
   const response = await fetch("/subscribe", {
     method: "POST",
     headers: {
@@ -309,9 +317,7 @@ async function subscribe(obj){
     body: JSON.stringify(obj),
   });
 
-
   return response.json();
-
 }
 
 // Check to make sure button is on page

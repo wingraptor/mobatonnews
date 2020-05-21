@@ -4,14 +4,14 @@ const Archive = require("./archive");
 
 //Environment variable setup
 require("dotenv").config();
-const databaseUrl =
-  process.env.DATABASE_URL || "mongodb://localhost:27017/scrapedData";
 
-//mongoose config
-mongoose.connect(databaseUrl, { useNewUrlParser: true });
-
+// TODO: Modify indices for emailAddress field on mlab.
 const userSchema = new mongoose.Schema({
-  _id: String,
+  email: {
+    type: String,
+    unique: true,
+    index: true,
+  },
   favoriteArticles: [
     {
       type: Schema.Types.ObjectId,
@@ -19,20 +19,20 @@ const userSchema = new mongoose.Schema({
       index: true,
     },
   ],
-  emailAddress: {
-    type: String,
-    unique: true,
-    index: true,
-    trim: true,
-    lowercase: true,
+  subscribed: {
+    type: Boolean,
   },
-  frequency: String
+  frequency: { 
+    type: String, 
+    default: "30min" 
+  },
 });
 
-// Sets the initial value of the favorite articles array to the article that describes adding/saving articles to favorites
+// Sets the initial value of the favorite articles array to the article that describes how to add/save articles to favorites
 userSchema.pre("save", function (next) {
-  if (this.favoriteArticles.length == 0) this.favoriteArticles.push("5e9f42aa82b17e58ca72ca08"); //Default article ID for live DB: 5e9f3edac028d0585a209ce2
-  next();
+  if (this.favoriteArticles.length == 0)
+    this.favoriteArticles.push("5e9f42aa82b17e58ca72ca08"); //Default article ID for live DB: 5e9f3edac028d0585a209ce2
+  this.next();
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -1,41 +1,74 @@
-  <body>
-    <header class="main-header flex-style-1">
-      <div class="header-links">
-        <a href="/">
-          <?xml version="1.0" encoding="UTF-8"?>
-          <svg height="30px" enable-background="new 0 0 494 557" version="1.1" viewBox="0 0 494 557"
-            xmlns="http://www.w3.org/2000/svg">
-            <switch>
-              <foreignObject width="1" height="1" requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/">
-              </foreignObject>
-              <g>
-                <path class="logo" ; fill-opacity: .5"
-                  d="m326.22 405.72h-53.01v122.82h-43.468v-122.82h-60.431c-46.649-260.81-144.19-346.68-144.19-346.68 65.732 8.482 125.1 77.395 125.1 77.395l-36.046 2.121c27.802 33.242 70.377 168.54 83.329 220.52h32.232v-223.09l-49.122-0.257 68.559-105.31 66.439 106.02-42.408-0.222v222.86h29.431c15.216-61.062 43.307-178.19 78.708-220.52l-36.046-2.121s59.371-68.913 125.1-77.395c0 1e-3 -97.538 85.877-144.19 346.69z"
-                  clip-rule="evenodd" fill-rule="evenodd" />
-              </g>
-            </switch>
-          </svg>
-          <!-- <img src="/images/logo.svg" alt="" height="30px" class="test"> -->
-          <h3>
-            MOBATON-A NEWS
-          </h3>
-        </a>
-        <!-- <a href="/archive">
+<body>
+  <header class="main-header">
+    <!-- LOGO -->
+    <div class="logo">
+      <a href="/">
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg
+          height="30px"
+          enable-background="new 0 0 494 557"
+          version="1.1"
+          viewBox="0 0 494 557"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <switch>
+            <foreignObject
+              width="1"
+              height="1"
+              requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
+            >
+            </foreignObject>
+            <g>
+              <path class="logo" ; fill-opacity: .5" d="m326.22
+              405.72h-53.01v122.82h-43.468v-122.82h-60.431c-46.649-260.81-144.19-346.68-144.19-346.68
+              65.732 8.482 125.1 77.395 125.1 77.395l-36.046 2.121c27.802 33.242
+              70.377 168.54 83.329 220.52h32.232v-223.09l-49.122-0.257
+              68.559-105.31 66.439
+              106.02-42.408-0.222v222.86h29.431c15.216-61.062 43.307-178.19
+              78.708-220.52l-36.046-2.121s59.371-68.913 125.1-77.395c0 1e-3
+              -97.538 85.877-144.19 346.69z" clip-rule="evenodd"
+              fill-rule="evenodd" />
+            </g>
+          </switch>
+        </svg>
+        <!-- <img src="/images/logo.svg" alt="" height="30px" class="test"> -->
+        <h3 id="site-name">
+          MOBATON-A NEWS
+        </h3>
+      </a>
+    </div>
+    <!-- Nav Links -->
+    <div class="nav-links">
+      <!-- <a href="/archive">
           <h4 class="header-link">
             Search
           </h4>
         </a> -->
-        <a href="/favorites">
-          <h4 class="header-link" id="favorites">
-            Favorites
-          </h4>
-        </a>
-
-      </div>
-      <div class="dark-mode-div">
-        <i class="fas" id="dark-mode-button"></i>
-      </div>
-<!-- 
+      <a href="/favorites">
+        <h4 class="header-link" id="favorites">
+          ⭐Favorites
+        </h4>
+      </a>
+      <% if (!isAuthenticated) { %>
+      <a href="/login">
+        <h4 class="header-link">
+          🖥️Login
+        </h4>
+      </a>
+      <% } else { %>
+      <a href="/account/preferences">
+        <h4 class="header-link">
+          ⚙️Account
+        </h4>
+      </a>
+      <% }%>
+    </div>
+      <!-- Dark Mode Toggle -->
+    <div class="dark-mode-div">
+      <i class="fas" id="dark-mode-button">
+      </i>
+    </div>
+    <!-- 
       <div class="weather-widget">
           <span class="weather-temp">
             <%# weather.temperature %><span>&#176;C</span>
@@ -45,4 +78,5 @@
             <img src="<%#weather.imageUrl%>" alt="">
           </span>
       </div>  -->
-    </header>
+  </header>
+

@@ -4,15 +4,16 @@ const Archive = require("../models/archive");
 const Data = require("../models/dataFeed");
 const moment = require("moment");
 const User = require("../models/user");
+const auth = require("../middleware/authMiddleware");
 
-router.get("/:filterValue", async (req, res) => {
-  const sessionId = req.session.id;
+router.get("/:filterValue",auth, async (req, res) => {
+  const email = req.user.emails[0].value;
   let filterValue = req.params.filterValue;
   let queryFilter;
 
 
   let favoriteArticleIds = [];
-  const user = await User.findById(sessionId);
+  const user = await User.findOne({ email });
   // If user visited website already
   if (user) {
     favoriteArticleIds = user.favoriteArticles;

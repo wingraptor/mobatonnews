@@ -1,0 +1,16 @@
+<% include partials/head %>
+<script src="/scripts/main.js" defer></script>
+<script src="/scripts/favorites.js" defer></script>
+<% include partials/header %>
+
+  <div class="register-form-div">
+    <h1><%= page[0].toUpperCase() + page.slice(1); %></h1>
+    <form class="register-form" action="/auth/<%= page %>" method="POST">
+      <input type="text" id="name" class="form-input" placeholder="Name" name="name" required>
+      <input type="email" id="email" class="form-input" placeholder="Email" name="email" required/>
+      <input type="password" id="password" class="form-input" placeholder="Password" name="password" required />
+      <input type="submit" id="submit" />
+    </form>
+  </div>
+
+<% include partials/footer %>

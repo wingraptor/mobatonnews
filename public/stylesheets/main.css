@@ -29,6 +29,11 @@
   --alt-highlight-color: rgba(80, 200, 120, 0.5);
 }
 
+html,
+body {
+  height: 100%;
+}
+
 /* Setting Related to Body Element */
 body {
   color: var(--main-text-color);
@@ -38,18 +43,6 @@ body {
   line-height: 1.5;
   margin: 0;
 }
-
-/* Change colors of background svg when page scrolled to certain position */
-
-/* html[data-scroll='1'] body{
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23578039' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
-}
-html[data-scroll='2'] body{
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23804d39' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
-}
-html[data-scroll='3'] body{
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23397580' stroke-width='0.6' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
-} */
 
 h1,
 h2,
@@ -89,16 +82,26 @@ button {
 
 /* CSS Rulesets for Main Header */
 .main-header {
-  /* border: solid red 1px; */
+  display: flex;
   background-color: var(--alt-bg-color);
   max-width: 100%;
   padding: 0.7rem;
-  /* position: fixed; */
-  align-items: baseline;
   margin-bottom: 2%;
+  align-items: baseline;
 }
 
-.header-links h3 {
+.nav-links {
+  position: relative;
+}
+
+.dark-mode-div {
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  font-size: 1.5em;
+}
+
+#site-name {
   display: inline;
 }
 
@@ -109,7 +112,6 @@ button {
 
 #dark-mode-button {
   color: var(--alt-text-color);
-  font-size: 1.6em;
   padding-right: 15px;
   cursor: pointer;
   transition: var(--transition-values);
@@ -158,7 +160,7 @@ html[data-scroll="3"] .logo {
   color: var(--alt-highlight-color);
 }
 
-.filter-div-container,.subscribe-div {
+.filter-div-container {
   text-align: center;
 }
 
@@ -201,8 +203,7 @@ html[data-scroll="3"] .logo {
   border-color: var(--alt-text-color);
 }
 
-
-#subscribe-form{
+#subscribe-form {
   display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
@@ -210,8 +211,8 @@ html[data-scroll="3"] .logo {
   padding: 10px 50px 20px 50px;
 }
 
-#subscribe-frequency-field{
-  margin-bottom: 15px; 
+#subscribe-frequency-field {
+  margin-bottom: 15px;
 }
 
 #email-field {
@@ -352,7 +353,8 @@ ul {
 }
 
 .share-button,
-.hide-share-button, .favorite-button  {
+.hide-share-button,
+.favorite-button {
   cursor: pointer;
 }
 .share-button {
@@ -375,34 +377,14 @@ ul {
   border-radius: 5px;
 }
 
-/* Color animation for new article */
-/* .new-article {
-  margin-right: 10px;
-  animation: smooth 7.5s infinite;
-}
-
-@keyframes smooth {
-  0% {
-    color: var(--alt-highlight-color);
-  }
-  33% {
-    color: var(--scroll-color-one);
-  }
-  66% {
-    color: var(--scroll-color-two);
-  }
-  100% {
-    color: var(--scroll-color-three);
-  }
-} */
-
 .article-thumbnail {
   height: 300px;
   width: 100%;
 }
 
 /* Style Icons */
-.fas, .far {
+.fas,
+.far {
   color: var(--alt-highlight-color);
   transition: var(--transition-values);
 }
@@ -412,7 +394,8 @@ ul {
 }
 
 /* Changes Color of Icons (fas) on page depending on scroll position */
-html[data-scroll="1"] .fas, html[data-scroll="1"] .far {
+html[data-scroll="1"] .fas,
+html[data-scroll="1"] .far {
   color: var(--scroll-color-one);
 }
 html[data-scroll="2"] .fas,
@@ -446,7 +429,8 @@ html[data-scroll="3"] .logo {
   margin-bottom: 25px;
 }
 
-.search-form button, #subscribe-form button {
+.search-form button,
+#subscribe-form button {
   box-shadow: 0 0 0 0.07em var(--alt-highlight-color);
   box-sizing: border-box;
   border-radius: 0.1235em;
@@ -478,48 +462,54 @@ html[data-scroll="3"] .logo {
   max-width: 276px;
 }
 
-input,
-select {
-  box-shadow: 0 0 0 0.07em var(--alt-highlight-color);
-  box-sizing: border-box;
-  padding-right: 0.5em;
-  border-radius: 0.1235em;
-  font-size: 1em;
-  height: 50px;
+/* Register Form */
+
+/********************
+Account Page Styling 
+**********************/
+
+#account-information {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60%;
 }
 
-input[type="date"] {
-  padding-left: 1.5em;
-  padding-right: 0;
-  background-repeat: no-repeat;
-  background-position: 0.25em center;
-  background-size: 1em;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><g stroke='%23111' stroke-width='1' fill='none'><path d='M2,5 38,5 38,10 2,10Z' fill='%23aaa' /><path d='M2,5 38,5 38,10 2,10 2,15 38,15 38,20 2,20 2,25 38,25 38,30 2,30 2,35 38,35 33,35 33,5 28,5 28,35 23,35 23,5 18,5 18,35 13,35 13,5 8,5 8,35' /><path d='M01.5,4.5 1.5,35.5 38.5,35.5 38.5,4.5Z' stroke-width='3'/></g></svg>");
-  box-shadow: 0 0 0 0.175em var(--alt-highlight-color);
+.account-information-parent {
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
-input:focus,
-select:focus {
-  outline: 2px dashed var(--alt-highlight-color);
-  outline-offset: 0.1em;
+.account-information-child {
+  margin-bottom: 40px;
 }
 
-input#endDate {
-  box-shadow: 0 0 0 0.175em var(--scroll-color-one);
+#logout-button {
+  padding: 10px;
+  border: none;
+  outline: none;
+  background-color: #f32013;
+  font-size: 1.25em;
+  color: var(--alt-text-color);
+  border-radius: 5px;
 }
 
-input#startDate {
-  box-shadow: 0 0 0 0.175em var(--scroll-color-two);
+#logout-button-div{
+  position: relative;
+  left:45%;
+  right: 55%;
 }
 
-input#endDate:focus {
-  outline: 2px dashed var(--scroll-color-one);
-  outline-offset: 0.25em;
-}
-
-input#startDate:focus {
-  outline: 2px dashed var(--scroll-color-two);
-  outline-offset: 0.25em;
+form #submit {
+  /* width: 50%; */
+  padding: 10px;
+  border: none;
+  outline: none;
+  background-color: var(--alt-highlight-color);
+  font-size: 1.25em;
+  color: var(--alt-text-color);
+  border-radius: 5px;
 }
 
 /* Results Page */

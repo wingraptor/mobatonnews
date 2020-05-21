@@ -1,0 +1,41 @@
+<% include ../partials/head %>
+<script src="/scripts/main.js" defer></script>
+<script src="/scripts/account-script.js" defer></script>
+<% include ../partials/header %>
+
+<main id="account-information">
+  <h1>Account Preferences</h1>
+  <form action="/account/preferences" method="POST" id="account-preferences-form" class="account-information-parent">
+    <div id="subscribe-div" class="account-information-child">
+      <h2>Subscribe To Email Alerts</h2>
+      <p>
+        Subscribe to get email alerts when new articles are added to websites
+      </p>
+      <input type="radio" name="subscribe" id="subscribe-true" value="true"  onclick="getCheckedValue(this)" <% if(isSubscribed){ %><%= "checked" %><% }  %>/>
+      <label for="subscribe-true">Yes</label>
+      <input type="radio" name="subscribe" id="subscribe-false" value="false" onclick="getCheckedValue(this)" <% if(!isSubscribed){ %><%= "checked" %><% }  %>/>
+      <label for="subscribe-false">No</label>
+    </div>
+    <div id="frequency-div" class="account-information-child">
+      <h2>Alert Frequency</h2>
+      <p>Choose how often you want to receive email alerts</p>
+      <input type="radio" name="frequency" id="frequency-30min" value="30min" <% if(frequency ==="30min"){ %><%= "checked" %><% }  %>/>
+      <label for="frequency-30min">Every 30min</label>
+      <input type="radio" name="frequency" id="frequency-1hr" value="1hr" <% if(frequency ==="1hr"){ %><%= "checked" %><% }  %>/>
+      <label for="frequency-1hr">Hourly</label>
+      <input type="radio" name="frequency" id="frequency-daily" value="daily" <% if(frequency ==="daily"){ %><%= "checked" %><% }  %>/>
+      <label for="frequency-daily">Daily (7:30 am AST) </label>
+    </div>
+    <input type="submit" name="submit" id="submit" value="Save" />
+  </form>
+
+</main>
+
+<div id="logout-button-div">
+  <a href="/logout">
+      <button id="logout-button">Log Out</button>
+  </a>
+</div>
+
+
+<% include ../partials/footer %>

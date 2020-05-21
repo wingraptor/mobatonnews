@@ -6,17 +6,19 @@ const User = require("../models/user");
 
 // Home Page Route
 router.get("/", async (req, res) => {
-  const sessionId = req.session.id;
+  // Extract email from Auth0 response (user argument)
+  let email;
+  if (req.user) email = req.user.emails[0].value;
+
   try {
     // Get data from api for weather, currency, oil prices etc.
     const widgetData = await Data.find({});
-    const user = await User.findById(sessionId);
+    // Query DB for user using their email address
+    const user = await User.findOne({ email });
     let favoriteArticleIds = [];
 
-    // If user visited website already
-    if (user) {
-      favoriteArticleIds = user.favoriteArticles;
-    }
+    // Get user specific favorite Article Ids
+    if (user) favoriteArticleIds = user.favoriteArticles;
 
     // Query DB for articles data
     const articles = await Archive.aggregate([
