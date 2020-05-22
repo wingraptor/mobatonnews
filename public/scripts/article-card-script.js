@@ -1,3 +1,6 @@
+const urlArr2 = window.location.href.split("/");
+const pageIdentifier2 = urlArr2[urlArr2.length - 1];
+
 /*********************************
 Handle articles that user has read - Indexed DB - https://dev.to/andyhaskell/build-a-basic-web-app-with-indexeddb-38ef?signin=true
 ********************************/
@@ -75,7 +78,6 @@ function fadeArticleCard(articleCardIds) {
     let articleCard = document.querySelector(
       `.article-card[data-articleID="${id}"]`
     );
-    // displayToggle(articleCard);
     articleCard.style.filter = "grayscale(100%)";
   });
 }
@@ -131,17 +133,13 @@ favoritesButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
     let obj = {};
     // Select parent element of the button with the class .article-card-footer
-    let article = button.closest(".article-card-footer");
+    let articleCard = button.closest(".article-card");
     // Grab ID of article from the selected parent element
-    let articleId = article.getAttribute("data-articleid");
+    let articleId = articleCard.getAttribute("data-articleid");
     let fetchMethod;
 
     // Set Method for fetch request depending on button: fas = saved; far = not saved
-    if (button.classList.contains("fas")) {
-      fetchMethod = "DELETE";
-    } else {
-      fetchMethod = "POST";
-    }
+    button.classList.contains("fas") ?  fetchMethod = "DELETE" : fetchMethod = "POST";
 
     // Send data to backend in the form {articleId: "articleId"}
     obj.articleId = articleId;
@@ -150,6 +148,8 @@ favoritesButtons.forEach((button) => {
       .then((data) => {
         if (!data.error) {
           toggleStarButton(button, data.message);
+          // Remove article from favorites page (hide it from the DOM) when article is removed from favorites (in DB)
+          if(fetchMethod ==="DELETE" && pageIdentifier2 === "favorites" ) displayToggle(articleCard);
         } else {
           alert(data.message);
         }
