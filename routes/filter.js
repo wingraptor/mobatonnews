@@ -4,17 +4,17 @@ const Archive = require("../models/archive");
 const Data = require("../models/dataFeed");
 const moment = require("moment");
 const User = require("../models/user");
-const auth = require("../middleware/authMiddleware");
 
-router.get("/:filterValue",auth, async (req, res) => {
-  const email = req.user.emails[0].value;
+router.get("/:filterValue", async (req, res) => {
+  // Extract email from Auth0 response
+  let email;
+  if (req.user) email = req.user.emails[0].value;
   let filterValue = req.params.filterValue;
   let queryFilter;
 
-
   let favoriteArticleIds = [];
   const user = await User.findOne({ email });
-  // If user visited website already
+  // If user has account, retrieve favorited articles
   if (user) {
     favoriteArticleIds = user.favoriteArticles;
   }
@@ -71,12 +71,12 @@ router.get("/:filterValue",auth, async (req, res) => {
     const articles = await Archive.aggregate([
       // Filter articles according to page clicked
       queryFilter,
-      { $sort: { utcDate: -1 } },
+      { $sort: { created_at: -1 } },
       { $limit: 50 },
       //group articles according to siteIDs
-      { $group: { _id: "$utcDate", data: { $push: "$$ROOT" } } },
-      //sort according utcDate
-      { $sort: { "data.utcDate": -1 } },
+      { $group: { _id: "$created_at", data: { $push: "$$ROOT" } } },
+      //sort according createdAt
+      { $sort: { _id: -1 } },
     ]);
     // Render homepage template
     res.status(200).render("home", {

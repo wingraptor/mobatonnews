@@ -6,8 +6,9 @@ const User = require("../models/user");
 
 // Home Page Route
 router.get("/", async (req, res) => {
-  // Extract email from Auth0 response (user argument)
+  // Extract email from Auth0 response
   let email;
+  let favoriteArticleIds = [];
   if (req.user) email = req.user.emails[0].value;
 
   try {
@@ -15,7 +16,6 @@ router.get("/", async (req, res) => {
     const widgetData = await Data.find({});
     // Query DB for user using their email address
     const user = await User.findOne({ email });
-    let favoriteArticleIds = [];
 
     // Get user specific favorite Article Ids
     if (user) favoriteArticleIds = user.favoriteArticles;
