@@ -216,7 +216,7 @@ module.exports = [
     requestOptions: {
       uri: "https://www.cbc.bb/category/barbados-news/",
     },
-    toBeScraped: true,
+    toBeScraped: false,
     parse: function ($) {
       let articles = [];
       $(".post").each(function (index, element) {
