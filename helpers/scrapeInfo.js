@@ -136,7 +136,8 @@ module.exports = [
           date: $(this).find(".date span").text(),
           summary: $(this).find(".field-item p").text() + "...",
           siteID: 3,
-          imgURL: $(this).find("img").attr("src"),
+          // Images no longer available
+          // imgURL: $(this).find("img").attr("src"),
         };
         articles.push(articleData);
       });
