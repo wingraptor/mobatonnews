@@ -285,6 +285,8 @@ function generateEmail(articles, emailAddresses) {
   }
 }
 
+console.log(chalk.bold.green("Ready to Scrape"));
+
 // // Get Weather Data and FX Data and reset article count
 // new CronJob(`0 26 ${scrapeHours} * * *`, function () {
 //   // Reset article count to 0 after all sites have been scraped
