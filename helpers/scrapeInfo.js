@@ -130,7 +130,7 @@ module.exports = [
       $(".node-article").each(function (index, element) {
         let articleData = {
           link:
-            "https://www.barbadosadvocate.com" +
+            "http://www.barbadosadvocate.com" +
             $(this).find(".title a").attr("href"),
           headline: $(this).find(".title a").text(),
           date: $(this).find(".date span").text(),
