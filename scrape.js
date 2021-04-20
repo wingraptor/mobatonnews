@@ -285,6 +285,7 @@ function generateEmail(articles, emailAddresses) {
   }
 }
 
+// Show that I am ready to scrape
 console.log(chalk.bold.green("Ready to Scrape"));
 
 // // Get Weather Data and FX Data and reset article count
