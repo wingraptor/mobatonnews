@@ -41,7 +41,7 @@
     "request-promise": "^4.2.5",
     "twilio": "^3.60.0",
     "twitter": "^1.7.1",
-    "validator": "^13.0.0",
+    "validator": "^13.7.0",
     "weather-js": "^2.0.0"
   },
   "devDependencies": {
